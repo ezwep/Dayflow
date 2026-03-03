@@ -150,7 +150,7 @@ struct SettingsView: View {
             Spacer()
 
             VStack(alignment: .leading, spacing: 12) {
-                Text("Dayflow v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")")
+                Text("Dayflow Dev v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""))")
                     .font(.custom("Nunito", size: 12))
                     .foregroundColor(.black.opacity(0.45))
                     .padding(.leading, 10)

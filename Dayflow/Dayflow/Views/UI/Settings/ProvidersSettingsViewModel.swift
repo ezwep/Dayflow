@@ -237,7 +237,19 @@ final class ProvidersSettingsViewModel: ObservableObject {
         }
 
         let raw = stored.rawValue
-        guard raw != currentProvider else {
+
+        // Allow same canonical provider (chatgpt_claude) when using different CLI tools
+        if raw == currentProvider {
+            if raw == "chatgpt_claude" {
+                let backupTool = LLMProviderRoutingPreferences.loadBackupChatCLITool()
+                if let backupTool, CLITool(rawValue: backupTool.rawValue) != preferredCLITool {
+                    // Different CLI tools: valid backup (e.g. primary=codex, secondary=claude)
+                    backupProvider = raw
+                    backupChatCLITool = CLITool(rawValue: backupTool.rawValue)
+                    return
+                }
+            }
+            // Same provider + same tool (or non-chatgpt_claude) = invalid backup
             backupProvider = nil
             backupChatCLITool = nil
             LLMProviderRoutingPreferences.saveBackupProvider(nil)
@@ -301,6 +313,12 @@ final class ProvidersSettingsViewModel: ObservableObject {
         case .setupOnly:
             break
         }
+
+        // Reload preferred CLI tool and backup provider in case the wizard changed them
+        if let raw = UserDefaults.standard.string(forKey: "chatCLIPreferredTool") {
+            preferredCLITool = CLITool(rawValue: raw)
+        }
+        loadBackupProvider()
     }
 
     func setPrimaryOrSetup(_ providerId: String) {
