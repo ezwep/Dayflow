@@ -168,12 +168,18 @@ struct DayflowApp: App {
             // Inline background behind the main app UI only
             .background {
                 if didOnboard {
-                    Image("MainUIBackground")
-                        .resizable()
-                        .scaledToFill()
-                        .ignoresSafeArea()
-                        .allowsHitTesting(false)
-                        .accessibilityHidden(true)
+                    ZStack {
+                        DayflowColors.background
+                        RadialGradient(
+                            colors: [DayflowColors.accent.opacity(0.03), Color.clear],
+                            center: .topLeading,
+                            startRadius: 100,
+                            endRadius: 600
+                        )
+                    }
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
                 }
             }
             .frame(minWidth: 900, maxWidth: .infinity, minHeight: 600, maxHeight: .infinity)

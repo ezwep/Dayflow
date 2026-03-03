@@ -70,10 +70,8 @@ struct SidebarIconButton: View {
             VStack(spacing: 3) {
                 ZStack {
                     if isSelected {
-                        Image("IconBackground")
-                            .resizable()
-                            .interpolation(.high)
-                            .renderingMode(.original)
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(DayflowColors.accent.opacity(0.15))
                             .frame(width: 30, height: 30)
                     }
 

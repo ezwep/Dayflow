@@ -321,7 +321,7 @@ struct BadgeView: View {
         case .green:
             return DayflowColors.success
         case .orange:
-            return DayflowColors.error
+            return DayflowColors.warning
         case .blue:
             return DayflowColors.accent
         }
@@ -329,12 +329,12 @@ struct BadgeView: View {
     
     private var badgeBackground: some View {
         ZStack {
-            DayflowColors.surface.opacity(0.69)
+            DayflowColors.surfaceElevated
 
             LinearGradient(
                 stops: gradientColors,
-                startPoint: UnitPoint(x: 1.15, y: 3.61),
-                endPoint: UnitPoint(x: 0.02, y: 0)
+                startPoint: .leading,
+                endPoint: .trailing
             )
         }
     }
@@ -349,18 +349,18 @@ struct BadgeView: View {
         switch type {
         case .green:
             return [
-                Gradient.Stop(color: DayflowColors.success, location: 0.00),
-                Gradient.Stop(color: DayflowColors.surface.opacity(0), location: 1.00)
+                Gradient.Stop(color: DayflowColors.success.opacity(0.2), location: 0.00),
+                Gradient.Stop(color: DayflowColors.surfaceElevated.opacity(0), location: 1.00)
             ]
         case .orange:
             return [
-                Gradient.Stop(color: DayflowColors.accent, location: 0.00),
-                Gradient.Stop(color: DayflowColors.surface.opacity(0), location: 1.00)
+                Gradient.Stop(color: DayflowColors.warning.opacity(0.2), location: 0.00),
+                Gradient.Stop(color: DayflowColors.surfaceElevated.opacity(0), location: 1.00)
             ]
         case .blue:
             return [
-                Gradient.Stop(color: DayflowColors.accent, location: 0.00),
-                Gradient.Stop(color: DayflowColors.surface.opacity(0), location: 1.00)
+                Gradient.Stop(color: DayflowColors.accent.opacity(0.2), location: 0.00),
+                Gradient.Stop(color: DayflowColors.surfaceElevated.opacity(0), location: 1.00)
             ]
         }
     }
@@ -381,7 +381,7 @@ struct BadgeView: View {
         case .green:
             return DayflowColors.success.opacity(0.3)
         case .orange:
-            return DayflowColors.error.opacity(0.3)
+            return DayflowColors.warning.opacity(0.3)
         case .blue:
             return DayflowColors.accent.opacity(0.3)
         }

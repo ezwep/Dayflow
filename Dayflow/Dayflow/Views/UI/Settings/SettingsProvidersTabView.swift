@@ -209,7 +209,7 @@ struct SettingsProvidersTabView: View {
                 } else if isConfigured {
                     roleTag(text: "CONFIGURED", type: .green)
                 } else {
-                    roleTag(text: "NOT SET", type: .green)
+                    roleTag(text: "NOT SET", type: .orange)
                 }
             }
 
@@ -240,11 +240,11 @@ struct SettingsProvidersTabView: View {
             }
         }
         .padding(14)
-        .background(DayflowColors.surface.opacity(0.52))
+        .background(DayflowColors.surfaceElevated)
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(DayflowColors.borderSubtle, lineWidth: 1)
+                .stroke(DayflowColors.border, lineWidth: 1)
         )
     }
 
