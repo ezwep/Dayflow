@@ -41,6 +41,7 @@ final class OtherSettingsViewModel: ObservableObject {
         didSet {
             guard appearance != oldValue else { return }
             UserDefaults.standard.set(appearance, forKey: "dayflowAppearance")
+            NotificationCenter.default.post(name: .dayflowAppearanceChanged, object: appearance)
         }
     }
     @Published var outputLanguageOverride: String

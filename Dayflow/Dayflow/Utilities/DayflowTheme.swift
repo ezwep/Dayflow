@@ -1,5 +1,11 @@
 import SwiftUI
 
+// MARK: - Notifications
+
+extension Notification.Name {
+    static let dayflowAppearanceChanged = Notification.Name("dayflowAppearanceChanged")
+}
+
 // MARK: - Appearance Preference
 
 enum DayflowAppearance: String, CaseIterable {

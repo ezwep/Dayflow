@@ -11,17 +11,17 @@ struct CardsToReviewBadge: View {
     let count: Int
 
     var body: some View {
-        HStack(alignment: .center, spacing: 6) {
+        HStack(alignment: .center, spacing: 8) {
             // Stacked cards icon with number
             stackedCardsIcon
 
             // Label text
             Text(count == 1 ? "card to review" : "cards to review")
-                .font(.custom("Nunito", size: 10).weight(.medium))
+                .font(.custom("Nunito", size: 12).weight(.medium))
                 .foregroundColor(.white)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .background(
             LinearGradient(
                 stops: [
@@ -43,33 +43,32 @@ struct CardsToReviewBadge: View {
 
     private var stackedCardsIcon: some View {
         ZStack(alignment: .bottom) {
-            // Back card (rotated, behind) - 15.75 x 14 (h x w)
-            // Positioned so leftmost point pokes out only 3px
-            RoundedRectangle(cornerRadius: 3.5)
+            // Back card (rotated, behind)
+            RoundedRectangle(cornerRadius: 4)
                 .fill(DayflowColors.surface)
-                .frame(width: 14, height: 15.75)
+                .frame(width: 16, height: 18)
                 .rotationEffect(.degrees(-11.64))
                 .offset(x: -3, y: 0)
 
-            // Front card with number - 18 x 14 (h x w)
+            // Front card with number
             ZStack {
-                RoundedRectangle(cornerRadius: 3.5)
+                RoundedRectangle(cornerRadius: 4)
                     .fill(DayflowColors.surface)
             }
-            .frame(width: 14, height: 18)
+            .frame(width: 16, height: 20)
             .overlay(
-                RoundedRectangle(cornerRadius: 3.5)
+                RoundedRectangle(cornerRadius: 4)
                     .inset(by: -0.63)
                     .stroke(DayflowColors.accent, lineWidth: 1.25)
             )
             .overlay(
                 Text("\(count)")
-                    .font(.custom("Nunito", size: 9).weight(.heavy))
+                    .font(.custom("Nunito", size: 11).weight(.heavy))
                     .foregroundColor(DayflowColors.accent)
             )
             .offset(x: 4, y: 0)
         }
-        .frame(width: 21, height: 20)
+        .frame(width: 26, height: 24)
     }
 }
 

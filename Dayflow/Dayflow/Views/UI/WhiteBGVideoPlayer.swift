@@ -26,14 +26,14 @@ final class PlayerLayerView: NSView {
         super.init(frame: frameRect)
         wantsLayer = true
         playerLayer.videoGravity = .resizeAspect
-        playerLayer.backgroundColor = NSColor.white.cgColor
+        playerLayer.backgroundColor = NSColor.clear.cgColor
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         wantsLayer = true
         playerLayer.videoGravity = .resizeAspect
-        playerLayer.backgroundColor = NSColor.white.cgColor
+        playerLayer.backgroundColor = NSColor.clear.cgColor
     }
 
     override func makeBackingLayer() -> CALayer {
@@ -46,7 +46,7 @@ final class PlayerLayerView: NSView {
 struct WhiteBGVideoPlayer: NSViewRepresentable {
     var player: AVPlayer?
     var videoGravity: AVLayerVideoGravity = .resizeAspect
-    var backgroundColor: NSColor = .white
+    var backgroundColor: NSColor = .clear
 
     func makeNSView(context: Context) -> PlayerLayerView {
         let view = PlayerLayerView()
