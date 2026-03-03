@@ -34,6 +34,7 @@ struct LogoBadgeView: View {
                 .interpolation(.high)
                 .scaledToFit() // image now tightly cropped; fit preserves circle
                 .clipShape(Circle())
+                .hueRotation(.degrees(155))
                 .shadow(color: .black.opacity(0.15), radius: 8, y: 2)
 
             // Rim shimmer (conic highlight)

@@ -33,7 +33,7 @@ struct CardsToReviewBadge: View {
             )
         )
         .cornerRadius(20)
-        .shadow(color: Color(red: 0.91, green: 0.79, blue: 0.7), radius: 1.5, x: 0, y: 2)
+        .shadow(color: DayflowColors.accent.opacity(0.3), radius: 3, x: 0, y: 2)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .inset(by: 0.75)

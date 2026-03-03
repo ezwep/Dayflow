@@ -145,14 +145,8 @@ struct DailyView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .background(
-            GeometryReader { geo in
-                Image("JournalPreview")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: geo.size.width, height: geo.size.height)
-                    .clipped()
-                    .allowsHitTesting(false)
-            }
+            DayflowColors.background
+                .ignoresSafeArea()
         )
     }
 

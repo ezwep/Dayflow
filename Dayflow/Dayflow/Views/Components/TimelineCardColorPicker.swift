@@ -501,6 +501,8 @@ fileprivate struct EditableCategoryCard: View {
                 } label: {
                     Image("CategoriesEdit")
                         .resizable()
+                        .renderingMode(.template)
+                        .foregroundColor(DayflowColors.accent)
                         .frame(width: 20, height: 20)
                         .accessibilityLabel("Edit category")
                 }
@@ -512,6 +514,8 @@ fileprivate struct EditableCategoryCard: View {
                 } label: {
                     Image("CategoriesDelete")
                         .resizable()
+                        .renderingMode(.template)
+                        .foregroundColor(DayflowColors.textMuted)
                         .frame(width: 20, height: 20)
                         .accessibilityLabel("Delete category")
                 }

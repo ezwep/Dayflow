@@ -391,14 +391,9 @@ struct BadgeView: View {
 
 struct BadgeShadowModifier: ViewModifier {
     let shadowColor: Color
-    
+
     func body(content: Content) -> some View {
         content
-            .shadow(color: shadowColor.opacity(0.14), radius: 1.5, x: 0, y: 1)
-            .shadow(color: shadowColor.opacity(0.12), radius: 2.5, x: 2, y: 4)
-            .shadow(color: shadowColor.opacity(0.07), radius: 3, x: 4, y: 10)
-            .shadow(color: shadowColor.opacity(0.02), radius: 3.5, x: 7, y: 17)
-            .shadow(color: shadowColor.opacity(0), radius: 4, x: 10, y: 27)
     }
 }
 
