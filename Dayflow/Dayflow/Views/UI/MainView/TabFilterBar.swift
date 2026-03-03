@@ -106,10 +106,14 @@ struct TabFilterBar: View {
 
     private var editButton: some View {
         Button(action: onManageCategories) {
-            Image("CategoryEditButton")
-                .resizable()
-                .scaledToFit()
-                .frame(width: editButtonSize, height: editButtonSize)
+            ZStack {
+                Circle()
+                    .fill(DayflowColors.accent.opacity(0.15))
+                Image(systemName: "pencil")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(DayflowColors.accent)
+            }
+            .frame(width: editButtonSize, height: editButtonSize)
         }
         .buttonStyle(PlainButtonStyle())
         .hoverScaleEffect(scale: 1.02)

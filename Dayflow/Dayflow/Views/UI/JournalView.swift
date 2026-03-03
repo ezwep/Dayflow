@@ -112,69 +112,67 @@ struct JournalView: View {
     }
 
     // MARK: - Access Code Card
-    // JournalLock is the entire card image (gradient bg + lock icon baked in)
     private var accessCodeCard: some View {
-        ZStack(alignment: .bottom) {
-            // Card background image (contains gradient + lock icon)
-            Image("JournalLock")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-
-            // Overlay content: title, text field, button (anchored to bottom)
-            VStack(spacing: 16) {
-                // Title
-                Text("Enter access code")
-                    .font(.custom("Nunito-SemiBold", size: 20))
+        VStack(spacing: 20) {
+            // Lock icon
+            ZStack {
+                Circle()
+                    .fill(DayflowColors.accent.opacity(0.1))
+                    .frame(width: 56, height: 56)
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 22, weight: .medium))
                     .foregroundColor(DayflowColors.accent)
-
-                // Text field
-                TextField("", text: $accessCode)
-                    .textFieldStyle(.plain)
-                    .font(.custom("Nunito-Medium", size: 15))
-                    .foregroundColor(DayflowColors.textPrimary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(DayflowColors.surface)
-                    )
-                    .padding(.horizontal, 80)
-                    .submitLabel(.go)
-                    .onSubmit { validateCode() }
-
-                // Submit button
-                Button(action: validateCode) {
-                    Text("Get early access")
-                        .font(.custom("Nunito-SemiBold", size: 15))
-                        .foregroundColor(DayflowColors.textPrimary)
-                        .padding(.horizontal, 28)
-                        .padding(.vertical, 10)
-                        .background(
-                            Capsule()
-                                .fill(
-                                    LinearGradient(
-                                        colors: [
-                                            DayflowColors.surface,
-                                            DayflowColors.border
-                                        ],
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
-                                .overlay(
-                                    Capsule()
-                                        .stroke(DayflowColors.border, lineWidth: 1)
-                                )
-                        )
-                }
-                .buttonStyle(.plain)
-                .pointingHandCursor()
             }
-            .padding(.bottom, 28)
+            .padding(.top, 24)
+
+            Text("Enter access code")
+                .font(.custom("Nunito-SemiBold", size: 20))
+                .foregroundColor(DayflowColors.accent)
+
+            TextField("", text: $accessCode)
+                .textFieldStyle(.plain)
+                .font(.custom("Nunito-Medium", size: 15))
+                .foregroundColor(DayflowColors.textPrimary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(DayflowColors.surface)
+                )
+                .padding(.horizontal, 40)
+                .submitLabel(.go)
+                .onSubmit { validateCode() }
+
+            Button(action: validateCode) {
+                Text("Get early access")
+                    .font(.custom("Nunito-SemiBold", size: 15))
+                    .foregroundColor(DayflowColors.textPrimary)
+                    .padding(.horizontal, 28)
+                    .padding(.vertical, 10)
+                    .background(
+                        Capsule()
+                            .fill(DayflowColors.accent.opacity(0.2))
+                            .overlay(
+                                Capsule()
+                                    .stroke(DayflowColors.border, lineWidth: 1)
+                            )
+                    )
+            }
+            .buttonStyle(.plain)
+            .pointingHandCursor()
+            .padding(.bottom, 24)
         }
         .frame(width: 380)
-        .shadow(color: Color.black.opacity(0.08), radius: 16, x: 0, y: 6)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(DayflowColors.surfaceElevated)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(DayflowColors.border, lineWidth: 1)
+                )
+        )
+        .shadow(color: Color.black.opacity(0.2), radius: 16, x: 0, y: 6)
     }
     
     // MARK: - Unlocked Content

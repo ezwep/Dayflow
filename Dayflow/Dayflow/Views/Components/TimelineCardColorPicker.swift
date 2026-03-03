@@ -499,9 +499,8 @@ fileprivate struct EditableCategoryCard: View {
                 Button {
                     onStartEdit()
                 } label: {
-                    Image("CategoriesEdit")
-                        .resizable()
-                        .renderingMode(.template)
+                    Image(systemName: "square.and.pencil")
+                        .font(.system(size: 14, weight: .medium))
                         .foregroundColor(DayflowColors.accent)
                         .frame(width: 20, height: 20)
                         .accessibilityLabel("Edit category")
@@ -512,9 +511,8 @@ fileprivate struct EditableCategoryCard: View {
                 Button {
                     onDelete()
                 } label: {
-                    Image("CategoriesDelete")
-                        .resizable()
-                        .renderingMode(.template)
+                    Image(systemName: "trash")
+                        .font(.system(size: 14, weight: .medium))
                         .foregroundColor(DayflowColors.textMuted)
                         .frame(width: 20, height: 20)
                         .accessibilityLabel("Delete category")
@@ -767,6 +765,8 @@ struct ColorOrganizerRoot: View {
         HStack(alignment: .top, spacing: 12) {
             Image(icon)
                 .resizable()
+                .renderingMode(.template)
+                .foregroundColor(DayflowColors.accent)
                 .frame(width: 28, height: 28)
 
             Text(text)
