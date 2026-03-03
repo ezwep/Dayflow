@@ -454,7 +454,7 @@ struct ActivityCard: View {
                             .cornerRadius(12)
                     } else {
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.gray.opacity(0.3))
+                            .fill(DayflowColors.borderSubtle)
                             .overlay(
                                 Image(systemName: "photo")
                                     .font(.system(size: 18, weight: .medium))

@@ -53,11 +53,11 @@ struct ScreenRecordingPermissionView: View {
                     case .granted:
                         Text("✓ Permission granted! Click Next to continue.")
                             .font(.custom("Nunito", size: 14))
-                            .foregroundColor(.green)
+                            .foregroundColor(DayflowColors.success)
                     case .needsAction:
                         Text("Turn on Screen Recording for Dayflow, then quit and reopen the app to finish.")
                             .font(.custom("Nunito", size: 14))
-                            .foregroundColor(.orange)
+                            .foregroundColor(DayflowColors.warning)
                     }
                 }
                 .padding(.top, 8)

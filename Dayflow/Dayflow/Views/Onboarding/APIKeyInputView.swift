@@ -65,7 +65,7 @@ struct APIKeyInputView: View {
                     if validationState != .none {
                         Image(systemName: validationState == .valid ? "checkmark.circle.fill" : "xmark.circle.fill")
                             .font(.system(size: 16))
-                            .foregroundColor(validationState == .valid ? Color(red: 0.34, green: 1, blue: 0.45) : Color(hex: "E91515"))
+                            .foregroundColor(validationState == .valid ? DayflowColors.success : DayflowColors.error)
                             .transition(.scale.combined(with: .opacity))
                     }
                 }
@@ -82,7 +82,7 @@ struct APIKeyInputView: View {
                 if validationState == .invalid {
                     Text("API key should start with 'AIza' and be at least 30 characters")
                         .font(.custom("Nunito", size: 12))
-                        .foregroundColor(Color(hex: "E91515"))
+                        .foregroundColor(DayflowColors.error)
                         .transition(.opacity)
                 }
             }
@@ -92,7 +92,7 @@ struct APIKeyInputView: View {
             HStack(spacing: 4) {
                 Image(systemName: "lock.shield.fill")
                     .font(.system(size: 12))
-                    .foregroundColor(Color(red: 0.34, green: 1, blue: 0.45).opacity(0.7))
+                    .foregroundColor(DayflowColors.success.opacity(0.7))
                 
                 Text("Your API key is encrypted and stored in your macOS Keychain - never uploaded anywhere")
                     .font(.custom("Nunito", size: 12))
@@ -105,14 +105,14 @@ struct APIKeyInputView: View {
         if isFocused {
             switch validationState {
             case .valid:
-                return Color(red: 0.34, green: 1, blue: 0.45).opacity(0.6)
+                return DayflowColors.success.opacity(0.6)
             case .invalid:
-                return Color(hex: "E91515").opacity(0.6)
+                return DayflowColors.error.opacity(0.6)
             case .none:
                 return DayflowColors.cta.opacity(0.6)
             }
         } else {
-            return Color.black.opacity(0.1)
+            return DayflowColors.borderSubtle
         }
     }
     

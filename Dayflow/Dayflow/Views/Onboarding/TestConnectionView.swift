@@ -54,25 +54,25 @@ struct TestConnectionView: View {
                 HStack(spacing: 8) {
                     Image(systemName: result.isSuccess ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
                         .font(.system(size: 12))
-                        .foregroundColor(result.isSuccess ? Color(red: 0.34, green: 1, blue: 0.45) : Color(hex: "E91515"))
+                        .foregroundColor(result.isSuccess ? DayflowColors.success : DayflowColors.error)
                     
                     Text(result.message)
                         .font(.custom("Nunito", size: 13))
-                        .foregroundColor(result.isSuccess ? .black.opacity(0.7) : Color(hex: "E91515"))
+                        .foregroundColor(result.isSuccess ? DayflowColors.textPrimary : DayflowColors.error)
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 10)
                 .background(
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(result.isSuccess ? 
-                              Color(red: 0.34, green: 1, blue: 0.45).opacity(0.1) : 
-                              Color(hex: "E91515").opacity(0.1))
+                        .fill(result.isSuccess ?
+                              DayflowColors.success.opacity(0.1) :
+                              DayflowColors.error.opacity(0.1))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 4)
-                        .stroke(result.isSuccess ? 
-                               Color(red: 0.34, green: 1, blue: 0.45).opacity(0.3) : 
-                               Color(hex: "E91515").opacity(0.3), lineWidth: 1)
+                        .stroke(result.isSuccess ?
+                               DayflowColors.success.opacity(0.3) :
+                               DayflowColors.error.opacity(0.3), lineWidth: 1)
                 )
             }
         }
@@ -92,7 +92,7 @@ struct TestConnectionView: View {
     
     private var buttonBackground: Color {
         if testResult?.isSuccess == true {
-            return Color(red: 0.34, green: 1, blue: 0.45).opacity(0.2)
+            return DayflowColors.success.opacity(0.2)
         } else {
             return DayflowColors.cta
         }
@@ -100,7 +100,7 @@ struct TestConnectionView: View {
 
     private var buttonBorder: Color {
         if testResult?.isSuccess == true {
-            return Color(red: 0.34, green: 1, blue: 0.45).opacity(0.5)
+            return DayflowColors.success.opacity(0.5)
         } else {
             return Color.clear
         }

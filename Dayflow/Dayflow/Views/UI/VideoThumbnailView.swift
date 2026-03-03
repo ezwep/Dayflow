@@ -96,7 +96,7 @@ struct VideoThumbnailView: View {
             } else {
                 // Loading state
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(DayflowColors.borderSubtle)
                     .overlay(
                         ProgressView()
                             .scaleEffect(0.5)

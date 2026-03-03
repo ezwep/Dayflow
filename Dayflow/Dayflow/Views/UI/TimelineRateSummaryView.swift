@@ -29,7 +29,7 @@ struct TimelineRateSummaryView: View {
                 Text(title)
                     .font(Font.custom("Nunito", size: 12).weight(.medium))
                     .foregroundColor(
-                        Color(red: 0.49, green: 0.47, blue: 0.46)
+                        DayflowColors.textMuted
                             .opacity(isEnabled ? 0.95 : 0.45)
                     )
 
@@ -46,7 +46,7 @@ struct TimelineRateSummaryView: View {
         .overlay(
             Rectangle()
                 .inset(by: 0.5)
-                .stroke(Color(red: 0.93, green: 0.93, blue: 0.93), lineWidth: 1)
+                .stroke(DayflowColors.border, lineWidth: 1)
         )
         .shadow(color: Color.white.opacity(1.0), radius: 9, x: 0, y: -4)
         .opacity(isEnabled ? 1 : 0.6)

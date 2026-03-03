@@ -395,13 +395,13 @@ struct JournalWeeklyIcon: Identifiable {
     var background: Color
     var foreground: Color
 
-    static let figma = JournalWeeklyIcon(systemName: "paintpalette.fill", background: Color(hex: "FFB859"), foreground: .white)
-    static let cart = JournalWeeklyIcon(systemName: "cart.fill", background: Color(hex: "553000"), foreground: Color(hex: "F9E2C9"))
-    static let slides = JournalWeeklyIcon(systemName: "rectangle.and.pencil.and.ellipsis", background: Color(hex: "FFD082"), foreground: Color(hex: "4A2606"))
-    static let video = JournalWeeklyIcon(systemName: "play.rectangle.fill", background: Color(hex: "F06543"), foreground: .white)
-    static let books = JournalWeeklyIcon(systemName: "book.fill", background: Color(hex: "5B3A2E"), foreground: Color(hex: "F9E2C9"))
-    static let moon = JournalWeeklyIcon(systemName: "moon.stars.fill", background: Color(hex: "2D1E2F"), foreground: .white)
-    static let tv = JournalWeeklyIcon(systemName: "tv.fill", background: Color(hex: "FFB2A6"), foreground: Color(hex: "4A1D12"))
+    static let figma = JournalWeeklyIcon(systemName: "paintpalette.fill", background: DayflowColors.accent, foreground: .white)
+    static let cart = JournalWeeklyIcon(systemName: "cart.fill", background: DayflowColors.surfaceElevated, foreground: DayflowColors.textMuted)
+    static let slides = JournalWeeklyIcon(systemName: "rectangle.and.pencil.and.ellipsis", background: DayflowColors.accent.opacity(0.7), foreground: DayflowColors.surfaceElevated)
+    static let video = JournalWeeklyIcon(systemName: "play.rectangle.fill", background: DayflowColors.error, foreground: .white)
+    static let books = JournalWeeklyIcon(systemName: "book.fill", background: DayflowColors.surfaceElevated, foreground: DayflowColors.textMuted)
+    static let moon = JournalWeeklyIcon(systemName: "moon.stars.fill", background: DayflowColors.surfaceElevated, foreground: .white)
+    static let tv = JournalWeeklyIcon(systemName: "tv.fill", background: DayflowColors.accent.opacity(0.7), foreground: DayflowColors.surfaceElevated)
 }
 
 enum JournalWeeklyViewPeriod: String, CaseIterable, Identifiable {

@@ -70,7 +70,7 @@ struct SettingsStorageTabView: View {
                         category: .timelapses,
                         label: "Timelapses",
                         size: viewModel.timelapseUsageBytes,
-                        tint: Color(hex: "1D7FFE"),
+                        tint: DayflowColors.accent,
                         limitIndex: viewModel.timelapsesLimitIndex,
                         limitBytes: viewModel.timelapsesLimitBytes,
                         actionTitle: "Open",

@@ -25,8 +25,8 @@ struct CardsToReviewBadge: View {
         .background(
             LinearGradient(
                 stops: [
-                    Gradient.Stop(color: Color(red: 1, green: 0.6, blue: 0.44), location: 0.00),
-                    Gradient.Stop(color: Color(red: 0.74, green: 0.67, blue: 1), location: 1.00),
+                    Gradient.Stop(color: DayflowColors.accent, location: 0.00),
+                    Gradient.Stop(color: DayflowColors.secondary, location: 1.00),
                 ],
                 startPoint: UnitPoint(x: 0.05, y: 0),
                 endPoint: UnitPoint(x: 0.95, y: 1)
@@ -37,7 +37,7 @@ struct CardsToReviewBadge: View {
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .inset(by: 0.75)
-                .stroke(Color(red: 1, green: 0.85, blue: 0.83), lineWidth: 1.5)
+                .stroke(DayflowColors.border, lineWidth: 1.5)
         )
     }
 
@@ -147,7 +147,7 @@ private struct CardsToReviewBadgePreview: View {
                 .frame(width: 200)
             }
             .padding()
-            .background(Color.gray.opacity(0.1))
+            .background(DayflowColors.borderSubtle)
             .cornerRadius(12)
         }
         .padding(60)

@@ -292,7 +292,7 @@ struct WhatsNewView: View {
                         .padding(.horizontal, 12)
                         .background(
                             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                .fill(valueFrequencySelection == option ? Color(red: 1.0, green: 0.95, blue: 0.9) : DayflowColors.surface)
+                                .fill(valueFrequencySelection == option ? DayflowColors.accent.opacity(0.1) : DayflowColors.surface)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 8, style: .continuous)
@@ -389,7 +389,7 @@ struct WhatsNewView: View {
             .padding(.horizontal, 12)
             .background(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(isSelected ? Color(red: 1.0, green: 0.95, blue: 0.9) : DayflowColors.surface)
+                    .fill(isSelected ? DayflowColors.accent.opacity(0.1) : DayflowColors.surface)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)

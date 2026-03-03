@@ -75,6 +75,6 @@ struct HowItWorksCard_Previews: PreviewProvider {
             )
         }
         .padding(40)
-        .background(Color.gray.opacity(0.1))
+        .background(DayflowColors.borderSubtle)
     }
 }

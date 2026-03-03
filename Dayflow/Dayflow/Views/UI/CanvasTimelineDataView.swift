@@ -206,7 +206,7 @@ struct CanvasTimelineDataView: View {
         .overlay {
             if showManualBlockPopover {
                 ZStack {
-                    Color.black.opacity(0.1)
+                    DayflowColors.textPrimary.opacity(0.1)
                         .ignoresSafeArea()
                         .onTapGesture {
                             showManualBlockPopover = false
@@ -563,8 +563,8 @@ struct CanvasTimelineDataView: View {
     private var recordingStatusGradient: LinearGradient {
         LinearGradient(
             stops: [
-                .init(color: Color(hex: "5E7FC0"), location: 0.00),
-                .init(color: Color(hex: "D88ECE"), location: 0.35),
+                .init(color: DayflowColors.accent.opacity(0.8), location: 0.00),
+                .init(color: DayflowColors.secondary.opacity(0.8), location: 0.35),
                 .init(color: DayflowColors.accent, location: 0.68),
                 .init(color: DayflowColors.surface, location: 1.00)
             ],

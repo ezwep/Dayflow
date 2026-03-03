@@ -25,7 +25,7 @@ struct IdleReturnPopup: View {
             HStack(spacing: 10) {
                 Image(systemName: "clock.badge.questionmark")
                     .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(Color(red: 0.62, green: 0.44, blue: 0.36))
+                    .foregroundColor(DayflowColors.textMuted)
 
                 Text("You were away")
                     .font(.custom("Nunito", size: 16).weight(.bold))
@@ -108,7 +108,7 @@ struct IdleReturnPopup: View {
                                 .fill(DayflowColors.surface.opacity(0.7))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color(red: 0.98, green: 0.76, blue: 0.42).opacity(0.5), lineWidth: 1)
+                                        .stroke(DayflowColors.accent.opacity(0.5), lineWidth: 1)
                                 )
                         )
                 }

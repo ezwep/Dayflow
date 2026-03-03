@@ -116,7 +116,7 @@ struct DatePickerSheet: View {
                 .pointingHandCursor()
                 .padding(.horizontal, 20)
                 .padding(.vertical, 8)
-                .background(Color.gray.opacity(0.2))
+                .background(DayflowColors.borderSubtle)
                 .cornerRadius(8)
                 
                 Button("Select") {

@@ -65,7 +65,7 @@ struct JournalView: View {
             HStack(alignment: .top, spacing: 4) {
                 Text("Dayflow Journal")
                     .font(.custom("InstrumentSerif-Italic", size: 38))
-                    .foregroundColor(Color(red: 0.35, green: 0.22, blue: 0.12))
+                    .foregroundColor(DayflowColors.textPrimary)
 
                 // BETA badge
                 Text("BETA")
@@ -75,7 +75,7 @@ struct JournalView: View {
                     .padding(.vertical, 4)
                     .background(
                         RoundedRectangle(cornerRadius: 6)
-                            .fill(Color(red: 0.98, green: 0.55, blue: 0.20))
+                            .fill(DayflowColors.accent)
                     )
                     .rotationEffect(.degrees(-12))
                     .offset(x: -4, y: -4)
@@ -84,7 +84,7 @@ struct JournalView: View {
             // Subtitle
             Text(betaNoticeCopy)
                 .font(.custom("Nunito-Regular", size: 15))
-                .foregroundColor(Color(red: 0.35, green: 0.22, blue: 0.12).opacity(0.8))
+                .foregroundColor(DayflowColors.textPrimary.opacity(0.8))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 480)
                 .padding(.horizontal, 24)
@@ -125,13 +125,13 @@ struct JournalView: View {
                 // Title
                 Text("Enter access code")
                     .font(.custom("Nunito-SemiBold", size: 20))
-                    .foregroundColor(Color(red: 0.85, green: 0.45, blue: 0.25))
+                    .foregroundColor(DayflowColors.accent)
 
                 // Text field
                 TextField("", text: $accessCode)
                     .textFieldStyle(.plain)
                     .font(.custom("Nunito-Medium", size: 15))
-                    .foregroundColor(Color(red: 0.25, green: 0.15, blue: 0.10))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 12)
@@ -147,7 +147,7 @@ struct JournalView: View {
                 Button(action: validateCode) {
                     Text("Get early access")
                         .font(.custom("Nunito-SemiBold", size: 15))
-                        .foregroundColor(Color(red: 0.35, green: 0.22, blue: 0.12))
+                        .foregroundColor(DayflowColors.textPrimary)
                         .padding(.horizontal, 28)
                         .padding(.vertical, 10)
                         .background(
@@ -155,8 +155,8 @@ struct JournalView: View {
                                 .fill(
                                     LinearGradient(
                                         colors: [
-                                            Color(red: 1.0, green: 0.92, blue: 0.82),
-                                            Color(red: 1.0, green: 0.85, blue: 0.70)
+                                            DayflowColors.surface,
+                                            DayflowColors.border
                                         ],
                                         startPoint: .top,
                                         endPoint: .bottom
@@ -164,7 +164,7 @@ struct JournalView: View {
                                 )
                                 .overlay(
                                     Capsule()
-                                        .stroke(Color(red: 0.90, green: 0.75, blue: 0.55), lineWidth: 1)
+                                        .stroke(DayflowColors.border, lineWidth: 1)
                                 )
                         )
                 }
@@ -230,13 +230,13 @@ private struct JournalOnboardingView: View {
             // Title
             Text("Set your intentions today")
                 .font(.custom("InstrumentSerif-Regular", size: 42))
-                .foregroundColor(Color(red: 0.85, green: 0.45, blue: 0.15))
+                .foregroundColor(DayflowColors.accent)
                 .multilineTextAlignment(.center)
 
             // Description
             Text("Dayflow helps you track your daily and longer term goals, gives you the space to reflect, and generates a summary of each day.")
                 .font(.custom("Nunito-Regular", size: 16))
-                .foregroundColor(Color(red: 0.25, green: 0.15, blue: 0.10).opacity(0.8))
+                .foregroundColor(DayflowColors.textPrimary.opacity(0.8))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 640)
                 .padding(.horizontal, 24)
@@ -247,7 +247,7 @@ private struct JournalOnboardingView: View {
             Button(action: onStartOnboarding) {
                 Text("Start onboarding")
                     .font(.custom("Nunito-SemiBold", size: 16))
-                    .foregroundColor(Color(red: 0.35, green: 0.22, blue: 0.12))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .padding(.horizontal, 32)
                     .padding(.vertical, 12)
                     .background(
@@ -255,8 +255,8 @@ private struct JournalOnboardingView: View {
                             .fill(
                                 LinearGradient(
                                     colors: [
-                                        Color(red: 1.0, green: 0.96, blue: 0.92),
-                                        Color(red: 1.0, green: 0.90, blue: 0.82)
+                                        DayflowColors.surface,
+                                        DayflowColors.surface.opacity(0.8)
                                     ],
                                     startPoint: .top,
                                     endPoint: .bottom
@@ -264,7 +264,7 @@ private struct JournalOnboardingView: View {
                             )
                             .overlay(
                                 Capsule()
-                                    .stroke(Color(red: 0.92, green: 0.85, blue: 0.78), lineWidth: 1)
+                                    .stroke(DayflowColors.border, lineWidth: 1)
                             )
                     )
             }
@@ -292,7 +292,7 @@ struct JournalOnboardingVideoView: View {
     var body: some View {
         ZStack {
             // Black background in case video doesn't load
-            Color.black.ignoresSafeArea()
+            DayflowColors.background.ignoresSafeArea()
 
             if let player = player {
                 JournalVideoPlayerView(player: player)

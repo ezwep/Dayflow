@@ -424,7 +424,7 @@ struct CompletionView: View {
                 },
                 background: canProceed
                     ? DayflowColors.accent
-                    : Color(red: 0.88, green: 0.84, blue: 0.78),
+                    : DayflowColors.textMuted,
                 foreground: .white,
                 borderColor: .clear,
                 cornerRadius: 8,

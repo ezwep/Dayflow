@@ -132,7 +132,7 @@ struct TimelineFeedbackModal: View {
                             .overlay(
                                 Image(systemName: "checkmark")
                                     .font(.system(size: 8, weight: .bold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.white) // white on accent bg for contrast
                                     .opacity(shareLogs ? 1 : 0)
                             )
                             .background(
@@ -155,7 +155,7 @@ struct TimelineFeedbackModal: View {
             Button(action: onSubmit) {
                 Text("Submit")
                     .font(Font.custom("Nunito", size: 12).weight(.medium))
-                    .foregroundColor(.white)
+                    .foregroundColor(.white) // white on accent bg for contrast
                     .frame(maxWidth: .infinity)
                     .frame(height: 30)
                     .background(DayflowColors.accent)
@@ -213,7 +213,7 @@ extension TimelineFeedbackModal {
         onClose: {}
     )
     .padding()
-    .background(Color.gray.opacity(0.1))
+    .background(DayflowColors.borderSubtle)
 
     TimelineFeedbackModal(
         message: .constant(""),
@@ -224,5 +224,5 @@ extension TimelineFeedbackModal {
         onClose: {}
     )
     .padding()
-    .background(Color.gray.opacity(0.1))
+    .background(DayflowColors.borderSubtle)
 }

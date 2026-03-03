@@ -363,12 +363,12 @@ struct DaySummaryView: View {
     private var emptyChartPlaceholder: some View {
         VStack(spacing: 12) {
             Circle()
-                .stroke(Color.gray.opacity(0.2), lineWidth: 20)
+                .stroke(DayflowColors.borderSubtle, lineWidth: 20)
                 .frame(width: 140, height: 140)
 
             Text("No activity data yet")
                 .font(.custom("Nunito", size: 12))
-                .foregroundColor(Color.gray.opacity(0.6))
+                .foregroundColor(DayflowColors.textMuted)
         }
         .padding(.vertical, 20)
     }

@@ -30,7 +30,7 @@ struct ManualTimeBlockPopover: View {
             HStack(spacing: 8) {
                 Image(systemName: isEditing ? "pencil.circle" : "plus.rectangle.on.rectangle")
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(Color(red: 0.62, green: 0.44, blue: 0.36))
+                    .foregroundColor(DayflowColors.textMuted)
 
                 Text(isEditing ? "Edit time block" : "Add time block")
                     .font(.custom("Nunito", size: 15).weight(.bold))
@@ -125,7 +125,7 @@ struct ManualTimeBlockPopover: View {
                                 .fill(DayflowColors.surface.opacity(0.7))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color(red: 0.98, green: 0.76, blue: 0.42).opacity(0.5), lineWidth: 1)
+                                        .stroke(DayflowColors.accent.opacity(0.5), lineWidth: 1)
                                 )
                         )
                 }

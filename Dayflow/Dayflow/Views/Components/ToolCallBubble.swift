@@ -213,9 +213,9 @@ private struct ShimmerOverlay: View {
         GeometryReader { geo in
             LinearGradient(
                 colors: [
-                    Color.white.opacity(0),
-                    Color.white.opacity(0.5),
-                    Color.white.opacity(0)
+                    DayflowColors.surface.opacity(0),
+                    DayflowColors.surface.opacity(0.5),
+                    DayflowColors.surface.opacity(0)
                 ],
                 startPoint: .leading,
                 endPoint: .trailing

@@ -34,7 +34,7 @@ struct CategoryTimeData: Identifiable {
         if let nsColor = NSColor(hex: colorHex) {
             return Color(nsColor: nsColor)
         }
-        return Color.gray
+        return DayflowColors.textMuted
     }
 
     var formattedDuration: String {

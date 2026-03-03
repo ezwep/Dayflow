@@ -19,18 +19,18 @@ struct TerminalCommandView: View {
             Text(title)
                 .font(.custom("Nunito", size: 16))
                 .fontWeight(.semibold)
-                .foregroundColor(.black.opacity(0.9))
+                .foregroundColor(DayflowColors.textPrimary)
             
             Text(subtitle)
                 .font(.custom("Nunito", size: 14))
-                .foregroundColor(.black.opacity(0.6))
+                .foregroundColor(DayflowColors.textMuted)
             
             // Command block with trailing copy button (overlay for tight right alignment)
             ZStack(alignment: .leading) {
                 // Command text area
                 Text(command)
                     .font(.custom("SF Mono", size: 13))
-                    .foregroundColor(.black.opacity(0.85))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .textSelection(.enabled)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 14)
@@ -48,11 +48,11 @@ struct TerminalCommandView: View {
                                 .font(.custom("Nunito", size: 13))
                                 .fontWeight(.medium)
                         }
-                        .foregroundColor(isCopied ? Color(red: 0.34, green: 1, blue: 0.45) : .black.opacity(0.75))
+                        .foregroundColor(isCopied ? DayflowColors.success : DayflowColors.textPrimary)
                     },
-                    background: Color.white.opacity(0.93),
-                    foreground: .black,
-                    borderColor: Color.black.opacity(0.12),
+                    background: DayflowColors.surface,
+                    foreground: DayflowColors.textPrimary,
+                    borderColor: DayflowColors.borderSubtle,
                     cornerRadius: 6,
                     horizontalPadding: 14,
                     verticalPadding: 10,
@@ -61,11 +61,11 @@ struct TerminalCommandView: View {
                 .padding(.trailing, 6)
                 .padding(.vertical, 6)
             }
-            .background(Color(hex: "F8F9FA"))
+            .background(DayflowColors.surface)
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    .stroke(DayflowColors.borderSubtle, lineWidth: 1)
             )
         }
     }

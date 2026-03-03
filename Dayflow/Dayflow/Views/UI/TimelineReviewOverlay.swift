@@ -427,7 +427,7 @@ struct TimelineReviewOverlay: View {
         if let match = categoryStore.categories.first(where: { $0.name == name }) {
             return Color(hex: match.colorHex)
         }
-        return Color(hex: "B984FF")
+        return DayflowColors.secondary
     }
 
     private func handleMoveCommand(_ direction: MoveCommandDirection) {
@@ -1029,8 +1029,8 @@ private struct TimelineReviewCard: View {
 
     private enum SpeedChipDesign {
         static let padding: CGFloat = 10
-        static let background = Color.black.opacity(0.8)
-        static let text = Color.white
+        static let background = DayflowColors.background.opacity(0.8)
+        static let text = DayflowColors.textPrimary
     }
 
     private var speedChip: some View {
@@ -1438,7 +1438,7 @@ private struct TimelineReviewCardMedia: View {
     let onTogglePlayback: () -> Void
 
     private enum Design {
-        static let mediaBorderColor = Color.white.opacity(0.2)
+        static let mediaBorderColor = DayflowColors.borderSubtle
     }
 
     var body: some View {
@@ -1542,7 +1542,7 @@ private struct TimelineReviewPlaybackTimeline: View {
         static let baseColor = DayflowColors.textMuted.opacity(0.5)
         static let progressColor = DayflowColors.accent.opacity(0.65)
         static let pillColor = DayflowColors.accent
-        static let pillText = Color.white
+        static let pillText = Color.white // white on accent bg for contrast
         static let pillFont = Font.custom("Nunito", size: 8).weight(.semibold)
         static let pillTracking: CGFloat = -0.32
         static let pillPaddingX: CGFloat = 4

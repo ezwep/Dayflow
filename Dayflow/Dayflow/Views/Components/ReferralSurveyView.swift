@@ -119,7 +119,7 @@ struct ReferralSurveyView: View {
     private var submitBackground: Color {
         canSubmit
             ? DayflowColors.accent
-            : Color(red: 0.88, green: 0.84, blue: 0.78)
+            : DayflowColors.textMuted
     }
 
     @ViewBuilder

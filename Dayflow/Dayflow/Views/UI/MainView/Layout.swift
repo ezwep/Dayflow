@@ -875,7 +875,7 @@ private struct TimelineFailureToastView: View {
             HStack(alignment: .top, spacing: 10) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 14))
-                    .foregroundColor(Color(hex: "C04A00"))
+                    .foregroundColor(DayflowColors.accent)
                     .padding(.top, 2)
 
                 Text(message)
@@ -916,11 +916,11 @@ private struct TimelineFailureToastView: View {
         }
         .padding(14)
         .frame(width: 360, alignment: .leading)
-        .background(Color(hex: "FFF8F2"))
+        .background(DayflowColors.surface)
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color(hex: "F3D9C2"), lineWidth: 1)
+                .stroke(DayflowColors.border, lineWidth: 1)
         )
         .shadow(color: Color.black.opacity(0.12), radius: 12, x: 0, y: 6)
     }

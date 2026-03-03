@@ -447,21 +447,21 @@ struct LLMProviderSetupView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .font(.system(size: 12))
-                            .foregroundColor(Color(hex: "E91515"))
+                            .foregroundColor(DayflowColors.error)
 
                         Text(message)
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(Color(hex: "E91515"))
+                            .foregroundColor(DayflowColors.error)
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 10)
                     .background(
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(Color(hex: "E91515").opacity(0.1))
+                            .fill(DayflowColors.error.opacity(0.1))
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 4)
-                            .stroke(Color(hex: "E91515").opacity(0.3), lineWidth: 1)
+                            .stroke(DayflowColors.error.opacity(0.3), lineWidth: 1)
                     )
                 }
 
@@ -1320,7 +1320,7 @@ struct LocalLLMTestView: View {
     }
 
     private let accentColor = DayflowColors.accent
-    private let successAccentColor = Color(red: 0.34, green: 1, blue: 0.45)
+    private let successAccentColor = DayflowColors.success
     private var trimmedAPIKey: String {
         apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
     }
@@ -1391,7 +1391,7 @@ struct LocalLLMTestView: View {
             if let msg = resultMessage {
                 Text(msg)
                     .font(.custom("Nunito", size: 13))
-                    .foregroundColor(success ? DayflowColors.textPrimary.opacity(0.7) : Color(hex: "E91515"))
+                    .foregroundColor(success ? DayflowColors.textPrimary.opacity(0.7) : DayflowColors.error)
                     .padding(.vertical, 6)
                 if !success {
                     Text("If you get stuck here, you can go back and choose the ‘Bring your own key’ option — it only takes a minute to set up.")
@@ -1514,7 +1514,7 @@ struct ChatCLITestView: View {
     let onTestComplete: (Bool) -> Void
 
     private let accentColor = DayflowColors.accent
-    private let successAccentColor = Color(red: 0.34, green: 1, blue: 0.45)
+    private let successAccentColor = DayflowColors.success
 
     // Primary test state
     @State private var isTesting = false
@@ -1620,7 +1620,7 @@ struct ChatCLITestView: View {
                 HStack(alignment: .center, spacing: 8) {
                     Text(msg)
                         .font(.custom("Nunito", size: 13))
-                        .foregroundColor(testSuccess ? DayflowColors.textPrimary.opacity(0.7) : Color(hex: "E91515"))
+                        .foregroundColor(testSuccess ? DayflowColors.textPrimary.opacity(0.7) : DayflowColors.error)
 
                     if debug != nil {
                         Button(action: onCopyLogs) {
@@ -1651,7 +1651,7 @@ struct ChatCLITestView: View {
                     }
                     .frame(maxHeight: 100)
                     .padding(8)
-                    .background(Color.black.opacity(0.03))
+                    .background(DayflowColors.borderSubtle)
                     .cornerRadius(6)
                 }
             }
@@ -2054,7 +2054,7 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                    .stroke(DayflowColors.borderSubtle, lineWidth: 1)
             )
 
             // Secondary provider (optional) - only show if both tools are available
@@ -2083,7 +2083,7 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                        .stroke(DayflowColors.borderSubtle, lineWidth: 1)
                 )
             }
 
@@ -2169,7 +2169,7 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(isSelected ? accentColor.opacity(0.4) : Color.black.opacity(0.05), lineWidth: 1)
+                    .stroke(isSelected ? accentColor.opacity(0.4) : DayflowColors.borderSubtle, lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
@@ -2187,7 +2187,7 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
             HStack(spacing: 6) {
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(enabled ? accentColor : Color.gray.opacity(0.6))
+                    .foregroundColor(enabled ? accentColor : DayflowColors.textMuted)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(tool.shortName)
                         .font(.custom("Nunito", size: 13))
@@ -2207,7 +2207,7 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(isSelected ? accentColor.opacity(0.4) : Color.black.opacity(0.05), lineWidth: 1)
+                    .stroke(isSelected ? accentColor.opacity(0.4) : DayflowColors.borderSubtle, lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
@@ -2281,7 +2281,7 @@ struct ChatCLIToolStatusRow: View {
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                .stroke(DayflowColors.borderSubtle, lineWidth: 1)
         )
     }
 
@@ -2303,28 +2303,28 @@ struct ChatCLIToolStatusRow: View {
             Text(status.statusLabel)
                 .font(.custom("Nunito", size: 11))
                 .fontWeight(.semibold)
-                .foregroundColor(Color(red: 0.13, green: 0.7, blue: 0.23))
+                .foregroundColor(DayflowColors.success)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
-                .background(Color(red: 0.13, green: 0.7, blue: 0.23).opacity(0.17))
+                .background(DayflowColors.success.opacity(0.17))
                 .cornerRadius(999)
         case .notFound:
             Text(status.statusLabel)
                 .font(.custom("Nunito", size: 11))
                 .fontWeight(.semibold)
-                .foregroundColor(Color(hex: "E91515"))
+                .foregroundColor(DayflowColors.error)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
-                .background(Color(hex: "FFD1D1"))
+                .background(DayflowColors.error.opacity(0.15))
                 .cornerRadius(999)
         case .failed:
             Text(status.statusLabel)
                 .font(.custom("Nunito", size: 11))
                 .fontWeight(.semibold)
-                .foregroundColor(Color(red: 0.91, green: 0.34, blue: 0.16))
+                .foregroundColor(DayflowColors.warning)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
-                .background(Color(red: 0.91, green: 0.34, blue: 0.16).opacity(0.18))
+                .background(DayflowColors.warning.opacity(0.18))
                 .cornerRadius(999)
         }
     }

@@ -23,7 +23,7 @@ struct DateNavigationControls: View {
             } content: {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(red: 0.3, green: 0.3, blue: 0.3))
+                    .foregroundColor(DayflowColors.textMuted)
             }
 
             Button(action: { showDatePicker = true; lastDateNavMethod = "picker" }) {
@@ -52,8 +52,8 @@ struct DateNavigationControls: View {
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(
                         canNavigateForward(from: selectedDate)
-                        ? Color(red: 0.3, green: 0.3, blue: 0.3)
-                        : Color.gray.opacity(0.3)
+                        ? DayflowColors.textMuted
+                        : DayflowColors.textMuted.opacity(0.5)
                     )
             }
         }

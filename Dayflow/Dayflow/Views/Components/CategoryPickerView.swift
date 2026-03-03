@@ -195,7 +195,7 @@ struct CategoryPill: View {
         if let nsColor = NSColor(hex: category.colorHex) {
             return Color(nsColor: nsColor)
         }
-        return Color.gray
+        return DayflowColors.textMuted
     }
     
     private var pillBackground: some View {

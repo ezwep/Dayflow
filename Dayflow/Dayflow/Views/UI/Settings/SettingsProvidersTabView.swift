@@ -23,7 +23,7 @@ struct SettingsProvidersTabView: View {
             if let status = viewModel.upgradeStatusMessage {
                 Text(status)
                     .font(.custom("Nunito", size: 13))
-                    .foregroundColor(Color(red: 0.06, green: 0.45, blue: 0.2))
+                    .foregroundColor(DayflowColors.success)
                     .padding(.horizontal, 4)
             }
 
@@ -62,7 +62,7 @@ struct SettingsProvidersTabView: View {
                                 .frame(minWidth: 160)
                             },
                             background: DayflowColors.surface,
-                            foreground: .black,
+                            foreground: DayflowColors.textPrimary,
                             borderColor: DayflowColors.border,
                             cornerRadius: 8,
                             horizontalPadding: 16,
@@ -263,7 +263,7 @@ struct SettingsProvidersTabView: View {
                     .frame(width: routingButtonTextWidth, alignment: .center)
             },
             background: filled ? routingAccentColor : DayflowColors.surface,
-            foreground: filled ? .white : .black,
+            foreground: filled ? .white : DayflowColors.textPrimary,
             borderColor: filled ? .clear : DayflowColors.border,
             cornerRadius: 7,
             horizontalPadding: 10,
@@ -584,7 +584,7 @@ private struct LocalModelUpgradeBanner: View {
                 Image(systemName: "sparkles")
                     .foregroundStyle(Color.white)
                     .padding(8)
-                    .background(Color(red: 0.12, green: 0.09, blue: 0.02))
+                    .background(DayflowColors.surfaceElevated)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Upgrade to \(preset.displayName)")
@@ -593,7 +593,7 @@ private struct LocalModelUpgradeBanner: View {
                         .foregroundColor(.white)
                     Text("Upgrade to Qwen3VL for a big improvement in quality.")
                         .font(.custom("Nunito", size: 13))
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(DayflowColors.textPrimary)
                 }
                 Spacer()
             }
@@ -603,11 +603,11 @@ private struct LocalModelUpgradeBanner: View {
                     HStack(alignment: .top, spacing: 8) {
                         Image(systemName: "checkmark.circle.fill")
                             .font(.system(size: 12))
-                            .foregroundColor(Color(red: 0.76, green: 1, blue: 0.74))
+                            .foregroundColor(DayflowColors.success)
                             .padding(.top, 2)
                         Text(bullet)
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.white.opacity(0.85))
+                            .foregroundColor(DayflowColors.textPrimary)
                     }
                 }
             }
@@ -618,9 +618,9 @@ private struct LocalModelUpgradeBanner: View {
                     content: {
                         Text("Keep Qwen2.5").font(.custom("Nunito", size: 13)).fontWeight(.semibold)
                     },
-                    background: Color.white.opacity(0.12),
+                    background: DayflowColors.surfaceElevated,
                     foreground: .white,
-                    borderColor: Color.white.opacity(0.25),
+                    borderColor: DayflowColors.borderSubtle,
                     cornerRadius: 8,
                     horizontalPadding: 18,
                     verticalPadding: 10,
@@ -635,8 +635,8 @@ private struct LocalModelUpgradeBanner: View {
                                 .font(.system(size: 13, weight: .semibold))
                         }
                     },
-                    background: Color.white,
-                    foreground: .black,
+                    background: DayflowColors.surface,
+                    foreground: DayflowColors.textPrimary,
                     borderColor: .clear,
                     cornerRadius: 8,
                     horizontalPadding: 18,
@@ -648,7 +648,7 @@ private struct LocalModelUpgradeBanner: View {
         .padding(20)
         .background(
             RoundedRectangle(cornerRadius: 18)
-                .fill(Color(red: 0.16, green: 0.11, blue: 0))
+                .fill(DayflowColors.surfaceElevated)
         )
     }
 }
@@ -720,7 +720,7 @@ struct LocalModelUpgradeSheet: View {
                         HStack(spacing: 8) {
                             Image(systemName: "sparkle")
                                 .font(.system(size: 12))
-                                .foregroundColor(Color(red: 0.39, green: 0.23, blue: 0.02))
+                                .foregroundColor(DayflowColors.textPrimary)
                             Text(bullet)
                                 .font(.custom("Nunito", size: 13))
                                 .foregroundColor(DayflowColors.textPrimary.opacity(0.75))
@@ -772,7 +772,7 @@ struct LocalModelUpgradeSheet: View {
                             Text("Close").font(.custom("Nunito", size: 13)).fontWeight(.semibold)
                         },
                         background: DayflowColors.surface,
-                        foreground: .black,
+                        foreground: DayflowColors.textPrimary,
                         borderColor: DayflowColors.border,
                         cornerRadius: 8,
                         horizontalPadding: 18,

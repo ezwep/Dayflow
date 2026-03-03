@@ -909,7 +909,7 @@ private struct ReflectionSavedCard: View {
                     }
                 } else if let error = errorMessage {
                     VStack(alignment: .trailing, spacing: 8) {
-                        Text(error).font(.custom("Nunito-Regular", size: 13)).foregroundStyle(Color.red.opacity(0.8)).multilineTextAlignment(.trailing)
+                        Text(error).font(.custom("Nunito-Regular", size: 13)).foregroundStyle(DayflowColors.error).multilineTextAlignment(.trailing)
                         HStack(spacing: 12) {
                             Button("Dismiss") { onDismissError?() }
                                 .buttonStyle(.plain).font(.custom("Nunito-Regular", size: 13)).foregroundStyle(JournalDayTokens.bodyText.opacity(0.6))

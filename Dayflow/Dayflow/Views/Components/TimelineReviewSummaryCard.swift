@@ -195,10 +195,10 @@ struct TimelineReviewSummaryCard: View {
             ratio: max(CGFloat(summary.distractedRatio), 0),
             durationText: durationText(summary.distractedDuration),
             style: metricStyle(
-                baseColor: Color(hex: "FF8772"),
-                shadow: Color(red: 148 / 255, green: 87 / 255, blue: 77 / 255).opacity(0.25),
-                legendFill: Color(hex: "FF8772").opacity(0.4),
-                legendStroke: Color(hex: "FF8772"),
+                baseColor: DayflowColors.error,
+                shadow: DayflowColors.error.opacity(0.25),
+                legendFill: DayflowColors.error.opacity(0.4),
+                legendStroke: DayflowColors.error,
                 placeholder: placeholder
             )
         )
@@ -209,10 +209,10 @@ struct TimelineReviewSummaryCard: View {
             ratio: max(CGFloat(summary.neutralRatio), 0),
             durationText: durationText(summary.neutralDuration),
             style: metricStyle(
-                baseColor: Color(hex: "EAE0DB"),
-                shadow: Color(red: 225 / 255, green: 210 / 255, blue: 203 / 255).opacity(0.25),
-                legendFill: Color(hex: "DDDBDA").opacity(0.4),
-                legendStroke: Color(hex: "DDDBDA"),
+                baseColor: DayflowColors.textMuted,
+                shadow: DayflowColors.textMuted.opacity(0.25),
+                legendFill: DayflowColors.textMuted.opacity(0.4),
+                legendStroke: DayflowColors.textMuted,
                 placeholder: placeholder
             )
         )
@@ -223,10 +223,10 @@ struct TimelineReviewSummaryCard: View {
             ratio: max(CGFloat(summary.productiveRatio), 0),
             durationText: durationText(summary.productiveDuration),
             style: metricStyle(
-                baseColor: Color(hex: "42D0BB"),
-                shadow: Color(red: 77 / 255, green: 156 / 255, blue: 145 / 255).opacity(0.25),
-                legendFill: Color(hex: "42D0BB").opacity(0.4),
-                legendStroke: Color(hex: "42D0BB"),
+                baseColor: DayflowColors.success,
+                shadow: DayflowColors.success.opacity(0.25),
+                legendFill: DayflowColors.success.opacity(0.4),
+                legendStroke: DayflowColors.success,
                 placeholder: placeholder
             )
         )

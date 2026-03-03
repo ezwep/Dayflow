@@ -71,7 +71,7 @@ struct DayflowButton: View {
                         if showPulse {
                             Group {
                                 if isSubtle {
-                                    Color.gray.opacity(0.1)
+                                    DayflowColors.borderSubtle
                                 } else {
                                     DayflowColors.cta
                                         .opacity(0.3)
@@ -141,6 +141,6 @@ struct DayflowButton_Previews: PreviewProvider {
             DayflowButton(title: "Subtle", action: {}, isSubtle: true)
         }
         .padding(40)
-        .background(Color.gray.opacity(0.1))
+        .background(DayflowColors.borderSubtle)
     }
 }

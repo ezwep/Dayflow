@@ -156,7 +156,7 @@ struct FlexibleProviderCard: View {
                 HStack(spacing: 4) {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 12))
-                        .foregroundColor(.green)
+                        .foregroundColor(DayflowColors.success)
                     Text(customStatusText ?? "Currently selected")
                         .font(.custom("Nunito", size: 12))
                         .fontWeight(.medium)
@@ -245,7 +245,7 @@ struct FlexibleProviderCard: View {
     }
     
     private var buttonForegroundColor: Color {
-        return .white
+        return .white // white on accent bg for contrast
     }
     
     private var buttonBackgroundColor: Color {
@@ -323,7 +323,7 @@ struct BadgeView: View {
         case .orange:
             return DayflowColors.error
         case .blue:
-            return Color(red: 0.19, green: 0.39, blue: 0.8)
+            return DayflowColors.accent
         }
     }
     
@@ -354,12 +354,12 @@ struct BadgeView: View {
             ]
         case .orange:
             return [
-                Gradient.Stop(color: Color(red: 1, green: 0.49, blue: 0.34), location: 0.00),
+                Gradient.Stop(color: DayflowColors.accent, location: 0.00),
                 Gradient.Stop(color: DayflowColors.surface.opacity(0), location: 1.00)
             ]
         case .blue:
             return [
-                Gradient.Stop(color: Color(red: 0.34, green: 0.56, blue: 1), location: 0.00),
+                Gradient.Stop(color: DayflowColors.accent, location: 0.00),
                 Gradient.Stop(color: DayflowColors.surface.opacity(0), location: 1.00)
             ]
         }
@@ -372,7 +372,7 @@ struct BadgeView: View {
         case .orange:
             return DayflowColors.warning
         case .blue:
-            return Color(red: 0.34, green: 0.56, blue: 1)
+            return DayflowColors.accent
         }
     }
     
@@ -383,7 +383,7 @@ struct BadgeView: View {
         case .orange:
             return DayflowColors.error.opacity(0.3)
         case .blue:
-            return Color(red: 0.34, green: 0.56, blue: 1).opacity(0.3)
+            return DayflowColors.accent.opacity(0.3)
         }
     }
 }
@@ -495,8 +495,8 @@ struct SelectedCardBackground: View {
             LinearGradient(
                 stops: [
                     Gradient.Stop(color: Color.clear, location: 0.25),
-                    Gradient.Stop(color: Color(hex: "FF7506").opacity(0.05), location: 0.7),
-                    Gradient.Stop(color: Color(hex: "FF7506").opacity(0.15), location: 1.0)
+                    Gradient.Stop(color: DayflowColors.accent.opacity(0.05), location: 0.7),
+                    Gradient.Stop(color: DayflowColors.accent.opacity(0.15), location: 1.0)
                 ],
                 startPoint: UnitPoint(x: 0, y: 0.5),
                 endPoint: UnitPoint(x: 1, y: 0.5)
@@ -522,18 +522,18 @@ struct SelectedCardOverlay: View {
                 .stroke(
                     AngularGradient(
                         stops: [
-                            .init(color: Color(hex: "FFF1D3").opacity(0.50), location: 0.00),
-                            .init(color: Color(hex: "FF8904").opacity(0.50), location: 0.03),
-                            .init(color: Color(hex: "FF8904").opacity(0.35), location: 0.09),
+                            .init(color: DayflowColors.accent.opacity(0.10), location: 0.00),
+                            .init(color: DayflowColors.accent.opacity(0.50), location: 0.03),
+                            .init(color: DayflowColors.accent.opacity(0.35), location: 0.09),
                             .init(color: .white, location: 0.17),
                             .init(color: .white.opacity(0.75), location: 0.23),
                             .init(color: .white.opacity(0.50), location: 0.25),
                             .init(color: .white.opacity(0.50), location: 0.30),
-                            .init(color: Color(hex: "FF8904").opacity(0.35), location: 0.52),
-                            .init(color: Color(hex: "FFE0A5"), location: 0.58),
+                            .init(color: DayflowColors.accent.opacity(0.35), location: 0.52),
+                            .init(color: DayflowColors.accent.opacity(0.2), location: 0.58),
                             .init(color: .white, location: 0.80),
-                            .init(color: Color(hex: "FFF1D3").opacity(0.50), location: 0.91),
-                            .init(color: Color(hex: "FFF1D3").opacity(0.50), location: 1.00)
+                            .init(color: DayflowColors.accent.opacity(0.10), location: 0.91),
+                            .init(color: DayflowColors.accent.opacity(0.10), location: 1.00)
                         ],
                         center: .center,
                         startAngle: .degrees(0),
@@ -552,19 +552,19 @@ struct CardShadowModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .shadow(
-                color: isSelected ? Color(red: 0.47, green: 0.27, blue: 0.09).opacity(0.21) : Color.clear,
+                color: isSelected ? DayflowColors.accent.opacity(0.3).opacity(0.21) : Color.clear,
                 radius: 5,
                 x: 4,
                 y: 3
             )
             .shadow(
-                color: isSelected ? Color(red: 0.47, green: 0.27, blue: 0.09).opacity(0.18) : Color.clear,
+                color: isSelected ? DayflowColors.accent.opacity(0.3).opacity(0.18) : Color.clear,
                 radius: 9.5,
                 x: 14,
                 y: 12
             )
             .shadow(
-                color: isSelected ? Color(red: 0.48, green: 0.27, blue: 0.1).opacity(0.11) : Color.clear,
+                color: isSelected ? DayflowColors.accent.opacity(0.3).opacity(0.11) : Color.clear,
                 radius: 12.5,
                 x: 32,
                 y: 27

@@ -591,7 +591,7 @@ struct ChatView: View {
                     .clipShape(Circle())
                     .overlay(
                         Circle()
-                            .stroke(Color.white.opacity(0.55), lineWidth: 0.8)
+                            .stroke(DayflowColors.borderSubtle, lineWidth: 0.8)
                     )
                     .shadow(
                         color: canSubmitCurrentInput ? DayflowColors.accent.opacity(0.35) : Color.clear,
@@ -624,7 +624,7 @@ struct ChatView: View {
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .inset(by: 0.6)
-                .stroke(Color.white.opacity(0.65), lineWidth: 0.8)
+                .stroke(DayflowColors.border, lineWidth: 0.8)
         )
         .shadow(color: DayflowColors.accent.opacity(0.14), radius: 14, x: 0, y: 6)
         .animation(.easeOut(duration: 0.16), value: isInputFocused)
@@ -1543,10 +1543,10 @@ private struct ChatChartBlockView: View {
 
     private static let defaultPalette: [Color] = [
         DayflowColors.accent,
-        Color(hex: "1F6FEB"),
-        Color(hex: "2E7D32"),
-        Color(hex: "8E24AA"),
-        Color(hex: "00897B")
+        DayflowColors.accent,
+        DayflowColors.success,
+        DayflowColors.secondary,
+        DayflowColors.success.opacity(0.8)
     ]
 }
 

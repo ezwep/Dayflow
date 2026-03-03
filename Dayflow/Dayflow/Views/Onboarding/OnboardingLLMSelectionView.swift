@@ -50,7 +50,7 @@ struct OnboardingLLMSelectionView: View {
                     Text("Choose a way to run Dayflow")
                     .font(.custom("InstrumentSerif-Regular", size: titleSize))
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.black.opacity(0.9))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .frame(maxWidth: .infinity)
                     .frame(height: headerHeight)
                     .opacity(titleOpacity)
@@ -81,20 +81,20 @@ struct OnboardingLLMSelectionView: View {
                     Group {
                         if cliDetected {
                             Text("You have Codex/Claude CLI installed! ")
-                                .foregroundColor(.black.opacity(0.6))
+                                .foregroundColor(DayflowColors.textMuted)
                             + Text("We recommend using it for the best experience.")
                                 .fontWeight(.semibold)
-                                .foregroundColor(.black.opacity(0.8))
+                                .foregroundColor(DayflowColors.textPrimary)
                             + Text(" You can switch at any time in the settings.")
-                                .foregroundColor(.black.opacity(0.6))
+                                .foregroundColor(DayflowColors.textMuted)
                         } else {
                             Text("Not sure which to choose? ")
-                                .foregroundColor(.black.opacity(0.6))
+                                .foregroundColor(DayflowColors.textMuted)
                             + Text("Bring your own keys is the easiest setup (30s).")
                                 .fontWeight(.semibold)
-                                .foregroundColor(.black.opacity(0.8))
+                                .foregroundColor(DayflowColors.textPrimary)
                             + Text(" You can switch at any time in the settings.")
-                                .foregroundColor(.black.opacity(0.6))
+                                .foregroundColor(DayflowColors.textMuted)
                         }
                     }
                     .font(.custom("Nunito", size: 14))

@@ -190,7 +190,7 @@ struct VideoExpansionOverlay: View {
                 if let startTime = expansionState.startTime, let endTime = expansionState.endTime {
                     Text("\(videoPlayerDisplayTime(from: startTime)) to \(videoPlayerDisplayTime(from: endTime))")
                         .font(.caption)
-                        .foregroundColor(Color(red: 0.4, green: 0.4, blue: 0.4))
+                        .foregroundColor(DayflowColors.textMuted)
                 }
             }
             Spacer()
@@ -205,7 +205,7 @@ struct VideoExpansionOverlay: View {
         .padding(.vertical, 10)
         .background(DayflowColors.surface)
         .overlay(
-            Rectangle().stroke(Color.gray.opacity(0.25), lineWidth: 1)
+            Rectangle().stroke(DayflowColors.borderSubtle, lineWidth: 1)
         )
     }
 
@@ -433,7 +433,7 @@ enum ActivityType {
         case .breaks:
             return Color.yellow
         case .other:
-            return Color.gray
+            return DayflowColors.textMuted
         }
     }
 }
@@ -590,7 +590,7 @@ struct VideoPlayerModal: View {
                         if let startTime = startTime, let endTime = endTime {
                             Text("\(videoPlayerDisplayTime(from: startTime)) to \(videoPlayerDisplayTime(from: endTime))")
                                 .font(.caption)
-                                .foregroundColor(Color(red: 0.4, green: 0.4, blue: 0.4))
+                                .foregroundColor(DayflowColors.textMuted)
                         }
                     }
                     Spacer()
@@ -605,7 +605,7 @@ struct VideoPlayerModal: View {
                 .padding(.vertical, 10)
                 .background(DayflowColors.surface)
                 .overlay(
-                    Rectangle().stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                    Rectangle().stroke(DayflowColors.borderSubtle, lineWidth: 1)
                 )
             }
 

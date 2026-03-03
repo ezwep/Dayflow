@@ -47,7 +47,7 @@ private extension JournalHeroView {
             .ignoresSafeArea()
 
             RadialGradient(
-                colors: [Color.white.opacity(0.9), Color.clear],
+                colors: [DayflowColors.background.opacity(0.9), Color.clear],
                 center: .bottomLeading,
                 startRadius: 90,
                 endRadius: 520
