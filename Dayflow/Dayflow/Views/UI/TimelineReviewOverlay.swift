@@ -28,17 +28,17 @@ private enum TimelineReviewRating: String, CaseIterable, Identifiable {
 
     var overlayColor: Color {
         switch self {
-        case .distracted: return Color(hex: "975D57").opacity(0.6)
-        case .neutral: return Color(hex: "8C8379").opacity(0.55)
-        case .focused: return Color(hex: "43765E").opacity(0.6)
+        case .distracted: return DayflowColors.error.opacity(0.6)
+        case .neutral: return DayflowColors.textMuted.opacity(0.55)
+        case .focused: return DayflowColors.success.opacity(0.6)
         }
     }
 
     var overlayTextColor: Color {
         switch self {
-        case .distracted: return Color(hex: "F9D8D4")
-        case .neutral: return Color(hex: "F4F0ED")
-        case .focused: return Color(hex: "D9F7E4")
+        case .distracted: return DayflowColors.error.opacity(0.3)
+        case .neutral: return DayflowColors.surface
+        case .focused: return DayflowColors.success.opacity(0.3)
         }
     }
 
@@ -46,19 +46,19 @@ private enum TimelineReviewRating: String, CaseIterable, Identifiable {
         switch self {
         case .distracted:
             return LinearGradient(
-                colors: [Color(hex: "FFBDB1"), Color(hex: "FF8772")],
+                colors: [DayflowColors.error.opacity(0.4), DayflowColors.error.opacity(0.7)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
         case .neutral:
             return LinearGradient(
-                colors: [Color(hex: "FFFEFE"), Color(hex: "EAE0DB")],
+                colors: [DayflowColors.surface, DayflowColors.textMuted.opacity(0.2)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
         case .focused:
             return LinearGradient(
-                colors: [Color(hex: "92F1E3"), Color(hex: "42D0BB")],
+                colors: [DayflowColors.success.opacity(0.4), DayflowColors.success.opacity(0.7)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -67,19 +67,19 @@ private enum TimelineReviewRating: String, CaseIterable, Identifiable {
 
     var barStroke: Color {
         switch self {
-        case .distracted: return Color(hex: "FF8772")
-        case .neutral: return Color(hex: "EAE0DB")
-        case .focused: return Color(hex: "42D0BB")
+        case .distracted: return DayflowColors.error.opacity(0.7)
+        case .neutral: return DayflowColors.textMuted.opacity(0.2)
+        case .focused: return DayflowColors.success.opacity(0.7)
         }
     }
 
-    var labelColor: Color { Color(hex: "707070") }
+    var labelColor: Color { DayflowColors.textMuted }
 
     var iconTint: Color {
         switch self {
-        case .distracted: return Color(hex: "FF7B67")
-        case .neutral: return Color(hex: "C8C8C8")
-        case .focused: return Color(hex: "47D2BD")
+        case .distracted: return DayflowColors.error
+        case .neutral: return DayflowColors.textMuted.opacity(0.5)
+        case .focused: return DayflowColors.success
         }
     }
 
@@ -217,7 +217,7 @@ struct TimelineReviewOverlay: View {
 
     private var overlayBackground: some View {
         Rectangle()
-            .fill(Color(hex: "FBE9E0").opacity(0.92))
+            .fill(DayflowColors.surface.opacity(0.92))
         .ignoresSafeArea()
     }
 
@@ -237,7 +237,7 @@ struct TimelineReviewOverlay: View {
                                 .fill(DayflowColors.surface.opacity(0.7))
                                 .overlay(
                                     Circle()
-                                        .stroke(Color(hex: "DABCA4"), lineWidth: 1)
+                                        .stroke(DayflowColors.border, lineWidth: 1)
                                 )
                         )
                 }
@@ -380,14 +380,14 @@ struct TimelineReviewOverlay: View {
                         Capsule()
                             .fill(
                                 LinearGradient(
-                                    colors: [Color(hex: "FFF9F1").opacity(0.9), Color(hex: "FDE8D1").opacity(0.9)],
+                                    colors: [DayflowColors.surface.opacity(0.9), DayflowColors.surface.opacity(0.9)],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 )
                             )
                             .overlay(
                                 Capsule()
-                                    .stroke(Color(hex: "FF8904").opacity(0.5), lineWidth: 1.25)
+                                    .stroke(DayflowColors.accent.opacity(0.5), lineWidth: 1.25)
                             )
                     )
             }
@@ -1539,7 +1539,7 @@ private struct TimelineReviewPlaybackTimeline: View {
     @State private var isScrubbing = false
 
     private enum Design {
-        static let baseColor = Color(hex: "A3978D").opacity(0.5)
+        static let baseColor = DayflowColors.textMuted.opacity(0.5)
         static let progressColor = DayflowColors.accent.opacity(0.65)
         static let pillColor = DayflowColors.accent
         static let pillText = Color.white
@@ -1697,11 +1697,11 @@ private struct TimelineReviewTimeRangePill: View {
             .foregroundColor(DayflowColors.textMuted)
             .padding(.horizontal, 6)
             .padding(.vertical, 4)
-            .background(Color(hex: "F5F0E9").opacity(0.9))
+            .background(DayflowColors.surface.opacity(0.9))
             .cornerRadius(6)
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
-                    .stroke(Color(hex: "E4E4E4"), lineWidth: 0.75)
+                    .stroke(DayflowColors.border, lineWidth: 0.75)
             )
     }
 }
@@ -1762,7 +1762,7 @@ private struct ZUndoIcon: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 4)
-                .fill(Color(hex: "D6AB8A").opacity(0.7))
+                .fill(DayflowColors.accent.opacity(0.7))
             Text("Z")
                 .font(.custom("Nunito", size: size * 0.525).weight(.bold))
                 .foregroundColor(.white)
@@ -1811,7 +1811,7 @@ private struct TimelineReviewFooterIcon: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: size * 0.25)
-                .fill(Color(hex: "D6AB8A").opacity(0.7))
+                .fill(DayflowColors.accent.opacity(0.7))
             Path { path in
                 path.move(to: CGPoint(x: size * 0.3125, y: size * 0.5))
                 path.addLine(to: CGPoint(x: size * 0.59375, y: size * 0.33762))

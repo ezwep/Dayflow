@@ -319,9 +319,9 @@ struct BadgeView: View {
     private var textColor: Color {
         switch type {
         case .green:
-            return Color(red: 0.13, green: 0.7, blue: 0.23)
+            return DayflowColors.success
         case .orange:
-            return Color(red: 0.91, green: 0.34, blue: 0.16)
+            return DayflowColors.error
         case .blue:
             return Color(red: 0.19, green: 0.39, blue: 0.8)
         }
@@ -329,8 +329,8 @@ struct BadgeView: View {
     
     private var badgeBackground: some View {
         ZStack {
-            Color.white.opacity(0.69)
-            
+            DayflowColors.surface.opacity(0.69)
+
             LinearGradient(
                 stops: gradientColors,
                 startPoint: UnitPoint(x: 1.15, y: 3.61),
@@ -349,18 +349,18 @@ struct BadgeView: View {
         switch type {
         case .green:
             return [
-                Gradient.Stop(color: Color(red: 0.34, green: 1, blue: 0.45), location: 0.00),
-                Gradient.Stop(color: Color(red: 1, green: 0.98, blue: 0.95).opacity(0), location: 1.00)
+                Gradient.Stop(color: DayflowColors.success, location: 0.00),
+                Gradient.Stop(color: DayflowColors.surface.opacity(0), location: 1.00)
             ]
         case .orange:
             return [
                 Gradient.Stop(color: Color(red: 1, green: 0.49, blue: 0.34), location: 0.00),
-                Gradient.Stop(color: Color(red: 1, green: 0.98, blue: 0.95).opacity(0), location: 1.00)
+                Gradient.Stop(color: DayflowColors.surface.opacity(0), location: 1.00)
             ]
         case .blue:
             return [
                 Gradient.Stop(color: Color(red: 0.34, green: 0.56, blue: 1), location: 0.00),
-                Gradient.Stop(color: Color(red: 1, green: 0.98, blue: 0.95).opacity(0), location: 1.00)
+                Gradient.Stop(color: DayflowColors.surface.opacity(0), location: 1.00)
             ]
         }
     }
@@ -368,9 +368,9 @@ struct BadgeView: View {
     private var shadowColor: Color {
         switch type {
         case .green:
-            return Color(red: 0.34, green: 1, blue: 0.45)
+            return DayflowColors.success
         case .orange:
-            return Color(red: 1, green: 0.53, blue: 0)
+            return DayflowColors.warning
         case .blue:
             return Color(red: 0.34, green: 0.56, blue: 1)
         }
@@ -379,9 +379,9 @@ struct BadgeView: View {
     private var strokeColor: Color {
         switch type {
         case .green:
-            return Color(red: 0.34, green: 1, blue: 0.45).opacity(0.3)
+            return DayflowColors.success.opacity(0.3)
         case .orange:
-            return Color(red: 1, green: 0.25, blue: 0.02).opacity(0.3)
+            return DayflowColors.error.opacity(0.3)
         case .blue:
             return Color(red: 0.34, green: 0.56, blue: 1).opacity(0.3)
         }
@@ -474,7 +474,7 @@ struct FeatureRowView: View {
         HStack(alignment: .center, spacing: 8) {
             Image(systemName: feature.isAvailable ? "checkmark" : "xmark")
                 .font(.system(size: 12, weight: .bold))
-                .foregroundColor(feature.isAvailable ? Color(red: 0.34, green: 1, blue: 0.45) : Color(hex: "E91515"))
+                .foregroundColor(feature.isAvailable ? DayflowColors.success : DayflowColors.error)
                 .frame(width: 16)
             
             Text(feature.text)
@@ -490,8 +490,8 @@ struct FeatureRowView: View {
 struct SelectedCardBackground: View {
     var body: some View {
         ZStack {
-            Color(hex: "FCF2E3")
-            Color.white.opacity(0.69)
+            DayflowColors.surface
+            DayflowColors.surface.opacity(0.69)
             LinearGradient(
                 stops: [
                     Gradient.Stop(color: Color.clear, location: 0.25),
@@ -511,11 +511,11 @@ struct SelectedCardOverlay: View {
         ZStack {
             RoundedRectangle(cornerRadius: 4)
                 .inset(by: 0.5)
-                .stroke(Color(hex: "EBE9E6"), lineWidth: 1)
+                .stroke(DayflowColors.border, lineWidth: 1)
             
             RoundedRectangle(cornerRadius: 4)
                 .inset(by: 0.5)
-                .stroke(Color(hex: "FFEBC9"), lineWidth: 1)
+                .stroke(DayflowColors.accent.opacity(0.3), lineWidth: 1)
             
             RoundedRectangle(cornerRadius: 4)
                 .inset(by: 0.5)

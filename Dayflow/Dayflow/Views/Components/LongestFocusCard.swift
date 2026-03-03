@@ -54,12 +54,12 @@ struct LongestFocusCard: View {
 
     private enum Design {
         // Colors
-        static let backgroundColor = Color(hex: "f7f7f7")
-        static let borderColor = Color(hex: "ececec")
-        static let titleColor = Color(hex: "333333")
-        static let orangeSolid = Color(hex: "f3854b")
-        static let orangeLight = Color(hex: "f3854b").opacity(0.4)
-        static let axisColor = Color(hex: "9A9393")
+        static let backgroundColor = DayflowColors.surface
+        static let borderColor = DayflowColors.borderSubtle
+        static let titleColor = DayflowColors.textPrimary
+        static let orangeSolid = DayflowColors.accent
+        static let orangeLight = DayflowColors.accent.opacity(0.4)
+        static let axisColor = DayflowColors.textMuted
 
         // Sizing
         static let cardWidth: CGFloat = 322
@@ -304,14 +304,14 @@ struct LongestFocusCard: View {
     LongestFocusCard(focusBlocks: sampleBlocks)
         .frame(width: 322)
         .padding(20)
-        .background(Color(red: 0.98, green: 0.97, blue: 0.96))
+        .background(DayflowColors.surface)
 }
 
 #Preview("Empty State") {
     LongestFocusCard(focusBlocks: [])
         .frame(width: 322)
         .padding(20)
-        .background(Color(red: 0.98, green: 0.97, blue: 0.96))
+        .background(DayflowColors.surface)
 }
 
 #Preview("Single Block") {
@@ -329,5 +329,5 @@ struct LongestFocusCard: View {
     LongestFocusCard(focusBlocks: singleBlock)
         .frame(width: 322)
         .padding(20)
-        .background(Color(red: 0.98, green: 0.97, blue: 0.96))
+        .background(DayflowColors.surface)
 }

@@ -42,7 +42,7 @@ struct TimelineRateSummaryView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 3)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(red: 0.98, green: 0.98, blue: 0.98))
+        .background(DayflowColors.surface)
         .overlay(
             Rectangle()
                 .inset(by: 0.5)
@@ -75,7 +75,7 @@ struct TimelineRateSummaryView: View {
                 .frame(width: 22, height: 22)
                 .background(
                     Circle()
-                        .fill(isSelected ? Color.white : Color.clear)
+                        .fill(isSelected ? DayflowColors.surface : Color.clear)
                         .shadow(color: isSelected ? Color.black.opacity(0.08) : Color.clear, radius: 6, x: 0, y: 3)
                 )
         }

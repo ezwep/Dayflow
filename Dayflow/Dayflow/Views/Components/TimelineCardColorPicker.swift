@@ -419,7 +419,7 @@ fileprivate struct EditableCategoryCard: View {
                 TextField("", text: $draftName)
                     .font(Font.custom("Nunito", size: 14).weight(.bold))
                     .textFieldStyle(.plain)
-                    .foregroundColor(.black)
+                    .foregroundColor(DayflowColors.textPrimary)
                     .submitLabel(.next)
                     .focused($focusedField, equals: .name)
                     .onSubmit {
@@ -445,36 +445,36 @@ fileprivate struct EditableCategoryCard: View {
                 if draftDetails.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     Text("Professional, school, or career-focused tasks (coding, design, meetings).")
                         .font(Font.custom("Nunito", size: 12).weight(.medium))
-                        .foregroundColor(Color.black.opacity(0.35))
+                        .foregroundColor(DayflowColors.textMuted)
                         .padding(.horizontal, 12)
                         .padding(.top, 12)
                 }
 
                 TextEditor(text: $draftDetails)
                     .font(Font.custom("Nunito", size: 12).weight(.medium))
-                    .foregroundColor(.black)
+                    .foregroundColor(DayflowColors.textPrimary)
                     .padding(.horizontal, 10)
                     .padding(.top, 10)
                     .padding(.bottom, 12)
                     .frame(minHeight: 55)
-                    .background(Color.white)
+                    .background(DayflowColors.surface)
                     .focused($focusedField, equals: .description)
                     .scrollContentBackground(.hidden)
             }
             .background(
                 RoundedRectangle(cornerRadius: 6)
-                    .stroke(Color(red: 0.89, green: 0.86, blue: 0.85), lineWidth: 0.5)
+                    .stroke(DayflowColors.borderSubtle, lineWidth: 0.5)
             )
         }
         .padding(16)
         .frame(alignment: .leading)
-        .background(Color.white)
+        .background(DayflowColors.surface)
         .cornerRadius(8)
-        .shadow(color: Color(red: 0.86, green: 0.8, blue: 0.76), radius: 3, x: 0, y: 0)
+        .shadow(color: DayflowColors.border.opacity(0.5), radius: 3, x: 0, y: 0)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .inset(by: 0.25)
-                .stroke(Color(red: 0.89, green: 0.86, blue: 0.85), lineWidth: 0.5)
+                .stroke(DayflowColors.borderSubtle, lineWidth: 0.5)
         )
     }
 
@@ -483,12 +483,12 @@ fileprivate struct EditableCategoryCard: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(category.name)
                     .font(Font.custom("Nunito", size: 12).weight(.bold))
-                    .foregroundColor(.black)
+                    .foregroundColor(DayflowColors.textPrimary)
                     .frame(maxWidth: .infinity, alignment: .center)
 
                 Text(category.details.isEmpty ? "Add a description to help Dayflow understand your workflow." : category.details)
                     .font(Font.custom("Nunito", size: 12).weight(.medium))
-                    .foregroundColor(Color(red: 0.35, green: 0.35, blue: 0.35))
+                    .foregroundColor(DayflowColors.textMuted)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .lineLimit(2)
             }
@@ -522,13 +522,13 @@ fileprivate struct EditableCategoryCard: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
         .frame(maxWidth: .infinity, alignment: .center)
-        .background(Color.white)
+        .background(DayflowColors.surface)
         .cornerRadius(4)
         .shadow(color: Color.black.opacity(0.06), radius: 2, x: 0, y: 0)
         .overlay(
             RoundedRectangle(cornerRadius: 4)
                 .inset(by: 0.25)
-                .stroke(Color(red: 0.89, green: 0.89, blue: 0.89), lineWidth: 0.5)
+                .stroke(DayflowColors.borderSubtle, lineWidth: 0.5)
         )
         .contentShape(Rectangle())
         .onTapGesture {
@@ -547,7 +547,7 @@ fileprivate struct ColorAssignmentCard: View {
     @State private var isTargeted = false
 
     private func colorSwatch(_ hex: String) -> some View {
-        let color = Color(hex: hex.isEmpty ? "#E5E7EB" : hex)
+        let color = hex.isEmpty ? DayflowColors.border : Color(hex: hex)
         return Rectangle()
             .foregroundColor(.clear)
             .frame(width: 18, height: 18)
@@ -569,12 +569,12 @@ fileprivate struct ColorAssignmentCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(category.name)
                         .font(Font.custom("Nunito", size: 12).weight(.bold))
-                        .foregroundColor(.black)
+                        .foregroundColor(DayflowColors.textPrimary)
 
                     if !category.details.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         Text(category.details)
                             .font(Font.custom("Nunito", size: 12).weight(.medium))
-                            .foregroundColor(Color(red: 0.35, green: 0.35, blue: 0.35))
+                            .foregroundColor(DayflowColors.textMuted)
                             .lineLimit(2)
                     }
                 }
@@ -585,10 +585,10 @@ fileprivate struct ColorAssignmentCard: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
         .frame(maxWidth: .infinity, alignment: .center)
-        .background(Color.white)
+        .background(DayflowColors.surface)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(isTargeted ? Color(red: 0.6, green: 0.5, blue: 0.4) : Color(red: 0.89, green: 0.89, blue: 0.89), lineWidth: isTargeted ? 1.5 : 0.8)
+                .stroke(isTargeted ? DayflowColors.accent : DayflowColors.borderSubtle, lineWidth: isTargeted ? 1.5 : 0.8)
         )
         .cornerRadius(8)
         .shadow(color: Color.black.opacity(0.06), radius: 2, x: 0, y: 1)
@@ -679,7 +679,7 @@ struct ColorOrganizerRoot: View {
                 if stage == .details && showsTitles {
                     Text("Customize your categories")
                         .font(Font.custom("Instrument Serif", size: 44))
-                        .foregroundColor(.black)
+                        .foregroundColor(DayflowColors.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
 
@@ -712,7 +712,7 @@ struct ColorOrganizerRoot: View {
                 Group {
                     if presentationStyle == .sheet {
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(Color.white)
+                            .fill(DayflowColors.surface)
                             .shadow(color: Color.black.opacity(0.15), radius: 20, x: 0, y: 8)
                     }
                 }
@@ -728,12 +728,12 @@ struct ColorOrganizerRoot: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Part 1 of 2")
                         .font(Font.custom("Nunito", size: 14).weight(.bold))
-                        .foregroundColor(Color(red: 0.98, green: 0.43, blue: 0))
+                        .foregroundColor(DayflowColors.accent)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     Text("Edit title and description")
                         .font(Font.custom("Instrument Serif", size: 30))
-                        .foregroundColor(.black)
+                        .foregroundColor(DayflowColors.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
@@ -754,7 +754,7 @@ struct ColorOrganizerRoot: View {
 
             Text("This step is optional. You can customize the categories or create new ones anytime while using Dayflow.")
                 .font(Font.custom("Nunito", size: 12).weight(.medium))
-                .foregroundColor(Color(red: 0.48, green: 0.48, blue: 0.48))
+                .foregroundColor(DayflowColors.textMuted)
                 .frame(maxWidth: isCompact ? .infinity : 280, alignment: .leading)
         }
     }
@@ -767,7 +767,7 @@ struct ColorOrganizerRoot: View {
 
             Text(text)
                 .font(Font.custom("Nunito", size: 14).weight(.medium))
-                .foregroundColor(.black)
+                .foregroundColor(DayflowColors.textPrimary)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
@@ -778,12 +778,12 @@ struct ColorOrganizerRoot: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Part 2 of 2")
                         .font(Font.custom("Nunito", size: 14).weight(.bold))
-                        .foregroundColor(Color(red: 0.98, green: 0.43, blue: 0))
+                        .foregroundColor(DayflowColors.accent)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     Text("Edit colors")
                         .font(Font.custom("Instrument Serif", size: 30))
-                        .foregroundColor(.black)
+                        .foregroundColor(DayflowColors.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
@@ -818,7 +818,7 @@ struct ColorOrganizerRoot: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text(isDraggingColor ? "Drop on a category →" : "Click and drag on the canvas above to change the color palette. Then drag a color onto a category.")
                     .font(Font.custom("Nunito", size: 13).weight(.medium))
-                    .foregroundColor(Color(red: 0.3, green: 0.3, blue: 0.3))
+                    .foregroundColor(DayflowColors.textPrimary)
 
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 4), spacing: 8) {
                     ForEach(Array(spectrumColors.enumerated()), id: \.offset) { index, hex in
@@ -851,19 +851,19 @@ struct ColorOrganizerRoot: View {
             HStack(spacing: 8) {
                 Image(systemName: "plus")
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(Color(red: 0.49, green: 0.33, blue: 0.16))
+                    .foregroundColor(DayflowColors.textPrimary)
 
                 Text("Create a new category")
                     .font(Font.custom("Nunito", size: 14).weight(.bold))
-                    .foregroundColor(Color(red: 0.49, green: 0.33, blue: 0.16))
+                    .foregroundColor(DayflowColors.textPrimary)
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 8)
             .background(
                 LinearGradient(
                     gradient: Gradient(stops: [
-                        .init(color: Color(red: 1, green: 0.94, blue: 0.79), location: 0),
-                        .init(color: Color(red: 1, green: 0.72, blue: 0.43), location: 1)
+                        .init(color: DayflowColors.accent.opacity(0.3), location: 0),
+                        .init(color: DayflowColors.accent.opacity(0.6), location: 1)
                     ]),
                     startPoint: .leading,
                     endPoint: .trailing
@@ -873,7 +873,7 @@ struct ColorOrganizerRoot: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
                     .inset(by: 0.5)
-                    .stroke(Color(red: 0.95, green: 0.71, blue: 0.56), lineWidth: 1)
+                    .stroke(DayflowColors.accent.opacity(0.7), lineWidth: 1)
             )
             .opacity(canAddMoreCategories ? 1 : 0.45)
         }
@@ -898,11 +898,11 @@ struct ColorOrganizerRoot: View {
         return VStack(alignment: .leading, spacing: 16) {
             ZStack(alignment: .top) {
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.white.opacity(0.2))
+                    .fill(DayflowColors.surface.opacity(0.2))
                     .frame(maxWidth: .infinity, minHeight: containerHeight, maxHeight: containerHeight)
 
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color(red: 0.94, green: 0.91, blue: 0.87), lineWidth: 1)
+                    .stroke(DayflowColors.borderSubtle, lineWidth: 1)
                     .frame(maxWidth: .infinity, minHeight: containerHeight, maxHeight: containerHeight)
 
                 ScrollView(showsIndicators: false) {
@@ -928,7 +928,7 @@ struct ColorOrganizerRoot: View {
 
             Text("This step is optional. You can change the colors anytime while using Dayflow.")
                 .font(Font.custom("Nunito", size: 12).weight(.medium))
-                .foregroundColor(Color(red: 0.48, green: 0.48, blue: 0.48))
+                .foregroundColor(DayflowColors.textMuted)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             HStack(spacing: 16) {
@@ -956,11 +956,11 @@ struct ColorOrganizerRoot: View {
             VStack(alignment: .leading, spacing: 24) {
                 ZStack(alignment: .top) {
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.white.opacity(0.2))
+                        .fill(DayflowColors.surface.opacity(0.2))
                         .frame(maxWidth: .infinity, minHeight: containerHeight, maxHeight: containerHeight)
 
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color(red: 0.94, green: 0.91, blue: 0.87), lineWidth: 1)
+                        .stroke(DayflowColors.borderSubtle, lineWidth: 1)
                         .frame(maxWidth: .infinity, minHeight: containerHeight, maxHeight: containerHeight)
 
                     ScrollView(showsIndicators: false) {
@@ -1017,12 +1017,12 @@ struct ColorOrganizerRoot: View {
     private var emptyState: some View {
         Text("Add a category to get started.")
             .font(Font.custom("Nunito", size: 13).weight(.medium))
-            .foregroundColor(Color(red: 0.35, green: 0.35, blue: 0.35))
+            .foregroundColor(DayflowColors.textPrimary)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color(red: 0.89, green: 0.89, blue: 0.89), lineWidth: 0.5)
+                    .stroke(DayflowColors.borderSubtle, lineWidth: 0.5)
             )
     }
 
@@ -1055,16 +1055,16 @@ struct ColorOrganizerRoot: View {
             Button(action: isEnabled ? action : {}) {
                 Text(title)
                     .font(Font.custom("Nunito", size: 16).weight(.semibold))
-                    .foregroundColor(Color(red: 0.26, green: 0.26, blue: 0.26))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .padding(.horizontal, 59)
                     .padding(.vertical, 18)
                     .frame(width: 160, alignment: .center)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.white.opacity(0.85))
+                            .fill(DayflowColors.surface.opacity(0.85))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color(red: 0.88, green: 0.88, blue: 0.88), lineWidth: 1)
+                                    .stroke(DayflowColors.borderSubtle, lineWidth: 1)
                             )
                     )
                     .opacity(isEnabled ? 1.0 : 0.4)

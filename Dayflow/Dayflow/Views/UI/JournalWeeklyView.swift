@@ -413,33 +413,33 @@ enum JournalWeeklyViewPeriod: String, CaseIterable, Identifiable {
 
 private enum JournalWeeklyTokens {
     static let background = LinearGradient(
-        colors: [Color(hex: "FFF6EE"), Color(hex: "FFE0C8"), Color(hex: "FFD9BD")],
+        colors: [DayflowColors.background, DayflowColors.accent.opacity(0.15), DayflowColors.accent.opacity(0.2)],
         startPoint: .top,
         endPoint: .bottom
     )
-    static let primaryText = Color(hex: "2F1607")
-    static let secondaryText = Color(hex: "6B4D3A")
-    static let accentText = Color(hex: "5A320E")
+    static let primaryText = DayflowColors.textPrimary
+    static let secondaryText = DayflowColors.textMuted
+    static let accentText = DayflowColors.textPrimary
     static let timelineGradient = LinearGradient(
-        colors: [Color(hex: "FFB859"), Color(hex: "FF8F4A")],
+        colors: [DayflowColors.accent, DayflowColors.accent],
         startPoint: .leading,
         endPoint: .trailing
     )
-    static let timelineShadow = Color(hex: "F7B47C")
-    static let dayActive = Color(hex: "FFB859")
-    static let dayMuted = Color(hex: "F2E4D4")
-    static let toggleBackground = Color(hex: "F5EEE6")
+    static let timelineShadow = DayflowColors.accent.opacity(0.5)
+    static let dayActive = DayflowColors.accent
+    static let dayMuted = DayflowColors.surface
+    static let toggleBackground = DayflowColors.surface
     static let toggleContainer = DayflowColors.surface.opacity(0.8)
-    static let setReminderBackground = LinearGradient(colors: [Color(hex: "FFE5C5"), Color(hex: "FFD29D")], startPoint: .top, endPoint: .bottom)
-    static let setReminderBorder = Color(hex: "FFC689").opacity(0.7)
-    static let setReminderBadge = Color(hex: "FFAA5F")
-    static let dayConnector = Color(hex: "FFB859").opacity(0.4)
+    static let setReminderBackground = LinearGradient(colors: [DayflowColors.accent.opacity(0.3), DayflowColors.accent.opacity(0.5)], startPoint: .top, endPoint: .bottom)
+    static let setReminderBorder = DayflowColors.accent.opacity(0.7)
+    static let setReminderBadge = DayflowColors.accent
+    static let dayConnector = DayflowColors.accent.opacity(0.4)
 }
 
 #Preview("Weekly Review", traits: .fixedLayout(width: 1000, height: 600)) {
     JournalWeeklyView()
         .padding()
-        .background(Color(hex: "F6F0EA"))
+        .background(DayflowColors.background)
 }
 
 // MARK: - Reference curve helpers

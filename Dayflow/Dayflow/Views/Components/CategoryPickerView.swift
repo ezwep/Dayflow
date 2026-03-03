@@ -31,7 +31,7 @@ struct CategoryPickerView: View {
                     .frame(height: 0)
                     .overlay(
                         Rectangle()
-                            .fill(Color(red: 0.91, green: 0.89, blue: 0.86))
+                            .fill(DayflowColors.surface)
                             .frame(height: 1)
                     )
                     .padding(.horizontal, 0)
@@ -43,12 +43,12 @@ struct CategoryPickerView: View {
                         HStack(alignment: .top, spacing: 0) {
                             Text("To help Dayflow organize your activities more accurately, try adding more details to the descriptions in your categories ")
                                 .font(Font.custom("Nunito", size: 10).weight(.medium))
-                                .foregroundColor(Color(red: 0.39, green: 0.35, blue: 0.33)) // #635953
+                                .foregroundColor(DayflowColors.textPrimary)
                             
                             Button(action: onNavigateToEditor) {
                                 Text("here")
                                     .font(Font.custom("Nunito", size: 10).weight(.medium))
-                                    .foregroundColor(Color(red: 1.0, green: 0.4, blue: 0.0)) // #ff6600
+                                    .foregroundColor(DayflowColors.accent)
                                     .underline()
                             }
                             .buttonStyle(.plain)
@@ -56,14 +56,14 @@ struct CategoryPickerView: View {
                             
                             Text(".")
                                 .font(Font.custom("Nunito", size: 10).weight(.medium))
-                                .foregroundColor(Color(red: 0.39, green: 0.35, blue: 0.33))
+                                .foregroundColor(DayflowColors.textPrimary)
                         }
                         .padding(.leading, 2.188)
                         
                         // Lightbulb icon overlaid
                         Image(systemName: "lightbulb.fill")
                             .font(.system(size: 7))
-                            .foregroundColor(Color(red: 0.49, green: 0.47, blue: 0.46)) // #7c7875
+                            .foregroundColor(DayflowColors.textMuted)
                             .offset(x: 0, y: 2)
                     }
                 }
@@ -75,7 +75,7 @@ struct CategoryPickerView: View {
         .background(
             ZStack {
                 // Backdrop blur effect - rgba(250,244,241,0.86) with blur
-                Color(red: 0.98, green: 0.96, blue: 0.95).opacity(0.86)
+                DayflowColors.surface.opacity(0.86)
                     .background(.ultraThinMaterial)
             }
             .overlay(
@@ -88,7 +88,7 @@ struct CategoryPickerView: View {
                         topTrailing: 6
                     )
                 )
-                .stroke(Color(red: 0.91, green: 0.88, blue: 0.87), lineWidth: 1)
+                .stroke(DayflowColors.borderSubtle, lineWidth: 1)
             )
         )
         .clipShape(
@@ -106,13 +106,13 @@ struct CategoryPickerView: View {
             Button(action: {}) {
                 Image(systemName: "checkmark")
                     .font(.system(size: 8))
-                    .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .frame(width: 8, height: 8)
             }
             .buttonStyle(.plain)
             .padding(6)
             .background(
-                Color(red: 0.98, green: 0.98, blue: 0.98).opacity(0.8)
+                DayflowColors.surface.opacity(0.8)
                     .background(.ultraThinMaterial)
             )
             .clipShape(
@@ -134,7 +134,7 @@ struct CategoryPickerView: View {
                         topTrailing: 6
                     )
                 )
-                .stroke(Color(red: 0.89, green: 0.89, blue: 0.89), lineWidth: 1)
+                .stroke(DayflowColors.borderSubtle, lineWidth: 1)
             )
             .offset(x: -8, y: 8)
         }
@@ -163,7 +163,7 @@ struct CategoryPill: View {
                 // Category name - no line limit, text can wrap if needed
                 Text(category.name)
                     .font(Font.custom("Nunito", size: 10).weight(.medium))
-                    .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(nil)
             }
@@ -204,26 +204,26 @@ struct CategoryPill: View {
                 // Gradient for selected state
                 LinearGradient(
                     colors: [
-                        Color(red: 1.0, green: 0.99, blue: 0.97), // #fffdf8
-                        Color(red: 1.0, green: 0.91, blue: 0.83)  // #ffe8d3
+                        DayflowColors.surface,
+                        DayflowColors.accent.opacity(0.3)
                     ],
                     startPoint: .leading,
                     endPoint: .trailing
                 )
             } else {
-                Color(red: 0.996, green: 0.996, blue: 0.996) // #fefefe
+                DayflowColors.surface
             }
         }
     }
     
     private var pillBorder: Color {
         if isSelected {
-            return Color(red: 0.98, green: 0.73, blue: 0.50) // #fbbb80
+            return DayflowColors.accent
         } else if category.isIdle {
             // Dotted border for Idle category
-            return Color(red: 0.88, green: 0.88, blue: 0.88) // Will be styled differently
+            return DayflowColors.borderSubtle
         } else {
-            return Color(red: 0.88, green: 0.88, blue: 0.88) // #e1e1e1
+            return DayflowColors.borderSubtle
         }
     }
 }

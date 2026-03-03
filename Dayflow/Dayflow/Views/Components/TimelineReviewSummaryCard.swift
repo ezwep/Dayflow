@@ -39,8 +39,8 @@ struct TimelineReviewSummaryCard: View {
         static let headerSpacing: CGFloat = 2
         static let contentSpacing: CGFloat = 16
 
-        static let titleColor = Color(hex: "333333")
-        static let subtitleColor = Color(hex: "707070")
+        static let titleColor = DayflowColors.textPrimary
+        static let subtitleColor = DayflowColors.textMuted
         static let linkColor = DayflowColors.accent
 
         static let barHeight: CGFloat = 39
@@ -241,9 +241,9 @@ struct TimelineReviewSummaryCard: View {
         legendStroke: Color,
         placeholder: Bool
     ) -> ReviewMetricStyle {
-        let barColor = placeholder ? Color(hex: "EAE0DB") : baseColor
+        let barColor = placeholder ? DayflowColors.border : baseColor
         let barShadow = placeholder
-            ? Color(red: 225 / 255, green: 210 / 255, blue: 203 / 255).opacity(0.25)
+            ? DayflowColors.border.opacity(0.25)
             : shadow
         let gradient = LinearGradient(
             colors: [barColor.opacity(0.5), barColor],
@@ -314,5 +314,5 @@ struct TimelineReviewSummaryCard: View {
         .frame(width: 322)
     }
     .padding(24)
-    .background(Color(red: 0.98, green: 0.97, blue: 0.96))
+    .background(DayflowColors.surface)
 }

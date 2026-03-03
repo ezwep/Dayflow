@@ -58,20 +58,20 @@ struct ToolCallBubble: View {
             // Animated spinner
             Image(systemName: "circle.dotted")
                 .font(.system(size: 14, weight: .medium))
-                .foregroundColor(Color(hex: "F96E00"))
+                .foregroundColor(DayflowColors.accent)
                 .rotationEffect(.degrees(spinnerRotation))
 
         case .completed:
             // Green checkmark
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 14, weight: .medium))
-                .foregroundColor(Color(hex: "34C759"))
+                .foregroundColor(DayflowColors.success)
 
         case .failed:
             // Red X
             Image(systemName: "xmark.circle.fill")
                 .font(.system(size: 14, weight: .medium))
-                .foregroundColor(Color(hex: "FF3B30"))
+                .foregroundColor(DayflowColors.error)
 
         case nil:
             EmptyView()
@@ -86,22 +86,22 @@ struct ToolCallBubble: View {
         case .running:
             Text(message.content)
                 .font(.custom("Nunito", size: 12).weight(.semibold))
-                .foregroundColor(Color(hex: "8B5E3C"))
+                .foregroundColor(DayflowColors.textMuted)
 
         case .completed(let summary):
             Text(summary)
                 .font(.custom("Nunito", size: 12).weight(.semibold))
-                .foregroundColor(Color(hex: "2D7D46"))
+                .foregroundColor(DayflowColors.success)
 
         case .failed(let error):
             Text(error)
                 .font(.custom("Nunito", size: 12).weight(.semibold))
-                .foregroundColor(Color(hex: "C62828"))
+                .foregroundColor(DayflowColors.error)
 
         case nil:
             Text(message.content)
                 .font(.custom("Nunito", size: 12).weight(.semibold))
-                .foregroundColor(Color(hex: "8B5E3C"))
+                .foregroundColor(DayflowColors.textMuted)
         }
     }
 
@@ -115,8 +115,8 @@ struct ToolCallBubble: View {
                 // Base gradient
                 LinearGradient(
                     colors: [
-                        Color(hex: "FFF4E9"),
-                        Color(hex: "FFECD8")
+                        DayflowColors.surface,
+                        DayflowColors.accent.opacity(0.3)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -132,8 +132,8 @@ struct ToolCallBubble: View {
         case .completed:
             LinearGradient(
                 colors: [
-                    Color(hex: "E8F5E9"),
-                    Color(hex: "C8E6C9")
+                    DayflowColors.success.opacity(0.15),
+                    DayflowColors.success.opacity(0.25)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -142,15 +142,15 @@ struct ToolCallBubble: View {
         case .failed:
             LinearGradient(
                 colors: [
-                    Color(hex: "FFEBEE"),
-                    Color(hex: "FFCDD2")
+                    DayflowColors.error.opacity(0.1),
+                    DayflowColors.error.opacity(0.2)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
 
         case nil:
-            Color(hex: "FFF4E9")
+            DayflowColors.surface
         }
     }
 
@@ -164,26 +164,26 @@ struct ToolCallBubble: View {
     private var borderColor: Color {
         switch message.toolStatus {
         case .running:
-            return Color(hex: "F96E00").opacity(0.3)
+            return DayflowColors.accent.opacity(0.3)
         case .completed:
-            return Color(hex: "34C759").opacity(0.3)
+            return DayflowColors.success.opacity(0.3)
         case .failed:
-            return Color(hex: "FF3B30").opacity(0.3)
+            return DayflowColors.error.opacity(0.3)
         case nil:
-            return Color(hex: "F96E00").opacity(0.3)
+            return DayflowColors.accent.opacity(0.3)
         }
     }
 
     private var shadowColor: Color {
         switch message.toolStatus {
         case .running:
-            return Color(hex: "F96E00").opacity(0.1)
+            return DayflowColors.accent.opacity(0.1)
         case .completed:
-            return Color(hex: "34C759").opacity(0.1)
+            return DayflowColors.success.opacity(0.1)
         case .failed:
-            return Color(hex: "FF3B30").opacity(0.1)
+            return DayflowColors.error.opacity(0.1)
         case nil:
-            return Color(hex: "F96E00").opacity(0.1)
+            return DayflowColors.accent.opacity(0.1)
         }
     }
 
@@ -256,5 +256,5 @@ private struct ShimmerOverlay: View {
         )
     }
     .padding(40)
-    .background(Color(hex: "FAF5F0"))
+    .background(DayflowColors.surface)
 }

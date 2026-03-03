@@ -61,7 +61,7 @@ extension AnyTransition {
 struct WetInkText: View {
     let text: String
     var font: Font = .custom("Nunito-Regular", size: 15)
-    var color: Color = Color(red: 0.18, green: 0.11, blue: 0.06)
+    var color: Color = DayflowColors.textPrimary
     var lineHeight: CGFloat = 5
     
     @State private var displayedText: String = ""
@@ -127,11 +127,11 @@ struct JournalPillButtonStyle: ButtonStyle {
             .padding(.vertical, verticalPadding)
             .background(
                 ZStack {
-                    Color(red: 1, green: 0.96, blue: 0.92)
+                    DayflowColors.surface
                         .opacity(configuration.isPressed ? 0.9 : 0.6)
-                    
+
                     if configuration.isPressed {
-                        Color.white.opacity(0.2)
+                        DayflowColors.surface.opacity(0.2)
                     }
                 }
             )
@@ -139,7 +139,7 @@ struct JournalPillButtonStyle: ButtonStyle {
             .overlay(
                 RoundedRectangle(cornerRadius: 100)
                     .inset(by: 0.5)
-                    .stroke(Color(red: 0.95, green: 0.86, blue: 0.84), lineWidth: 1)
+                    .stroke(DayflowColors.border, lineWidth: 1)
             )
             .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
             .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
@@ -404,7 +404,7 @@ private struct MacTextView: NSViewRepresentable {
         let textView = JournalClickableTextView()
         textView.delegate = context.coordinator
         textView.font = font
-        textView.textColor = NSColor(red: 0.18, green: 0.11, blue: 0.06, alpha: 1.0)
+        textView.textColor = NSColor(DayflowColors.textPrimary)
         textView.drawsBackground = false
         textView.isRichText = false
         textView.isAutomaticQuoteSubstitutionEnabled = false
@@ -421,8 +421,8 @@ private struct MacTextView: NSViewRepresentable {
         }
 
         textView.selectedTextAttributes = [
-            .backgroundColor: NSColor(red: 1.0, green: 0.93, blue: 0.82, alpha: 1.0),
-            .foregroundColor: NSColor(red: 0.18, green: 0.11, blue: 0.06, alpha: 1.0)
+            .backgroundColor: NSColor(DayflowColors.surface),
+            .foregroundColor: NSColor(DayflowColors.textPrimary)
         ]
 
         if autoFocus {
@@ -1129,26 +1129,26 @@ enum JournalDayViewPeriod: String, CaseIterable, Identifiable {
 }
 
 private enum JournalDayTokens {
-    static let primaryText = Color(red: 0.18, green: 0.09, blue: 0.03)
-    static let reminderText = Color(red: 0.35, green: 0.20, blue: 0.05)
-    static let bodyText = Color(red: 0.18, green: 0.11, blue: 0.06)
-    static let bullet = Color(red: 0.96, green: 0.57, blue: 0.24)
-    static let sectionHeader = Color(red: 0.85, green: 0.44, blue: 0.04)
-    static let divider = Color(red: 0.90, green: 0.85, blue: 0.80)
-    static let navCircleFill = Color(red: 0.996, green: 0.976, blue: 0.953)
+    static let primaryText = DayflowColors.textPrimary
+    static let reminderText = DayflowColors.textMuted
+    static let bodyText = DayflowColors.textPrimary
+    static let bullet = DayflowColors.accent
+    static let sectionHeader = DayflowColors.accent
+    static let divider = DayflowColors.border
+    static let navCircleFill = DayflowColors.surface
     static let navCircleStroke = DayflowColors.surface
     static let navCircleShadow = Color.black.opacity(0.04)
-    static let navArrow = Color(red: 1.0, green: 0.74, blue: 0.35)
-    static let segmentActiveFill = Color(red: 1, green: 0.72, blue: 0.35)
-    static let segmentInactiveFill = Color(red: 0.95, green: 0.94, blue: 0.93)
-    static let segmentInactiveText = Color(red: 0.80, green: 0.78, blue: 0.77)
-    static let segmentContainerFill = Color(red: 1.0, green: 0.976, blue: 0.953)
+    static let navArrow = DayflowColors.accent
+    static let segmentActiveFill = DayflowColors.accent
+    static let segmentInactiveFill = DayflowColors.surface
+    static let segmentInactiveText = DayflowColors.textMuted
+    static let segmentContainerFill = DayflowColors.surface
 }
 
 struct JournalDayView_Previews: PreviewProvider {
     static var previews: some View {
         JournalDayView()
-            .background(Color(red: 0.96, green: 0.94, blue: 0.92))
+            .background(DayflowColors.surface)
             .previewLayout(.sizeThatFits)
             .frame(width: 800, height: 600)
     }

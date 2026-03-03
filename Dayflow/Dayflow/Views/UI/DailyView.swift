@@ -84,7 +84,7 @@ struct DailyView: View {
             HStack(alignment: .top, spacing: 4) {
                 Text("Dayflow Daily")
                     .font(.custom("InstrumentSerif-Italic", size: 38))
-                    .foregroundColor(Color(red: 0.35, green: 0.22, blue: 0.12))
+                    .foregroundColor(DayflowColors.textPrimary)
 
                 Text("BETA")
                     .font(.custom("Nunito-Bold", size: 11))
@@ -93,7 +93,7 @@ struct DailyView: View {
                     .padding(.vertical, 4)
                     .background(
                         RoundedRectangle(cornerRadius: 6)
-                            .fill(Color(red: 0.98, green: 0.55, blue: 0.20))
+                            .fill(DayflowColors.accent)
                     )
                     .rotationEffect(.degrees(-12))
                     .offset(x: -4, y: -4)
@@ -101,7 +101,7 @@ struct DailyView: View {
 
             Text(betaNoticeCopy)
                 .font(.custom("Nunito-Regular", size: 15))
-                .foregroundColor(Color(red: 0.35, green: 0.22, blue: 0.12).opacity(0.8))
+                .foregroundColor(DayflowColors.textPrimary.opacity(0.8))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 480)
                 .padding(.horizontal, 24)
@@ -113,7 +113,7 @@ struct DailyView: View {
             VStack(spacing: 8) {
                 Text(onboardingNoticeCopy)
                     .font(.custom("Nunito-Regular", size: 13))
-                    .foregroundColor(Color(red: 0.35, green: 0.22, blue: 0.12).opacity(0.75))
+                    .foregroundColor(DayflowColors.textPrimary.opacity(0.75))
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: 520)
                     .padding(.horizontal, 24)
@@ -165,12 +165,12 @@ struct DailyView: View {
             VStack(spacing: 16) {
                 Text("Enter access code")
                     .font(.custom("Nunito-SemiBold", size: 20))
-                    .foregroundColor(Color(red: 0.85, green: 0.45, blue: 0.25))
+                    .foregroundColor(DayflowColors.accent)
 
                 TextField("", text: $accessCode)
                     .textFieldStyle(.plain)
                     .font(.custom("Nunito-Medium", size: 15))
-                    .foregroundColor(Color(red: 0.25, green: 0.15, blue: 0.10))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 12)
@@ -185,7 +185,7 @@ struct DailyView: View {
                 Button(action: validateCode) {
                     Text("Get early access")
                         .font(.custom("Nunito-SemiBold", size: 15))
-                        .foregroundColor(Color(red: 0.35, green: 0.22, blue: 0.12))
+                        .foregroundColor(DayflowColors.textPrimary)
                         .padding(.horizontal, 28)
                         .padding(.vertical, 10)
                         .background(
@@ -193,8 +193,8 @@ struct DailyView: View {
                                 .fill(
                                     LinearGradient(
                                         colors: [
-                                            Color(red: 1.0, green: 0.92, blue: 0.82),
-                                            Color(red: 1.0, green: 0.85, blue: 0.70)
+                                            DayflowColors.accent.opacity(0.3),
+                                            DayflowColors.accent.opacity(0.5)
                                         ],
                                         startPoint: .top,
                                         endPoint: .bottom
@@ -202,7 +202,7 @@ struct DailyView: View {
                                 )
                                 .overlay(
                                     Capsule()
-                                        .stroke(Color(red: 0.90, green: 0.75, blue: 0.55), lineWidth: 1)
+                                        .stroke(DayflowColors.border, lineWidth: 1)
                                 )
                         )
                 }
@@ -317,7 +317,7 @@ struct DailyView: View {
 
                 Text(dailyDateTitle(for: selectedDate))
                     .font(.custom("InstrumentSerif-Regular", size: 26 * scale))
-                    .foregroundStyle(Color(hex: "1E1B18"))
+                    .foregroundStyle(DayflowColors.textPrimary)
 
                 let canMoveForward = canNavigateForward(from: selectedDate)
                 DailyCircleNavButton(iconName: "chevron.right", isDisabled: !canMoveForward, scale: scale) {
@@ -344,7 +344,7 @@ struct DailyView: View {
             HStack {
                 Text(headingText)
                     .font(.custom("InstrumentSerif-Regular", size: 24 * scale))
-                    .foregroundStyle(Color(hex: "B46531"))
+                    .foregroundStyle(DayflowColors.accent)
 
                 Spacer()
 
@@ -357,14 +357,14 @@ struct DailyView: View {
                     }
                     .padding(.horizontal, 10 * scale)
                     .padding(.vertical, 5 * scale)
-                    .foregroundStyle(Color(hex: "D17C45"))
+                    .foregroundStyle(DayflowColors.accent)
                     .background(
                         Capsule(style: .continuous)
-                            .fill(Color(hex: "FFF2E6"))
+                            .fill(DayflowColors.surface)
                     )
                     .overlay(
                         Capsule(style: .continuous)
-                            .stroke(Color(hex: "E6C6A8"), lineWidth: max(0.6, 0.8 * scale))
+                            .stroke(DayflowColors.border, lineWidth: max(0.6, 0.8 * scale))
                     )
                 }
                 .buttonStyle(.plain)
@@ -375,7 +375,7 @@ struct DailyView: View {
                 DailyWorkflowGrid(rows: workflowRows, timelineWindow: workflowWindow, scale: scale)
 
                 Divider()
-                    .overlay(Color(hex: "E5DFD9"))
+                    .overlay(DayflowColors.borderSubtle)
 
                 workflowTotalsView(scale: scale, isViewingToday: isViewingToday)
                     .padding(.horizontal, 16 * scale)
@@ -388,7 +388,7 @@ struct DailyView: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 4, style: .continuous)
-                    .stroke(Color(hex: "E8E1DA"), lineWidth: max(0.7, 1 * scale))
+                    .stroke(DayflowColors.border, lineWidth: max(0.7, 1 * scale))
             )
         }
     }
@@ -398,22 +398,22 @@ struct DailyView: View {
             if isViewingToday {
                 Text("Yesterday's total")
                     .font(.custom("InstrumentSerif-Regular", size: 14 * scale))
-                    .foregroundStyle(Color(hex: "777777"))
+                    .foregroundStyle(DayflowColors.textMuted)
             } else if workflowTotals.isEmpty {
                 Text("Yesterday's total  No captured activity during 9am-9pm")
                     .font(.custom("Nunito-Regular", size: 12 * scale))
-                    .foregroundStyle(Color(hex: "7F7062"))
+                    .foregroundStyle(DayflowColors.textMuted)
             } else {
                 HStack(spacing: 8 * scale) {
                     Text("Yesterday's total")
                         .font(.custom("InstrumentSerif-Regular", size: 14 * scale))
-                        .foregroundStyle(Color(hex: "777777"))
+                        .foregroundStyle(DayflowColors.textMuted)
 
                     ForEach(workflowTotals) { total in
                         HStack(spacing: 2 * scale) {
                             Text(total.name)
                                 .font(.custom("Nunito-Regular", size: 12 * scale))
-                                .foregroundStyle(Color(hex: "1F1B18"))
+                                .foregroundStyle(DayflowColors.textPrimary)
                             Text(formatDuration(minutes: total.minutes))
                                 .font(.custom("Nunito-SemiBold", size: 12 * scale))
                                 .foregroundStyle(Color(hex: total.colorHex))
@@ -483,8 +483,8 @@ struct DailyView: View {
             .background(
                 LinearGradient(
                     colors: [
-                        Color(hex: "FF986F"),
-                        Color(hex: "BDAAFF")
+                        DayflowColors.accent,
+                        DayflowColors.secondary
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -493,7 +493,7 @@ struct DailyView: View {
             .clipShape(Capsule(style: .continuous))
             .overlay(
                 Capsule(style: .continuous)
-                    .stroke(Color(hex: "F2D7C3"), lineWidth: max(1.2, 1.5 * scale))
+                    .stroke(DayflowColors.border, lineWidth: max(1.2, 1.5 * scale))
             )
             .contentShape(Capsule(style: .continuous))
         }
@@ -545,8 +545,8 @@ struct DailyView: View {
             .background(
                 LinearGradient(
                     colors: [
-                        Color(hex: "FFB58A"),
-                        Color(hex: "ED9BC0")
+                        DayflowColors.accent,
+                        DayflowColors.secondary
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -555,7 +555,7 @@ struct DailyView: View {
             .clipShape(Capsule(style: .continuous))
             .overlay(
                 Capsule(style: .continuous)
-                    .stroke(Color(hex: "F2D7C3"), lineWidth: max(1.2, 1.5 * scale))
+                    .stroke(DayflowColors.border, lineWidth: max(1.2, 1.5 * scale))
             )
             .contentShape(Capsule(style: .continuous))
         }
@@ -1196,13 +1196,13 @@ private struct DailyCircleNavButton: View {
         Button(action: action) {
             ZStack {
                 Circle()
-                    .fill(Color(hex: "F4EFEA"))
+                    .fill(DayflowColors.surface)
                 Circle()
-                    .stroke(Color(hex: "E2DDD8"), lineWidth: max(0.7, 1 * scale))
+                    .stroke(DayflowColors.borderSubtle, lineWidth: max(0.7, 1 * scale))
 
                 Image(systemName: iconName)
                     .font(.system(size: 13 * scale, weight: .medium))
-                    .foregroundStyle(Color(hex: "C9C2BC").opacity(isDisabled ? 0.5 : 1.0))
+                    .foregroundStyle(DayflowColors.textMuted.opacity(isDisabled ? 0.5 : 1.0))
             }
             .frame(width: 30 * scale, height: 30 * scale)
         }
@@ -1265,7 +1265,7 @@ private struct DailyWorkflowGrid: View {
                         ForEach(renderRows) { row in
                             Text(row.name)
                                 .font(.custom("Nunito-Regular", size: categoryLabelFontSize))
-                                .foregroundStyle(Color.black.opacity(0.9))
+                                .foregroundStyle(DayflowColors.textPrimary)
                                 .frame(width: categoryLabelWidth, height: cellSize, alignment: .trailing)
                         }
                     }
@@ -1291,7 +1291,7 @@ private struct DailyWorkflowGrid: View {
 
                             VStack(alignment: .leading, spacing: axisLabelSpacing) {
                                 Rectangle()
-                                    .fill(Color(hex: "E0D9D5"))
+                                    .fill(DayflowColors.borderSubtle)
                                     .frame(width: axisWidth, height: max(0.7, 0.9 * layoutScale))
 
                                 if hourTicks.count > 1 {
@@ -1305,7 +1305,7 @@ private struct DailyWorkflowGrid: View {
                                             Text(formatAxisHourLabel(fromAbsoluteHour: hour))
                                                 .font(.custom("Nunito-Regular", size: axisLabelFontSize))
                                                 .kerning(-0.08 * layoutScale)
-                                                .foregroundStyle(Color.black.opacity(0.78))
+                                                .foregroundStyle(DayflowColors.textPrimary.opacity(0.78))
                                                 .frame(
                                                     width: labelWidth,
                                                     alignment: axisLabelAlignment(
@@ -1329,7 +1329,7 @@ private struct DailyWorkflowGrid: View {
                                     Text(formatAxisHourLabel(fromAbsoluteHour: onlyTick))
                                         .font(.custom("Nunito-Regular", size: axisLabelFontSize))
                                         .kerning(-0.08 * layoutScale)
-                                        .foregroundStyle(Color.black.opacity(0.78))
+                                        .foregroundStyle(DayflowColors.textPrimary.opacity(0.78))
                                         .frame(width: axisWidth, alignment: .leading)
                                 }
                             }
@@ -1362,10 +1362,10 @@ private struct DailyWorkflowGrid: View {
 
     private func fillColor(for row: DailyWorkflowGridRow, slotIndex: Int) -> Color {
         guard slotIndex < row.slotOccupancies.count else {
-            return Color(red: 0.95, green: 0.93, blue: 0.92)
+            return DayflowColors.surface
         }
         let occupancy = min(max(row.slotOccupancies[slotIndex], 0), 1)
-        guard occupancy > 0 else { return Color(red: 0.95, green: 0.93, blue: 0.92) }
+        guard occupancy > 0 else { return DayflowColors.surface }
 
         // Partial occupancy stays dimmer; full occupancy reaches full intensity.
         let alpha = 0.3 + (occupancy * 0.7)
@@ -1410,20 +1410,20 @@ private struct DailyStatChip: View {
         HStack(spacing: 4) {
             Text(title)
                 .font(.custom("Nunito-Regular", size: 10 * scale))
-                .foregroundStyle(Color(hex: "5D5651"))
+                .foregroundStyle(DayflowColors.textPrimary)
             Text(value)
                 .font(.custom("Nunito-SemiBold", size: 10 * scale))
-                .foregroundStyle(Color(hex: "D77A43"))
+                .foregroundStyle(DayflowColors.accent)
         }
         .padding(.horizontal, 12 * scale)
         .padding(.vertical, 6 * scale)
         .background(
             Capsule(style: .continuous)
-                .fill(Color(hex: "F7F3F0"))
+                .fill(DayflowColors.surface)
         )
         .overlay(
             Capsule(style: .continuous)
-                .stroke(Color(hex: "DDD6CF"), lineWidth: max(0.6, 0.8 * scale))
+                .stroke(DayflowColors.borderSubtle, lineWidth: max(0.6, 0.8 * scale))
         )
     }
 }
@@ -1439,7 +1439,7 @@ private struct DailyModeToggle: View {
 
     private var cornerRadius: CGFloat { 8 * scale }
     private var borderWidth: CGFloat { max(0.7, 1 * scale) }
-    private var borderColor: Color { Color(hex: "C7C2C0") }
+    private var borderColor: Color { DayflowColors.border }
 
     var body: some View {
         HStack(spacing: 0) {
@@ -1462,12 +1462,12 @@ private struct DailyModeToggle: View {
 
     @ViewBuilder
     private func segment(text: String, isActive: Bool, isLeading: Bool) -> some View {
-        let fill = isActive ? Color(hex: "FFA767") : Color(hex: "FFFAF7").opacity(0.6)
+        let fill = isActive ? DayflowColors.accent : DayflowColors.surface.opacity(0.6)
 
         Text(text)
             .font(.custom("Nunito-Regular", size: 14 * scale))
             .lineLimit(1)
-            .foregroundStyle(isActive ? Color.white : Color(hex: "837870"))
+            .foregroundStyle(isActive ? Color.white : DayflowColors.textMuted)
             .padding(.horizontal, 12 * scale)
             .padding(.vertical, 8 * scale)
             .frame(minHeight: 33 * scale)
@@ -1561,7 +1561,7 @@ private struct DailyBulletCard: View {
             VStack(alignment: .leading, spacing: 18 * scale) {
                 TextField("Section title", text: $title)
                     .font(.custom("InstrumentSerif-Regular", size: 24 * scale))
-                    .foregroundStyle(Color(hex: "B46531"))
+                    .foregroundStyle(DayflowColors.accent)
                     .textFieldStyle(.plain)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -1602,7 +1602,7 @@ private struct DailyBulletCard: View {
         .clipShape(cardShape)
         .overlay(
             cardShape
-                .stroke(Color(hex: "EBE6E3"), lineWidth: max(0.7, 1 * scale))
+                .stroke(DayflowColors.borderSubtle, lineWidth: max(0.7, 1 * scale))
         )
         .shadow(color: Color.black.opacity(0.1), radius: 12 * scale, x: 0, y: 0)
         .onAppear {
@@ -1632,7 +1632,7 @@ private struct DailyBulletCard: View {
 
                             TextField("", text: bindingForItemText(id: itemID), axis: .vertical)
                                 .font(.custom("Nunito-Regular", size: 14 * scale))
-                                .foregroundStyle(Color.black)
+                                .foregroundStyle(DayflowColors.textPrimary)
                                 .textFieldStyle(.plain)
                                 .lineLimit(1...6)
                                 .multilineTextAlignment(.leading)
@@ -1693,12 +1693,12 @@ private struct DailyBulletCard: View {
             HStack(spacing: 6 * scale) {
                 Image(systemName: "plus")
                     .font(.system(size: 18 * scale, weight: .regular))
-                    .foregroundStyle(Color(hex: "999999"))
+                    .foregroundStyle(DayflowColors.textMuted)
                     .frame(width: 18 * scale, height: 18 * scale)
 
                 Text("Add item")
                     .font(.custom("Nunito-Regular", size: 13 * scale))
-                    .foregroundStyle(Color(hex: "999999"))
+                    .foregroundStyle(DayflowColors.textMuted)
                     .lineLimit(1)
             }
             .padding(.vertical, 6 * scale)
@@ -1783,10 +1783,10 @@ private struct DailyDragHandleIcon: View {
             ForEach(0..<3, id: \.self) { _ in
                 HStack(spacing: 2 * scale) {
                     Circle()
-                        .fill(Color(hex: "A5A5A5"))
+                        .fill(DayflowColors.textMuted)
                         .frame(width: 2.5 * scale, height: 2.5 * scale)
                     Circle()
-                        .fill(Color(hex: "A5A5A5"))
+                        .fill(DayflowColors.textMuted)
                         .frame(width: 2.5 * scale, height: 2.5 * scale)
                 }
             }
@@ -1804,7 +1804,7 @@ private struct DailyBlockersSection: View {
         VStack(alignment: .leading, spacing: 8 * scale) {
             TextField("Blockers", text: $title)
                 .font(.custom("Nunito-Medium", size: 14 * scale))
-                .foregroundStyle(Color(hex: "BD9479"))
+                .foregroundStyle(DayflowColors.textMuted)
                 .textFieldStyle(.plain)
 
             HStack(alignment: .center, spacing: 8 * scale) {
@@ -1813,7 +1813,7 @@ private struct DailyBlockersSection: View {
 
                 TextField("Fill in any blockers you may have", text: $prompt, axis: .vertical)
                     .font(.custom("Nunito-Regular", size: 14 * scale))
-                    .foregroundStyle(Color(hex: "929292"))
+                    .foregroundStyle(DayflowColors.textMuted)
                     .textFieldStyle(.plain)
                     .lineLimit(1...4)
                     .multilineTextAlignment(.leading)
@@ -1824,10 +1824,10 @@ private struct DailyBlockersSection: View {
         .padding(.trailing, 26 * scale)
         .padding(.top, 14 * scale)
         .frame(maxWidth: .infinity, minHeight: 94 * scale, alignment: .topLeading)
-        .background(Color(hex: "F7F6F5"))
+        .background(DayflowColors.surface)
         .overlay(alignment: .top) {
             Rectangle()
-                .fill(Color(hex: "EBE6E3"))
+                .fill(DayflowColors.borderSubtle)
                 .frame(height: max(0.7, 1 * scale))
         }
     }

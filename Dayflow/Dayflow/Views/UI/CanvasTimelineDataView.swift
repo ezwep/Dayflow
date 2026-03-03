@@ -269,7 +269,7 @@ struct CanvasTimelineDataView: View {
             ForEach(0..<(CanvasConfig.endHour - CanvasConfig.startHour), id: \.self) { _ in
                 VStack(spacing: 0) {
                     Rectangle()
-                        .fill(Color(hex: "E2A97B"))
+                        .fill(DayflowColors.accent)
                         .frame(height: 1)
                     Spacer()
                 }
@@ -284,7 +284,7 @@ struct CanvasTimelineDataView: View {
                 let hourIndex = hour - CanvasConfig.startHour
                 Text(formatHour(hour))
                     .font(.custom("Figtree", size: 13))
-                    .foregroundColor(Color(hex: "594838"))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .padding(.trailing, 5)
                     .padding(.top, 2)
                     .frame(width: CanvasConfig.timeColumnWidth, alignment: .trailing)
@@ -361,10 +361,10 @@ struct CanvasTimelineDataView: View {
                     let maxY = max(startY, currentY)
                     let height = maxY - minY
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(Color(red: 1.0, green: 0.76, blue: 0.42).opacity(0.25))
+                        .fill(DayflowColors.accent.opacity(0.25))
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color(red: 0.98, green: 0.76, blue: 0.42), lineWidth: 1.5)
+                                .stroke(DayflowColors.accent, lineWidth: 1.5)
                         )
                         .frame(width: geo.size.width - 16, height: max(height, 4))
                         .position(x: geo.size.width / 2, y: minY + height / 2)
@@ -478,8 +478,8 @@ struct CanvasTimelineDataView: View {
                     yPosition: calculateYPosition(for: projection.start) + 1,
                     gradient: recordingStatusGradient,
                     gradientOpacity: 0.70,
-                    baseColor: Color(hex: "D9C6BA"),
-                    strokeColor: Color.white.opacity(0.52),
+                    baseColor: DayflowColors.border,
+                    strokeColor: DayflowColors.surface.opacity(0.52),
                     strokeWidth: 0.75,
                     shadowColor: .black.opacity(0.10),
                     shadowRadius: 4
@@ -496,7 +496,7 @@ struct CanvasTimelineDataView: View {
                     gradient: pausedStatusGradient,
                     gradientOpacity: 1.0,
                     baseColor: .clear,
-                    strokeColor: .white,
+                    strokeColor: DayflowColors.surface,
                     strokeWidth: 1,
                     shadowColor: .black.opacity(0.03),
                     shadowRadius: 2,
@@ -565,8 +565,8 @@ struct CanvasTimelineDataView: View {
             stops: [
                 .init(color: Color(hex: "5E7FC0"), location: 0.00),
                 .init(color: Color(hex: "D88ECE"), location: 0.35),
-                .init(color: Color(hex: "FFC19E"), location: 0.68),
-                .init(color: Color(hex: "FFEDE0"), location: 1.00)
+                .init(color: DayflowColors.accent, location: 0.68),
+                .init(color: DayflowColors.surface, location: 1.00)
             ],
             startPoint: .leading,
             endPoint: .trailing
@@ -576,8 +576,8 @@ struct CanvasTimelineDataView: View {
     private var pausedStatusGradient: LinearGradient {
         LinearGradient(
             stops: [
-                .init(color: Color(hex: "F7E6D5"), location: 0.13),
-                .init(color: Color(hex: "DADEE4"), location: 1.00)
+                .init(color: DayflowColors.surface, location: 0.13),
+                .init(color: DayflowColors.surface, location: 1.00)
             ],
             startPoint: .leading,
             endPoint: .trailing
@@ -607,7 +607,7 @@ struct CanvasTimelineDataView: View {
         HStack(spacing: 10) {
             Image(systemName: "pause.fill")
                 .font(.system(size: 11, weight: .semibold))
-                .foregroundColor(Color(hex: "888D95"))
+                .foregroundColor(DayflowColors.textMuted)
             Text("Dayflow is paused. Click 'Record' to generate new activity cards.")
         }
         .font(
@@ -616,7 +616,7 @@ struct CanvasTimelineDataView: View {
         )
         .lineSpacing(2.4)
         .tracking(0)
-        .foregroundColor(Color(hex: "888D95"))
+        .foregroundColor(DayflowColors.textMuted)
         .lineLimit(1)
         .truncationMode(.tail)
     }
@@ -1396,7 +1396,7 @@ struct CanvasActivityCard: View {
                 maxHeight: height,
                 alignment: isCompactCard ? .leading : .topLeading
             )
-            .background(isFailedCard ? Color(hex: "FFECE4") : Color(hex: "FFFBF8"))
+            .background(isFailedCard ? DayflowColors.error.opacity(0.15) : DayflowColors.surface)
             .clipShape(RoundedRectangle(cornerRadius: 2, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 2, style: .continuous)

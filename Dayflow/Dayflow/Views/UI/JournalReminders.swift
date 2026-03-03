@@ -64,7 +64,7 @@ struct JournalRemindersView: View {
             .cornerRadius(6)
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
-                    .stroke(Color(hex: "F2F2F2"), lineWidth: 1)
+                    .stroke(DayflowColors.borderSubtle, lineWidth: 1)
             )
 
             HStack(spacing: 12) {
@@ -252,7 +252,7 @@ struct JournalRemindersView: View {
                 TimeDigitField(text: hour, field: hourField, focusedField: $focusedField)
                 Text(":")
                     .font(.custom("Nunito", size: 14))
-                    .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .baselineOffset(-1)
                 TimeDigitField(text: minute, field: minuteField, focusedField: $focusedField)
                 PeriodDropdown(
@@ -517,24 +517,24 @@ extension JournalRemindersView {
 }
 
 private enum JournalReminderTokens {
-    static let canvas = Color(hex: "FAF7F3")
-    static let accent = Color(hex: "FFB859")
-    static let saveFill = Color(hex: "553000")
-    static let cancelFill = Color(hex: "F1ECE7")
-    static let cancelBorder = Color(hex: "E1D7CC")
-    static let cancelText = Color(hex: "9F8D80")
-    static let neutral = Color(hex: "F2EFEE")
-    static let secondaryText = Color(hex: "9F8D80")
-    static let primaryText = Color(hex: "333333")
-    static let inputBackground = Color(hex: "F9F3EC")
-    static let inputStroke = Color(hex: "FF9B4C")
-    static let inactiveStroke = Color(hex: "E8DCCF")
-    static let focusStroke = Color(red: 1, green: 0.61, blue: 0.3)
-    static let timeSeparator = Color(hex: "B7A391")
-    static let dropdownIndicator = Color(hex: "8F6B4A")
-    static let dayIdleBackground = Color(hex: "FBF7F1")
-    static let dayIdleStroke = Color(hex: "F6E1CA")
-    static let dayIdleText = Color(hex: "B9A595")
+    static let canvas = DayflowColors.surface
+    static let accent = DayflowColors.accent
+    static let saveFill = DayflowColors.cta
+    static let cancelFill = DayflowColors.surface
+    static let cancelBorder = DayflowColors.border
+    static let cancelText = DayflowColors.textMuted
+    static let neutral = DayflowColors.surface
+    static let secondaryText = DayflowColors.textMuted
+    static let primaryText = DayflowColors.textPrimary
+    static let inputBackground = DayflowColors.surface
+    static let inputStroke = DayflowColors.accent
+    static let inactiveStroke = DayflowColors.borderSubtle
+    static let focusStroke = DayflowColors.accent
+    static let timeSeparator = DayflowColors.textMuted
+    static let dropdownIndicator = DayflowColors.textMuted
+    static let dayIdleBackground = DayflowColors.surface
+    static let dayIdleStroke = DayflowColors.borderSubtle
+    static let dayIdleText = DayflowColors.textMuted
 }
 
 // MARK: - Hover interactions
@@ -568,7 +568,7 @@ struct JournalRemindersView_Previews: PreviewProvider {
         JournalRemindersView()
             .padding()
             .frame(width: 480, height: 376)
-            .background(Color(hex: "E9E5E0"))
+            .background(DayflowColors.border)
             .previewDisplayName("Journal Reminders")
     }
 }

@@ -46,7 +46,7 @@ struct CardsToReviewBadge: View {
             // Back card (rotated, behind) - 15.75 x 14 (h x w)
             // Positioned so leftmost point pokes out only 3px
             RoundedRectangle(cornerRadius: 3.5)
-                .fill(Color.white)
+                .fill(DayflowColors.surface)
                 .frame(width: 14, height: 15.75)
                 .rotationEffect(.degrees(-11.64))
                 .offset(x: -3, y: 0)
@@ -54,18 +54,18 @@ struct CardsToReviewBadge: View {
             // Front card with number - 18 x 14 (h x w)
             ZStack {
                 RoundedRectangle(cornerRadius: 3.5)
-                    .fill(Color.white)
+                    .fill(DayflowColors.surface)
             }
             .frame(width: 14, height: 18)
             .overlay(
                 RoundedRectangle(cornerRadius: 3.5)
                     .inset(by: -0.63)
-                    .stroke(Color(red: 0.97, green: 0.61, blue: 0.51), lineWidth: 1.25)
+                    .stroke(DayflowColors.accent, lineWidth: 1.25)
             )
             .overlay(
                 Text("\(count)")
                     .font(.custom("Nunito", size: 9).weight(.heavy))
-                    .foregroundColor(Color(red: 0.98, green: 0.6, blue: 0.49))
+                    .foregroundColor(DayflowColors.accent)
             )
             .offset(x: 4, y: 0)
         }
@@ -151,6 +151,6 @@ private struct CardsToReviewBadgePreview: View {
             .cornerRadius(12)
         }
         .padding(60)
-        .background(Color(red: 0.98, green: 0.96, blue: 0.94))
+        .background(DayflowColors.surface)
     }
 }

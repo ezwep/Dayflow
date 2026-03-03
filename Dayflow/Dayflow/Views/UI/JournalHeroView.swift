@@ -36,10 +36,10 @@ private extension JournalHeroView {
         ZStack {
             LinearGradient(
                 colors: [
-                    Color(hex: "FF9B3A"),
-                    Color(hex: "FFB764"),
-                    Color(hex: "FFE6C5"),
-                    Color(hex: "FFF6EB")
+                    DayflowColors.accent,
+                    DayflowColors.accent.opacity(0.7),
+                    DayflowColors.accent.opacity(0.3),
+                    DayflowColors.surface
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -56,7 +56,7 @@ private extension JournalHeroView {
             .ignoresSafeArea()
 
             RadialGradient(
-                colors: [Color(hex: "FFAE5E").opacity(0.45), Color.clear],
+                colors: [DayflowColors.accent.opacity(0.45), Color.clear],
                 center: .topLeading,
                 startRadius: 140,
                 endRadius: 520
@@ -147,15 +147,15 @@ private struct JournalHeroPillButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundStyle(Color(red: 0.18, green: 0.11, blue: 0.06).opacity(0.8))
+            .foregroundStyle(DayflowColors.textPrimary.opacity(0.8))
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, verticalPadding)
-            .background(Color(red: 1, green: 0.96, blue: 0.92).opacity(configuration.isPressed ? 0.7 : 0.6))
+            .background(DayflowColors.surface.opacity(configuration.isPressed ? 0.7 : 0.6))
             .cornerRadius(100)
             .overlay(
                 RoundedRectangle(cornerRadius: 100)
                     .inset(by: 0.5)
-                    .stroke(Color(red: 0.95, green: 0.86, blue: 0.84), lineWidth: 1)
+                    .stroke(DayflowColors.borderSubtle, lineWidth: 1)
             )
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .animation(.spring(response: 0.25, dampingFraction: 0.85), value: configuration.isPressed)
@@ -208,41 +208,41 @@ private extension AttributedString {
 
 private enum JournalHeroTokens {
     static let badgeTextGradient = LinearGradient(
-        colors: [Color(hex: "ED6B0C"), Color(hex: "F4C11C")],
+        colors: [DayflowColors.accent, DayflowColors.accent],
         startPoint: .leading,
         endPoint: .trailing
     )
 
     static let badgeBackground = LinearGradient(
-        colors: [Color.white.opacity(0.96), Color(hex: "FFF2DB")],
+        colors: [DayflowColors.surface.opacity(0.96), DayflowColors.surface],
         startPoint: .top,
         endPoint: .bottom
     )
 
     static let badgeStroke = DayflowColors.surface.opacity(0.65)
     static let badgeInnerHighlight = DayflowColors.surface.opacity(0.32)
-    static let badgeShadow = Color(hex: "D88931").opacity(0.38)
+    static let badgeShadow = DayflowColors.accent.opacity(0.38)
 
     static let entryBackground = DayflowColors.surface.opacity(0.36)
     static let entryStroke = DayflowColors.surface.opacity(0.62)
-    static let entryShadow = Color(hex: "C86E1A").opacity(0.14)
-    static let entryPrimary = Color(hex: "7A4116")
-    static let entrySecondary = Color(hex: "9C5A26").opacity(0.86)
-    static let entryEmphasis = Color(hex: "5B2A06")
+    static let entryShadow = DayflowColors.accent.opacity(0.14)
+    static let entryPrimary = DayflowColors.textPrimary
+    static let entrySecondary = DayflowColors.textMuted.opacity(0.86)
+    static let entryEmphasis = DayflowColors.textPrimary
     static let entryFade = LinearGradient(
-        colors: [Color.clear, Color(hex: "FFF6EB").opacity(0.94)],
+        colors: [Color.clear, DayflowColors.surface.opacity(0.94)],
         startPoint: .center,
         endPoint: .bottom
     )
 
     static let ctaBackground = LinearGradient(
-        colors: [Color(hex: "FFE1B5"), Color(hex: "FFC169")],
+        colors: [DayflowColors.accent.opacity(0.4), DayflowColors.accent.opacity(0.6)],
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
-    static let ctaStroke = Color(hex: "FFD28A")
-    static let ctaText = Color(hex: "7A3A00")
-    static let ctaShadow = Color(hex: "E6A65A").opacity(0.30)
+    static let ctaStroke = DayflowColors.accent
+    static let ctaText = DayflowColors.textPrimary
+    static let ctaShadow = DayflowColors.accent.opacity(0.30)
 }
 
 // MARK: - Preview

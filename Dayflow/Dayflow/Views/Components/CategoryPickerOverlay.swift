@@ -42,7 +42,7 @@ struct CategoryPickerOverlay: View {
             .frame(maxWidth: .infinity, alignment: .leading)
 
             Rectangle()
-                .fill(Color(red: 0.91, green: 0.89, blue: 0.86))
+                .fill(DayflowColors.surface)
                 .frame(height: 1)
 
             helperContent
@@ -71,19 +71,19 @@ struct CategoryPickerOverlay: View {
                     topTrailing: 6
                 )
             )
-                .stroke(Color(red: 0.91, green: 0.88, blue: 0.87), lineWidth: 1)
+                .stroke(DayflowColors.borderSubtle, lineWidth: 1)
         )
     }
 
     private var backgroundView: some View {
-        Color(red: 0.98, green: 0.96, blue: 0.95).opacity(0.86)
+        DayflowColors.surface.opacity(0.86)
             .background(.ultraThinMaterial)
     }
 
     private var helperContent: some View {
         let baseFont = Font.custom("Nunito", size: 12)
-        let baseColor = Color(red: 0.39, green: 0.35, blue: 0.33)
-        let linkColor = Color(red: 1.0, green: 0.4, blue: 0.0)
+        let baseColor = DayflowColors.textPrimary
+        let linkColor = DayflowColors.accent
         let linkURL = URL(string: "dayflow://category-editor")!
 
         var intro = AttributedString("To help Dayflow organize your activities more accurately, try adding more details to the descriptions in your categories ")
@@ -133,23 +133,23 @@ private struct CategoryPickerPill: View {
             if isSelected {
                 LinearGradient(
                     colors: [
-                        Color(red: 1.0, green: 0.99, blue: 0.97),
-                        Color(red: 1.0, green: 0.91, blue: 0.83)
+                        DayflowColors.surface,
+                        DayflowColors.accent.opacity(0.3)
                     ],
                     startPoint: .leading,
                     endPoint: .trailing
                 )
             } else {
-                Color.white.opacity(0.76)
+                DayflowColors.surface.opacity(0.76)
             }
         }
     }
 
     private var borderColor: Color {
         if isSelected {
-            return Color(red: 0.98, green: 0.73, blue: 0.50)
+            return DayflowColors.accent
         }
-        return Color(red: 0.88, green: 0.88, blue: 0.88)
+        return DayflowColors.borderSubtle
     }
 
     var body: some View {
@@ -163,7 +163,7 @@ private struct CategoryPickerPill: View {
                     Font.custom("Nunito", size: 13)
                         .weight(.medium)
                 )
-                .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
+                .foregroundColor(DayflowColors.textPrimary)
                 .lineLimit(1)
         }
         .padding(.horizontal, 6)

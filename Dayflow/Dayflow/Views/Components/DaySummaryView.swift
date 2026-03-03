@@ -99,9 +99,9 @@ struct DaySummaryView: View {
         static let gateAccent = DayflowColors.accent
         static let gateButtonText = DayflowColors.textPrimary
         static let gateButtonShadow = Color.black.opacity(0.08)
-        static let gateGlow = Color(hex: "FAD2B3")
-        static let gateBackgroundStart = Color(hex: "FFF7EE")
-        static let gateBackgroundEnd = Color(hex: "FFF1E3")
+        static let gateGlow = DayflowColors.accent.opacity(0.5)
+        static let gateBackgroundStart = DayflowColors.surface
+        static let gateBackgroundEnd = DayflowColors.surface
     }
 
     /// Pre-computed card data with parsed timestamps to avoid expensive parsing during body evaluation
@@ -454,7 +454,7 @@ struct DaySummaryView: View {
                         RoundedRectangle(cornerRadius: 12, style: .continuous)
                             .fill(
                                 LinearGradient(
-                                    colors: [Color(hex: "FFE3CB"), Color(hex: "FFD1AE")],
+                                    colors: [DayflowColors.accent.opacity(0.4), DayflowColors.accent.opacity(0.6)],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 )
@@ -462,7 +462,7 @@ struct DaySummaryView: View {
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(Color(hex: "F2C7A3"), lineWidth: 1)
+                            .stroke(DayflowColors.border, lineWidth: 1)
                     )
                     .shadow(color: Design.gateButtonShadow, radius: 6, x: 0, y: 3)
                 }

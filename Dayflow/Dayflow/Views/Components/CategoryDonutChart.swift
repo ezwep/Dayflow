@@ -93,7 +93,7 @@ struct CategoryDonutChart: View {
         return ZStack {
             // Background circle with light grey fill and shadow
             Circle()
-                .fill(Color(red: 0.95, green: 0.94, blue: 0.94)) // Light grey background
+                .fill(DayflowColors.surface) // Light grey background
                 .frame(width: size, height: size)
                 .shadow(color: Color(red: 0.39, green: 0.28, blue: 0.22).opacity(0.35), radius: 5, x: 0, y: 0)
 
@@ -129,7 +129,7 @@ struct CategoryDonutChart: View {
             // White circle in center - slightly smaller than donut hole to show grey gap on inner edge
             let innerGap: CGFloat = 8  // 4px gap on each side (matches outer gap)
             Circle()
-                .fill(Color.white)
+                .fill(DayflowColors.surface)
                 .frame(width: chartSize * innerRadiusRatio - innerGap, height: chartSize * innerRadiusRatio - innerGap)
 
             // Center content
@@ -142,16 +142,16 @@ struct CategoryDonutChart: View {
         VStack(spacing: 4) {
             Text("TOTAL")
                 .font(.custom("Nunito", size: 8).weight(.bold))
-                .foregroundColor(Color(red: 0.65, green: 0.65, blue: 0.65)) // #a5a5a5
+                .foregroundColor(DayflowColors.textMuted) // #a5a5a5
 
             VStack(spacing: 0) {
                 let total = formattedTotal
                 Text("\(total.hours) hours")
                     .font(.custom("InstrumentSerif-Regular", size: 16))
-                    .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2)) // #333333
+                    .foregroundColor(DayflowColors.textPrimary) // #333333
                 Text("\(total.minutes) minutes")
                     .font(.custom("InstrumentSerif-Regular", size: 16))
-                    .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
+                    .foregroundColor(DayflowColors.textPrimary)
             }
         }
     }
@@ -184,7 +184,7 @@ struct CategoryDonutChart: View {
                 // Category name
                 Text(item.name)
                     .font(.custom("NunitoSans-Regular", size: 10))
-                    .foregroundColor(Color(red: 0.39, green: 0.39, blue: 0.39)) // #636363
+                    .foregroundColor(DayflowColors.textMuted) // #636363
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .frame(width: 70, alignment: .leading)
@@ -193,7 +193,7 @@ struct CategoryDonutChart: View {
             // Duration
             Text(item.formattedDuration)
                 .font(.custom("NunitoSans-SemiBold", size: 12))
-                .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2)) // #333333
+                .foregroundColor(DayflowColors.textPrimary) // #333333
                 .padding(.leading, 14) // Align with text above
         }
         .frame(width: 84.667, alignment: .leading)
@@ -215,11 +215,11 @@ struct CategoryDonutChart: View {
 
     CategoryDonutChart(data: previewData)
         .padding(40)
-        .background(Color(red: 0.98, green: 0.97, blue: 0.96))
+        .background(DayflowColors.surface)
 }
 
 #Preview("Empty State") {
     CategoryDonutChart(data: [])
         .padding(40)
-        .background(Color(red: 0.98, green: 0.97, blue: 0.96))
+        .background(DayflowColors.surface)
 }

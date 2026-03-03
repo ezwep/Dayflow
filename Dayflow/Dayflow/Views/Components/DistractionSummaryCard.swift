@@ -39,14 +39,14 @@ struct DistractionSummaryCard: View {
         static let donutInnerMaxSize: CGFloat = 136
         static let donutInnerBottomInset: CGFloat = 4.868
 
-        static let donutFill = Color(hex: "F0F0F0").opacity(0.8)
-        static let donutStroke = Color(hex: "DDDDDD")
-        static let donutGradientStart = Color(hex: "FFE3DE")
-        static let donutGradientEnd = Color(hex: "FF694B")
+        static let donutFill = DayflowColors.surface.opacity(0.8)
+        static let donutStroke = DayflowColors.border
+        static let donutGradientStart = DayflowColors.error.opacity(0.15)
+        static let donutGradientEnd = DayflowColors.error
 
-        static let capturedTextColor = Color(hex: "9C9C9C")
-        static let distractedTextColor = Color(hex: "FF694B")
-        static let bodyTextColor = Color(hex: "333333")
+        static let capturedTextColor = DayflowColors.textMuted
+        static let distractedTextColor = DayflowColors.error
+        static let bodyTextColor = DayflowColors.textPrimary
 
         static let labelFont = Font.custom("InstrumentSerif-Regular", size: 14)
         static let valueFont = Font.custom("InstrumentSerif-Regular", size: 20)
@@ -165,5 +165,5 @@ struct DistractionSummaryCard: View {
         patternDescription: "YouTube recommendations pull attention from one video to the next for extended periods."
     )
     .padding(24)
-    .background(Color.white)
+    .background(DayflowColors.surface)
 }
