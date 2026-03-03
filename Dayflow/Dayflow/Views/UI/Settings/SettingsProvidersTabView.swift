@@ -40,7 +40,7 @@ struct SettingsProvidersTabView: View {
                             }
                             .frame(minWidth: 160)
                         },
-                        background: Color(red: 0.25, green: 0.17, blue: 0),
+                        background: DayflowColors.accent,
                         foreground: .white,
                         borderColor: .clear,
                         cornerRadius: 8,
@@ -61,9 +61,9 @@ struct SettingsProvidersTabView: View {
                                 }
                                 .frame(minWidth: 160)
                             },
-                            background: Color.white,
+                            background: DayflowColors.surface,
                             foreground: .black,
-                            borderColor: Color.black.opacity(0.15),
+                            borderColor: DayflowColors.border,
                             cornerRadius: 8,
                             horizontalPadding: 16,
                             verticalPadding: 9,
@@ -79,7 +79,7 @@ struct SettingsProvidersTabView: View {
                     Text(viewModel.connectionHealthLabel)
                         .font(.custom("Nunito", size: 14))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(0.72))
+                        .foregroundColor(DayflowColors.textPrimary.opacity(0.72))
 
                     switch viewModel.currentProvider {
                     case "gemini":
@@ -105,7 +105,7 @@ struct SettingsProvidersTabView: View {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Dayflow Pro diagnostics coming soon")
                                 .font(.custom("Nunito", size: 13))
-                                .foregroundColor(.black.opacity(0.55))
+                                .foregroundColor(DayflowColors.textMuted)
                         }
                     }
                 }
@@ -137,7 +137,7 @@ struct SettingsProvidersTabView: View {
         }
     }
 
-    private let routingAccentColor = Color(red: 0.25, green: 0.17, blue: 0)
+    private let routingAccentColor = DayflowColors.accent
     private let routingButtonTextWidth: CGFloat = 120
 
     private var routingMatrix: some View {
@@ -198,7 +198,7 @@ struct SettingsProvidersTabView: View {
                 Text(provider.providerTableName)
                     .font(.custom("Nunito", size: 15))
                     .fontWeight(.semibold)
-                    .foregroundColor(.black.opacity(0.82))
+                    .foregroundColor(DayflowColors.textPrimary.opacity(0.82))
 
                 Spacer()
 
@@ -215,7 +215,7 @@ struct SettingsProvidersTabView: View {
 
             Text(provider.summary)
                 .font(.custom("Nunito", size: 12))
-                .foregroundColor(.black.opacity(0.54))
+                .foregroundColor(DayflowColors.textMuted)
                 .fixedSize(horizontal: false, vertical: true)
 
             VStack(alignment: .leading, spacing: 8) {
@@ -240,11 +240,11 @@ struct SettingsProvidersTabView: View {
             }
         }
         .padding(14)
-        .background(Color.white.opacity(0.52))
+        .background(DayflowColors.surface.opacity(0.52))
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.black.opacity(0.06), lineWidth: 1)
+                .stroke(DayflowColors.borderSubtle, lineWidth: 1)
         )
     }
 
@@ -262,9 +262,9 @@ struct SettingsProvidersTabView: View {
                     .fontWeight(.semibold)
                     .frame(width: routingButtonTextWidth, alignment: .center)
             },
-            background: filled ? routingAccentColor : Color.white,
+            background: filled ? routingAccentColor : DayflowColors.surface,
             foreground: filled ? .white : .black,
-            borderColor: filled ? .clear : Color.black.opacity(0.14),
+            borderColor: filled ? .clear : DayflowColors.border,
             cornerRadius: 7,
             horizontalPadding: 10,
             verticalPadding: 5,
@@ -282,7 +282,7 @@ struct SettingsProvidersTabView: View {
         VStack(alignment: .leading, spacing: 22) {
             Text("Overrides apply only when their toggle is on. Unchecked sections fall back to Dayflow's defaults.")
                 .font(.custom("Nunito", size: 12))
-                .foregroundColor(.black.opacity(0.55))
+                .foregroundColor(DayflowColors.textMuted)
                 .fixedSize(horizontal: false, vertical: true)
 
             promptSection(
@@ -321,9 +321,9 @@ struct SettingsProvidersTabView: View {
                         }
                         .padding(.horizontal, 2)
                     },
-                    background: Color.white,
-                    foreground: Color(red: 0.25, green: 0.17, blue: 0),
-                    borderColor: Color(hex: "FFE0A5"),
+                    background: DayflowColors.surface,
+                    foreground: DayflowColors.accent,
+                    borderColor: DayflowColors.accent.opacity(0.4),
                     cornerRadius: 8,
                     horizontalPadding: 18,
                     verticalPadding: 9,
@@ -337,7 +337,7 @@ struct SettingsProvidersTabView: View {
         VStack(alignment: .leading, spacing: 22) {
             Text("Customize the local model prompts for summary and title generation.")
                 .font(.custom("Nunito", size: 12))
-                .foregroundColor(.black.opacity(0.55))
+                .foregroundColor(DayflowColors.textMuted)
                 .fixedSize(horizontal: false, vertical: true)
 
             promptSection(
@@ -368,9 +368,9 @@ struct SettingsProvidersTabView: View {
                         }
                         .padding(.horizontal, 2)
                     },
-                    background: Color.white,
-                    foreground: Color(red: 0.25, green: 0.17, blue: 0),
-                    borderColor: Color(hex: "FFE0A5"),
+                    background: DayflowColors.surface,
+                    foreground: DayflowColors.accent,
+                    borderColor: DayflowColors.accent.opacity(0.4),
                     cornerRadius: 8,
                     horizontalPadding: 18,
                     verticalPadding: 9,
@@ -384,7 +384,7 @@ struct SettingsProvidersTabView: View {
         VStack(alignment: .leading, spacing: 22) {
             Text("Overrides apply only when their toggle is on. Unchecked sections fall back to Dayflow's defaults.")
                 .font(.custom("Nunito", size: 12))
-                .foregroundColor(.black.opacity(0.55))
+                .foregroundColor(DayflowColors.textMuted)
                 .fixedSize(horizontal: false, vertical: true)
 
             promptSection(
@@ -423,9 +423,9 @@ struct SettingsProvidersTabView: View {
                         }
                         .padding(.horizontal, 2)
                     },
-                    background: Color.white,
-                    foreground: Color(red: 0.25, green: 0.17, blue: 0),
-                    borderColor: Color(hex: "FFE0A5"),
+                    background: DayflowColors.surface,
+                    foreground: DayflowColors.accent,
+                    borderColor: DayflowColors.accent.opacity(0.4),
                     cornerRadius: 8,
                     horizontalPadding: 18,
                     verticalPadding: 9,
@@ -447,24 +447,24 @@ struct SettingsProvidersTabView: View {
                     Text(heading)
                         .font(.custom("Nunito", size: 14))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(0.75))
+                        .foregroundColor(DayflowColors.textPrimary.opacity(0.75))
                     Text(description)
                         .font(.custom("Nunito", size: 12))
-                        .foregroundColor(.black.opacity(0.55))
+                        .foregroundColor(DayflowColors.textMuted)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
-            .toggleStyle(SwitchToggleStyle(tint: Color(red: 0.25, green: 0.17, blue: 0)))
+            .toggleStyle(SwitchToggleStyle(tint: DayflowColors.accent))
             .pointingHandCursor()
 
             promptEditorBlock(title: "Prompt text", text: text, isEnabled: isEnabled.wrappedValue, defaultText: defaultText)
         }
         .padding(16)
-        .background(Color.white.opacity(0.95))
+        .background(DayflowColors.surface.opacity(0.95))
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color(hex: "FFE0A5"), lineWidth: 0.8)
+                .stroke(DayflowColors.accent.opacity(0.4), lineWidth: 0.8)
         )
     }
 
@@ -476,12 +476,12 @@ struct SettingsProvidersTabView: View {
             Text(title)
                 .font(.custom("Nunito", size: 12))
                 .fontWeight(.semibold)
-                .foregroundColor(.black.opacity(0.6))
+                .foregroundColor(DayflowColors.textMuted)
             ZStack(alignment: .topLeading) {
                 if text.wrappedValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     Text(defaultText)
                         .font(.custom("Nunito", size: 12))
-                        .foregroundColor(.black.opacity(0.4))
+                        .foregroundColor(DayflowColors.textMuted)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 10)
                         .fixedSize(horizontal: false, vertical: true)
@@ -490,18 +490,18 @@ struct SettingsProvidersTabView: View {
 
                 TextEditor(text: text)
                     .font(.custom("Nunito", size: 12))
-                    .foregroundColor(.black.opacity(isEnabled ? 0.85 : 0.45))
+                    .foregroundColor(DayflowColors.textPrimary.opacity(isEnabled ? 0.85 : 0.45))
                     .scrollContentBackground(.hidden)
                     .disabled(!isEnabled)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 8)
                     .frame(minHeight: isEnabled ? 140 : 120)
-                    .background(Color.white)
+                    .background(DayflowColors.surface)
             }
-            .background(Color.white)
+            .background(DayflowColors.surface)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.black.opacity(0.12), lineWidth: 1)
+                    .stroke(DayflowColors.border, lineWidth: 1)
             )
             .cornerRadius(8)
             .opacity(isEnabled ? 1 : 0.6)
@@ -551,11 +551,11 @@ struct SettingsProvidersTabView: View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
             Text(label)
                 .font(.custom("Nunito", size: 13))
-                .foregroundColor(.black.opacity(0.55))
+                .foregroundColor(DayflowColors.textMuted)
                 .frame(width: 150, alignment: .leading)
             Text(value)
                 .font(.custom("Nunito", size: 14))
-                .foregroundColor(.black.opacity(0.78))
+                .foregroundColor(DayflowColors.textPrimary.opacity(0.78))
             roleTag(text: roleText, type: roleType)
         }
     }
@@ -564,11 +564,11 @@ struct SettingsProvidersTabView: View {
         HStack(alignment: .firstTextBaseline) {
             Text(label)
                 .font(.custom("Nunito", size: 13))
-                .foregroundColor(.black.opacity(0.55))
+                .foregroundColor(DayflowColors.textMuted)
                 .frame(width: 150, alignment: .leading)
             Text(value)
                 .font(.custom("Nunito", size: 14))
-                .foregroundColor(.black.opacity(0.78))
+                .foregroundColor(DayflowColors.textPrimary.opacity(0.78))
         }
     }
 }
@@ -703,13 +703,13 @@ struct LocalModelUpgradeSheet: View {
                             .fontWeight(.semibold)
                         Text("Follow the steps below, run a quick test, and Dayflow will switch you over automatically.")
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.black.opacity(0.6))
+                            .foregroundColor(DayflowColors.textMuted)
                     }
                     Spacer()
                     Button(action: onCancel) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 20))
-                            .foregroundColor(.black.opacity(0.35))
+                            .foregroundColor(DayflowColors.textMuted)
                     }
                     .buttonStyle(.plain)
                     .pointingHandCursor()
@@ -723,7 +723,7 @@ struct LocalModelUpgradeSheet: View {
                                 .foregroundColor(Color(red: 0.39, green: 0.23, blue: 0.02))
                             Text(bullet)
                                 .font(.custom("Nunito", size: 13))
-                                .foregroundColor(.black.opacity(0.75))
+                                .foregroundColor(DayflowColors.textPrimary.opacity(0.75))
                         }
                     }
                 }
@@ -731,7 +731,7 @@ struct LocalModelUpgradeSheet: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Which local runtime are you using?")
                         .font(.custom("Nunito", size: 14))
-                        .foregroundColor(.black.opacity(0.65))
+                        .foregroundColor(DayflowColors.textMuted)
                     Picker("Engine", selection: $selectedEngine) {
                         Text("Ollama").tag(LocalEngine.ollama)
                         Text("LM Studio").tag(LocalEngine.lmstudio)
@@ -762,7 +762,7 @@ struct LocalModelUpgradeSheet: View {
 
                 Text("Once the test succeeds, Dayflow updates your settings to \(preset.displayName) automatically.")
                     .font(.custom("Nunito", size: 12))
-                    .foregroundColor(.black.opacity(0.55))
+                    .foregroundColor(DayflowColors.textMuted)
 
                 HStack {
                     Spacer()
@@ -771,9 +771,9 @@ struct LocalModelUpgradeSheet: View {
                         content: {
                             Text("Close").font(.custom("Nunito", size: 13)).fontWeight(.semibold)
                         },
-                        background: Color.white,
+                        background: DayflowColors.surface,
                         foreground: .black,
-                        borderColor: Color.black.opacity(0.15),
+                        borderColor: DayflowColors.border,
                         cornerRadius: 8,
                         horizontalPadding: 18,
                         verticalPadding: 10,
@@ -803,17 +803,17 @@ struct LocalModelUpgradeSheet: View {
                 .fontWeight(.semibold)
             Text(instruction.subtitle)
                 .font(.custom("Nunito", size: 13))
-                .foregroundColor(.black.opacity(0.65))
+                .foregroundColor(DayflowColors.textMuted)
             VStack(alignment: .leading, spacing: 6) {
                 ForEach(Array(instruction.bullets.enumerated()), id: \.offset) { index, bullet in
                     HStack(alignment: .firstTextBaseline, spacing: 8) {
                         Text("\(index + 1).")
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.black.opacity(0.55))
+                            .foregroundColor(DayflowColors.textMuted)
                             .frame(width: 18, alignment: .leading)
                         Text(bullet)
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.black.opacity(0.8))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.8))
                     }
                 }
             }
@@ -841,7 +841,7 @@ struct LocalModelUpgradeSheet: View {
                                 .fontWeight(.semibold)
                         }
                     },
-                    background: Color(red: 0.25, green: 0.17, blue: 0),
+                    background: DayflowColors.accent,
                     foreground: .white,
                     borderColor: .clear,
                     cornerRadius: 8,
@@ -854,16 +854,16 @@ struct LocalModelUpgradeSheet: View {
             if let note = instruction.note {
                 Text(note)
                     .font(.custom("Nunito", size: 12))
-                    .foregroundColor(.black.opacity(0.55))
+                    .foregroundColor(DayflowColors.textMuted)
             }
         }
         .padding(20)
         .background(
             RoundedRectangle(cornerRadius: 14)
-                .fill(Color.white)
+                .fill(DayflowColors.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 14)
-                        .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                        .stroke(DayflowColors.borderSubtle, lineWidth: 1)
                 )
         )
     }
@@ -878,7 +878,7 @@ private struct GeminiModelSettingsCard: View {
             Text("Gemini model")
                 .font(.custom("Nunito", size: 13))
                 .fontWeight(.semibold)
-                .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0))
+                .foregroundColor(DayflowColors.accent)
 
             Picker("Gemini model", selection: $selectedModel) {
                 ForEach(GeminiModel.allCases, id: \.self) { model in
@@ -887,15 +887,14 @@ private struct GeminiModelSettingsCard: View {
             }
             .pickerStyle(.segmented)
             .labelsHidden()
-            .environment(\.colorScheme, .light)
 
             Text(GeminiModelPreference(primary: selectedModel).fallbackSummary)
                 .font(.custom("Nunito", size: 12))
-                .foregroundColor(.black.opacity(0.5))
+                .foregroundColor(DayflowColors.textMuted)
 
             Text("Dayflow automatically downgrades if your chosen model is rate limited or unavailable.")
                 .font(.custom("Nunito", size: 11))
-                .foregroundColor(.black.opacity(0.45))
+                .foregroundColor(DayflowColors.textMuted)
         }
         .onChange(of: selectedModel) { _, newValue in
             onSelectionChanged(newValue)

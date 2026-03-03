@@ -11,9 +11,9 @@ struct DayflowSurfaceButton<Content: View>: View {
     let action: () -> Void
     @ViewBuilder let content: () -> Content
 
-    var background: Color = .white
-    var foreground: Color = .black
-    var borderColor: Color = .black.opacity(0.15)
+    var background: Color = DayflowColors.surface
+    var foreground: Color = DayflowColors.textPrimary
+    var borderColor: Color = DayflowColors.border
     var cornerRadius: CGFloat = 0
     var horizontalPadding: CGFloat = 18
     var verticalPadding: CGFloat = 12
@@ -50,7 +50,7 @@ struct DayflowSurfaceButton<Content: View>: View {
                     if isSecondaryStyle {
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .inset(by: 0.75)
-                            .stroke(Color(red: 0.25, green: 0.17, blue: 0), lineWidth: 1.5)
+                            .stroke(DayflowColors.accent, lineWidth: 1.5)
                     } else if showOverlayStroke {
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .inset(by: 0.75)

@@ -132,7 +132,7 @@ struct FlexibleProviderCard: View {
             Text(title)
                 .font(.custom("Nunito", size: 18))
                 .fontWeight(.semibold)
-                .foregroundColor(.black.opacity(0.9))
+                .foregroundColor(DayflowColors.textPrimary.opacity(0.9))
                 .lineLimit(2)
                 .truncationMode(.tail)
             Spacer()
@@ -160,7 +160,7 @@ struct FlexibleProviderCard: View {
                     Text(customStatusText ?? "Currently selected")
                         .font(.custom("Nunito", size: 12))
                         .fontWeight(.medium)
-                        .foregroundColor(.black.opacity(0.6))
+                        .foregroundColor(DayflowColors.textMuted)
                 }
             }
             Spacer()
@@ -249,7 +249,7 @@ struct FlexibleProviderCard: View {
     }
     
     private var buttonBackgroundColor: Color {
-        return Color(red: 0.25, green: 0.17, blue: 0)
+        return DayflowColors.accent
     }
     
     @ViewBuilder
@@ -257,7 +257,7 @@ struct FlexibleProviderCard: View {
         if isSelected {
             SelectedCardBackground()
         } else {
-            Color.white.opacity(0.3)
+            DayflowColors.surface.opacity(0.3)
         }
     }
     
@@ -268,7 +268,7 @@ struct FlexibleProviderCard: View {
         } else {
             RoundedRectangle(cornerRadius: 4)
                 .inset(by: 0.5)
-                .stroke(Color.black.opacity(0.06), lineWidth: 1)
+                .stroke(DayflowColors.borderSubtle, lineWidth: 1)
         }
     }
 }
@@ -440,12 +440,12 @@ struct ProviderIconView: View {
             .scaledToFit()
             .frame(width: 28, height: 28)
             .padding(6)
-            .background(.white.opacity(0.9))
+            .background(DayflowColors.surface.opacity(0.9))
             .cornerRadius(6)
             .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 2)
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
-                    .stroke(Color.black.opacity(0.05), lineWidth: 0.5)
+                    .stroke(DayflowColors.borderSubtle, lineWidth: 0.5)
             )
     }
 
@@ -453,9 +453,9 @@ struct ProviderIconView: View {
     private func logoBox(systemName: String) -> some View {
         Image(systemName: systemName)
             .font(.system(size: 20, weight: .medium))
-            .foregroundColor(.black.opacity(0.7))
+            .foregroundColor(DayflowColors.textPrimary.opacity(0.7))
             .frame(width: 40, height: 40)
-            .background(.white.opacity(0.6))
+            .background(DayflowColors.surface.opacity(0.6))
             .cornerRadius(3)
             .shadow(color: Color(red: 0.92, green: 0.91, blue: 0.91), radius: 1, x: -1, y: 2)
             .overlay(
@@ -479,7 +479,7 @@ struct FeatureRowView: View {
             
             Text(feature.text)
                 .font(.custom("Nunito", size: 14))
-                .foregroundColor(.black.opacity(0.75))
+                .foregroundColor(DayflowColors.textPrimary.opacity(0.75))
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }

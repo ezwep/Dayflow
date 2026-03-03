@@ -60,7 +60,7 @@ struct JournalRemindersView: View {
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 28)
-            .background(Color.white)
+            .background(DayflowColors.surface)
             .cornerRadius(6)
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
@@ -109,10 +109,9 @@ struct JournalRemindersView: View {
                 .fill(JournalReminderTokens.canvas)
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
-                        .stroke(Color.white, lineWidth: 1)
+                        .stroke(DayflowColors.surface, lineWidth: 1)
                 )
         )
-        .environment(\.colorScheme, .light)
         .onAppear(perform: loadSavedPreferences)
     }
 
@@ -570,7 +569,6 @@ struct JournalRemindersView_Previews: PreviewProvider {
             .padding()
             .frame(width: 480, height: 376)
             .background(Color(hex: "E9E5E0"))
-            .preferredColorScheme(.light)
             .previewDisplayName("Journal Reminders")
     }
 }

@@ -499,7 +499,7 @@ private struct IntentionsEditForm: View {
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(JournalDayTokens.bodyText.opacity(0.5))
                         .frame(width: 32, height: 32)
-                        .background(Color.white.opacity(0.6))
+                        .background(DayflowColors.surface.opacity(0.6))
                         .clipShape(Circle())
                 }
                 .buttonStyle(.plain)
@@ -539,9 +539,9 @@ private struct IntentionsEditForm: View {
         .background(
             LinearGradient(
                 stops: [
-                    .init(color: Color.white.opacity(0.3), location: 0.00),
-                    .init(color: Color.white.opacity(0.8), location: 0.50),
-                    .init(color: Color.white.opacity(0.3), location: 1.00)
+                    .init(color: DayflowColors.surface.opacity(0.3), location: 0.00),
+                    .init(color: DayflowColors.surface.opacity(0.8), location: 0.50),
+                    .init(color: DayflowColors.surface.opacity(0.3), location: 1.00)
                 ],
                 startPoint: UnitPoint(x: 1, y: 0.14),
                 endPoint: UnitPoint(x: 0, y: 0.78)
@@ -552,7 +552,7 @@ private struct IntentionsEditForm: View {
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .inset(by: 0.5)
-                .stroke(Color.white, lineWidth: 1)
+                .stroke(DayflowColors.surface, lineWidth: 1)
         )
     }
 
@@ -731,9 +731,9 @@ private struct JournalLeftCardView: View {
         .background(
             LinearGradient(
                 stops: [
-                    .init(color: Color.white.opacity(0.3), location: 0.00),
-                    .init(color: Color.white.opacity(0.8), location: 0.51),
-                    .init(color: Color.white.opacity(0.3), location: 1.00)
+                    .init(color: DayflowColors.surface.opacity(0.3), location: 0.00),
+                    .init(color: DayflowColors.surface.opacity(0.8), location: 0.51),
+                    .init(color: DayflowColors.surface.opacity(0.3), location: 1.00)
                 ],
                 startPoint: UnitPoint(x: 1, y: 0.14),
                 endPoint: UnitPoint(x: 0, y: 0.78)
@@ -744,7 +744,7 @@ private struct JournalLeftCardView: View {
         .overlay(
             RoundedRectangle(cornerRadius: 12)
                 .inset(by: 0.5)
-                .stroke(Color.white, lineWidth: 1)
+                .stroke(DayflowColors.surface, lineWidth: 1)
         )
         .applyIf(namespace != nil) { view in
              view.matchedGeometryEffect(id: "card_bg", in: namespace!)
@@ -789,12 +789,12 @@ private struct JournalRightCard<Content: View>: View {
             .frame(maxWidth: .infinity, alignment: .topLeading)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white.opacity(0.92))
+        .background(DayflowColors.surface.opacity(0.92))
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.1), radius: 6, x: 0, y: 0)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.white.opacity(0.8), lineWidth: 1)
+                .stroke(DayflowColors.surface.opacity(0.8), lineWidth: 1)
         )
     }
 }
@@ -1112,7 +1112,7 @@ private struct JournalDaySegmentedControl: View {
         }
         .padding(2)
         .background(
-            Capsule().fill(JournalDayTokens.segmentContainerFill).overlay(Capsule().inset(by: 0.5).stroke(Color.white.opacity(0.6), lineWidth: 1))
+            Capsule().fill(JournalDayTokens.segmentContainerFill).overlay(Capsule().inset(by: 0.5).stroke(DayflowColors.surface.opacity(0.6), lineWidth: 1))
         )
         .shadow(color: Color.black.opacity(0.10), radius: 2, x: 0, y: 1)
     }
@@ -1136,7 +1136,7 @@ private enum JournalDayTokens {
     static let sectionHeader = Color(red: 0.85, green: 0.44, blue: 0.04)
     static let divider = Color(red: 0.90, green: 0.85, blue: 0.80)
     static let navCircleFill = Color(red: 0.996, green: 0.976, blue: 0.953)
-    static let navCircleStroke = Color.white
+    static let navCircleStroke = DayflowColors.surface
     static let navCircleShadow = Color.black.opacity(0.04)
     static let navArrow = Color(red: 1.0, green: 0.74, blue: 0.35)
     static let segmentActiveFill = Color(red: 1, green: 0.72, blue: 0.35)
@@ -1150,7 +1150,6 @@ struct JournalDayView_Previews: PreviewProvider {
         JournalDayView()
             .background(Color(red: 0.96, green: 0.94, blue: 0.92))
             .previewLayout(.sizeThatFits)
-            .preferredColorScheme(.light)
             .frame(width: 800, height: 600)
     }
 }

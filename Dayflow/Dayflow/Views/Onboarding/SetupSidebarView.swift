@@ -34,7 +34,7 @@ struct SetupSidebarView: View {
         .background(
             ZStack {
                 // Subtle base color
-                Color.white.opacity(0.03)
+                DayflowColors.surface.opacity(0.03)
                 
                 // Angular gradient overlay
                 RoundedRectangle(cornerRadius: 8)
@@ -51,7 +51,7 @@ struct SetupSidebarView: View {
                                 .init(color: .white.opacity(0.02), location: 0.25),
                                 .init(color: .white.opacity(0.02), location: 0.30),
                                 .init(color: Color(hex: "FF8904").opacity(0.10), location: 0.52),
-                                .init(color: Color(hex: "FFE0A5").opacity(0.20), location: 0.58),
+                                .init(color: DayflowColors.accent.opacity(0.08), location: 0.58),
                                 .init(color: .white.opacity(0.05), location: 0.80),
                                 .init(color: Color(hex: "FFF1D3").opacity(0.15), location: 0.91),
                                 
@@ -152,7 +152,7 @@ struct SetupSidebarItem: View {
                 )
                 
                 // Layer 2: White opacity overlay
-                Color.white.opacity(0.69)
+                DayflowColors.surface.opacity(0.69)
             }
             .blur(radius: 4.62801)
             .matchedGeometryEffect(id: "selection", in: namespace)

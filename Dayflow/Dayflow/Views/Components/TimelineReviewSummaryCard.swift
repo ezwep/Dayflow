@@ -41,7 +41,7 @@ struct TimelineReviewSummaryCard: View {
 
         static let titleColor = Color(hex: "333333")
         static let subtitleColor = Color(hex: "707070")
-        static let linkColor = Color(hex: "F96E00")
+        static let linkColor = DayflowColors.accent
 
         static let barHeight: CGFloat = 39
         static let barCornerRadius: CGFloat = 4

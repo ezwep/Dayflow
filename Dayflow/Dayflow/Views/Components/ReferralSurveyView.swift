@@ -43,7 +43,7 @@ struct ReferralSurveyView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(prompt)
                 .font(.custom("Nunito", size: 15).weight(.semibold))
-                .foregroundColor(.black.opacity(0.85))
+                .foregroundColor(DayflowColors.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
 
             VStack(spacing: 10) {
@@ -65,7 +65,7 @@ struct ReferralSurveyView: View {
             if showsThankYou && hasSubmitted {
                 Label("Thanks for letting me know!", systemImage: "checkmark.circle.fill")
                     .font(.custom("Nunito", size: 14))
-                    .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0))
+                    .foregroundColor(DayflowColors.accent)
                     .padding(.top, 4)
             }
 
@@ -118,7 +118,7 @@ struct ReferralSurveyView: View {
 
     private var submitBackground: Color {
         canSubmit
-            ? Color(red: 0.25, green: 0.17, blue: 0)
+            ? DayflowColors.accent
             : Color(red: 0.88, green: 0.84, blue: 0.78)
     }
 
@@ -130,11 +130,11 @@ struct ReferralSurveyView: View {
             Button(action: { select(option) }) {
                 HStack(spacing: 8) {
                     Image(systemName: isSelected ? "largecircle.fill.circle" : "circle")
-                        .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0))
+                        .foregroundColor(DayflowColors.accent)
 
                     Text(option.displayName)
                         .font(.custom("Nunito", size: 14))
-                        .foregroundColor(.black.opacity(0.78))
+                        .foregroundColor(DayflowColors.textMuted)
 
                     Spacer(minLength: 0)
                 }
@@ -143,11 +143,11 @@ struct ReferralSurveyView: View {
                 .padding(.horizontal, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(isSelected ? Color(red: 1.0, green: 0.95, blue: 0.9) : Color.white)
+                        .fill(isSelected ? DayflowColors.accent.opacity(0.15) : DayflowColors.surface)
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .stroke(Color(red: 0.25, green: 0.17, blue: 0).opacity(isSelected ? 0.22 : 0.1), lineWidth: 1)
+                        .stroke(DayflowColors.accent.opacity(isSelected ? 0.22 : 0.1), lineWidth: 1)
                 )
             }
             .buttonStyle(PlainButtonStyle())

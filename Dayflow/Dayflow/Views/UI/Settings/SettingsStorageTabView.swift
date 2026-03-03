@@ -10,13 +10,13 @@ struct SettingsStorageTabView: View {
                     HStack(spacing: 12) {
                         statusPill(
                             icon: viewModel.storagePermissionGranted == true ? "checkmark.circle.fill" : "exclamationmark.triangle.fill",
-                            tint: viewModel.storagePermissionGranted == true ? Color(red: 0.35, green: 0.7, blue: 0.32) : Color(hex: "E91515"),
+                            tint: viewModel.storagePermissionGranted == true ? DayflowColors.success : DayflowColors.error,
                             text: viewModel.storagePermissionGranted == true ? "Screen recording permission granted" : "Screen recording permission missing"
                         )
 
                         statusPill(
                             icon: AppState.shared.isRecording ? "dot.radiowaves.left.and.right" : "pause.circle",
-                            tint: AppState.shared.isRecording ? Color(hex: "FF7506") : Color.black.opacity(0.25),
+                            tint: AppState.shared.isRecording ? DayflowColors.cta : DayflowColors.textMuted,
                             text: AppState.shared.isRecording ? "Recorder active" : "Recorder idle"
                         )
                     }
@@ -35,7 +35,7 @@ struct SettingsStorageTabView: View {
                                 }
                                 .frame(minWidth: 170)
                             },
-                            background: Color(red: 0.25, green: 0.17, blue: 0),
+                            background: DayflowColors.accent,
                             foreground: .white,
                             borderColor: .clear,
                             cornerRadius: 8,
@@ -48,7 +48,7 @@ struct SettingsStorageTabView: View {
                         if let last = viewModel.lastStorageCheck {
                             Text("Last checked \(relativeDate(last))")
                                 .font(.custom("Nunito", size: 12))
-                                .foregroundColor(.black.opacity(0.45))
+                                .foregroundColor(DayflowColors.textMuted)
                         }
                     }
                 }
@@ -60,7 +60,7 @@ struct SettingsStorageTabView: View {
                         category: .recordings,
                         label: "Recordings",
                         size: viewModel.recordingsUsageBytes,
-                        tint: Color(hex: "FF7506"),
+                        tint: DayflowColors.cta,
                         limitIndex: viewModel.recordingsLimitIndex,
                         limitBytes: viewModel.recordingsLimitBytes,
                         actionTitle: "Open",
@@ -79,7 +79,7 @@ struct SettingsStorageTabView: View {
 
                     Text(viewModel.storageFooterText())
                         .font(.custom("Nunito", size: 12))
-                        .foregroundColor(.black.opacity(0.5))
+                        .foregroundColor(DayflowColors.textMuted)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
@@ -127,15 +127,15 @@ struct SettingsStorageTabView: View {
                     Text(label)
                         .font(.custom("Nunito", size: 14))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(0.75))
+                        .foregroundColor(DayflowColors.textPrimary.opacity(0.75))
                     HStack(spacing: 6) {
                         Text(usageString)
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.black.opacity(0.55))
+                            .foregroundColor(DayflowColors.textMuted)
                         if let percentString {
                             Text(percentString)
                                 .font(.custom("Nunito", size: 12))
-                                .foregroundColor(.black.opacity(0.45))
+                                .foregroundColor(DayflowColors.textMuted)
                         }
                     }
                 }
@@ -149,9 +149,9 @@ struct SettingsStorageTabView: View {
                                 .font(.custom("Nunito", size: 13))
                         }
                     },
-                    background: Color.white,
-                    foreground: Color(red: 0.25, green: 0.17, blue: 0),
-                    borderColor: Color(hex: "FFE0A5"),
+                    background: DayflowColors.surface,
+                    foreground: DayflowColors.accent,
+                    borderColor: DayflowColors.accent.opacity(0.4),
                     cornerRadius: 8,
                     horizontalPadding: 20,
                     verticalPadding: 10,
@@ -170,14 +170,14 @@ struct SettingsStorageTabView: View {
                         Text(option.label)
                             .font(.custom("Nunito", size: 12))
                     }
-                    .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0))
+                    .foregroundColor(DayflowColors.accent)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 8)
-                    .background(Color.white)
+                    .background(DayflowColors.surface)
                     .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color(hex: "FFE0A5"), lineWidth: 1)
+                            .stroke(DayflowColors.accent.opacity(0.4), lineWidth: 1)
                     )
                 }
                 .menuStyle(BorderlessButtonMenuStyle())
@@ -198,14 +198,14 @@ struct SettingsStorageTabView: View {
                 .foregroundColor(tint)
             Text(text)
                 .font(.custom("Nunito", size: 12))
-                .foregroundColor(.black.opacity(0.65))
+                .foregroundColor(DayflowColors.textPrimary.opacity(0.65))
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
         .background(
             Capsule()
-                .fill(Color.white.opacity(0.75))
-                .overlay(Capsule().stroke(Color.white.opacity(0.5), lineWidth: 0.8))
+                .fill(DayflowColors.surface.opacity(0.75))
+                .overlay(Capsule().stroke(DayflowColors.surface.opacity(0.5), lineWidth: 0.8))
         )
     }
 

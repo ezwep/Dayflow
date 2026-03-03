@@ -53,19 +53,19 @@ struct TabFilterBar: View {
                         Font.custom("Nunito", size: 13)
                             .weight(.medium)
                     )
-                    .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .lineLimit(1)
                     .fixedSize()
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 5)
             .frame(height: 26)
-            .background(.white.opacity(0.76))
+            .background(DayflowColors.surface.opacity(0.76))
             .cornerRadius(6)
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
                     .inset(by: 0.25)
-                    .stroke(Color(red: 0.88, green: 0.88, blue: 0.88), lineWidth: 0.5)
+                    .stroke(DayflowColors.border, lineWidth: 0.5)
             )
         }
     }
@@ -120,14 +120,14 @@ struct TabFilterBar: View {
         HStack(spacing: 0) {
             Spacer()
             LinearGradient(
-                gradient: Gradient(colors: [Color.clear, Color(hex: "FFF8F1")]),
+                gradient: Gradient(colors: [Color.clear, DayflowColors.surface]),
                 startPoint: .leading,
                 endPoint: .trailing
             )
             .frame(width: 40)
             .allowsHitTesting(false)
 
-            Color(hex: "FFF8F1")
+            DayflowColors.surface
                 .frame(width: editButtonSize)
                 .allowsHitTesting(false)
         }

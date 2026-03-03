@@ -362,6 +362,7 @@ extension MainView {
         .frame(width: 100)
         .fixedSize(horizontal: true, vertical: false)
         .frame(maxHeight: .infinity)
+        .background(.ultraThinMaterial)
         .layoutPriority(1)
     }
 
@@ -396,24 +397,16 @@ extension MainView {
     }
 
     private var mainPanelBackground: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.white)
-                .shadow(color: .black.opacity(0.04), radius: 4, x: 0, y: 0)
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.white)
-                .blendMode(.destinationOut)
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(.white.opacity(0.22))
-        }
-        .compositingGroup()
+        RoundedRectangle(cornerRadius: 8, style: .continuous)
+            .fill(DayflowColors.surface)
+            .shadow(color: .black.opacity(0.04), radius: 4, x: 0, y: 0)
     }
 
     private func timelinePanel(geo: GeometryProxy) -> some View {
         HStack(alignment: .top, spacing: 0) {
             timelineLeftColumn
             Rectangle()
-                .fill(Color(hex: "ECECEC"))
+                .fill(DayflowColors.border)
                 .frame(width: 1)
                 .frame(maxHeight: .infinity)
             timelineRightColumn(geo: geo)
@@ -450,7 +443,7 @@ extension MainView {
             HStack(spacing: 16) {
                 Text(formatDateForDisplay(selectedDate))
                     .font(.custom("InstrumentSerif-Regular", size: 36))
-                    .foregroundColor(Color.black)
+                    .foregroundColor(DayflowColors.textPrimary)
                     .frame(width: Self.maxDateTitleWidth, alignment: .leading)
 
                 HStack(spacing: 3) {
@@ -525,16 +518,16 @@ extension MainView {
                     }) {
                         Text("Today")
                             .font(.custom("Nunito", size: 12).weight(.semibold))
-                            .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0))
+                            .foregroundColor(DayflowColors.accent)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 5)
                             .background(
                                 Capsule()
-                                    .fill(Color(red: 1.0, green: 0.88, blue: 0.65).opacity(0.6))
+                                    .fill(DayflowColors.accent.opacity(0.15))
                             )
                             .overlay(
                                 Capsule()
-                                    .stroke(Color(red: 0.98, green: 0.76, blue: 0.42), lineWidth: 1)
+                                    .stroke(DayflowColors.accent.opacity(0.3), lineWidth: 1)
                             )
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -556,7 +549,7 @@ extension MainView {
                         Font.custom("Nunito", size: 12)
                             .weight(.medium)
                     )
-                    .foregroundColor(Color(red: 0.62, green: 0.44, blue: 0.36))
+                    .foregroundColor(DayflowColors.textMuted)
 
                 Toggle("Record", isOn: $appState.isRecording)
                     .labelsHidden()
@@ -630,7 +623,7 @@ extension MainView {
     private func timelineRightColumn(geo: GeometryProxy) -> some View {
         // Right column: activity detail card OR day summary — spans full height
         ZStack(alignment: .topLeading) {
-            Color.white.opacity(0.7)
+            DayflowColors.surface.opacity(0.7)
 
             if let activity = selectedActivity {
                 // Show activity details when a card is selected
@@ -783,15 +776,14 @@ extension MainView {
 
     private var weeklyHoursText: some View {
         let hours = Int(weeklyTrackedMinutes / 60)
-        let textColor = Color(red: 0.84, green: 0.65, blue: 0.52)
 
         return HStack(spacing: 4) {
             Text("\(hours) hours")
                 .font(Font.custom("Nunito", size: 10).weight(.bold))
-                .foregroundColor(textColor)
+                .foregroundColor(DayflowColors.textMuted)
             Text("tracked this week")
                 .font(Font.custom("Nunito", size: 10).weight(.regular))
-                .foregroundColor(textColor)
+                .foregroundColor(DayflowColors.textMuted)
         }
         .background(
             GeometryReader { proxy in
@@ -804,9 +796,9 @@ extension MainView {
     }
 
     private var copyTimelineButton: some View {
-        let background = Color(red: 0.99, green: 0.93, blue: 0.88)
-        let stroke = Color(red: 0.97, green: 0.89, blue: 0.81)
-        let textColor = Color(red: 0.84, green: 0.65, blue: 0.52)
+        let background = DayflowColors.surfaceElevated
+        let stroke = DayflowColors.border
+        let textColor = DayflowColors.textMuted
 
         let transition = AnyTransition.opacity.combined(with: .scale(scale: 0.5))
 
@@ -888,13 +880,13 @@ private struct TimelineFailureToastView: View {
 
                 Text(message)
                     .font(.custom("Nunito", size: 13))
-                    .foregroundColor(.black.opacity(0.82))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .fixedSize(horizontal: false, vertical: true)
 
                 Button(action: onDismiss) {
                     Image(systemName: "xmark")
                         .font(.system(size: 11, weight: .semibold))
-                        .foregroundColor(.black.opacity(0.45))
+                        .foregroundColor(DayflowColors.textMuted)
                         .frame(width: 18, height: 18)
                 }
                 .buttonStyle(.plain)
@@ -913,7 +905,7 @@ private struct TimelineFailureToastView: View {
                             .fontWeight(.semibold)
                     }
                 },
-                background: Color(red: 0.25, green: 0.17, blue: 0),
+                background: DayflowColors.accent,
                 foreground: .white,
                 borderColor: .clear,
                 cornerRadius: 8,

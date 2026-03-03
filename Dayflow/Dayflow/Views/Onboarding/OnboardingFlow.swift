@@ -149,7 +149,6 @@ struct OnboardingFlow: View {
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
         }
-        .preferredColorScheme(.light)
     }
 
     private func restoreSavedStep() {
@@ -298,7 +297,7 @@ struct WelcomeView: View {
                         Text(fullText)
                             .font(.custom("InstrumentSerif-Regular", size: 36))
                             .multilineTextAlignment(.center)
-                            .foregroundColor(.black.opacity(0.8))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.8))
                             .padding(.horizontal, 20)
                             .minimumScaleFactor(0.5)
                             .lineLimit(3)
@@ -313,7 +312,7 @@ struct WelcomeView: View {
                         DayflowSurfaceButton(
                             action: onStart,
                             content: { Text("Start").font(.custom("Nunito", size: 16)).fontWeight(.semibold) },
-                            background: Color(red: 0.25, green: 0.17, blue: 0),
+                            background: DayflowColors.accent,
                             foreground: .white,
                             borderColor: .clear,
                             cornerRadius: 8,
@@ -395,11 +394,11 @@ struct CompletionView: View {
             VStack(spacing: 8) {
                 Text("You are ready to go!")
                     .font(.custom("InstrumentSerif-Regular", size: 36))
-                    .foregroundColor(.black.opacity(0.9))
+                    .foregroundColor(DayflowColors.textPrimary.opacity(0.9))
                 
                 Text("Welcome to Dayflow! Let it run for about 30 minutes to gather enough data, then come back to explore your personalized timeline. If you have any issues, feature requests, or feedback please use the feedback tab. I would love to hear from you! ")
                     .font(.custom("Nunito", size: 15))
-                    .foregroundColor(.black.opacity(0.6))
+                    .foregroundColor(DayflowColors.textMuted)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -424,7 +423,7 @@ struct CompletionView: View {
                         .fontWeight(.semibold)
                 },
                 background: canProceed
-                    ? Color(red: 0.25, green: 0.17, blue: 0)
+                    ? DayflowColors.accent
                     : Color(red: 0.88, green: 0.84, blue: 0.78),
                 foreground: .white,
                 borderColor: .clear,

@@ -128,7 +128,7 @@ struct ChatView: View {
                     Button(action: { resetConversation() }) {
                         Text("Clear")
                             .font(.custom("Nunito", size: 12).weight(.semibold))
-                            .foregroundColor(Color(hex: "F96E00"))
+                            .foregroundColor(DayflowColors.accent)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 6)
                             .background(
@@ -137,7 +137,7 @@ struct ChatView: View {
                             )
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                    .stroke(Color(hex: "F96E00").opacity(0.25), lineWidth: 1)
+                                    .stroke(DayflowColors.accent.opacity(0.25), lineWidth: 1)
                             )
                     }
                     .buttonStyle(.plain)
@@ -149,7 +149,7 @@ struct ChatView: View {
                 Button(action: { chatService.showDebugPanel.toggle() }) {
                     Image(systemName: chatService.showDebugPanel ? "ladybug.fill" : "ladybug")
                         .font(.system(size: 14))
-                        .foregroundColor(chatService.showDebugPanel ? Color(hex: "F96E00") : Color(hex: "999999"))
+                        .foregroundColor(chatService.showDebugPanel ? DayflowColors.accent : DayflowColors.textMuted)
                 }
                 .buttonStyle(.plain)
                 .help("Toggle debug panel")
@@ -241,14 +241,14 @@ struct ChatView: View {
             HStack {
                 Text("Debug Log")
                     .font(.custom("Nunito", size: 12).weight(.bold))
-                    .foregroundColor(Color(hex: "666666"))
+                    .foregroundColor(DayflowColors.textMuted)
 
                 Spacer()
 
                 Button(action: { copyDebugLog() }) {
                     Image(systemName: "doc.on.doc")
                         .font(.system(size: 11))
-                        .foregroundColor(Color(hex: "999999"))
+                        .foregroundColor(DayflowColors.textMuted)
                 }
                 .buttonStyle(.plain)
                 .help("Copy all")
@@ -257,7 +257,7 @@ struct ChatView: View {
                 Button(action: { chatService.clearDebugLog() }) {
                     Image(systemName: "trash")
                         .font(.system(size: 11))
-                        .foregroundColor(Color(hex: "999999"))
+                        .foregroundColor(DayflowColors.textMuted)
                 }
                 .buttonStyle(.plain)
                 .help("Clear log")
@@ -280,10 +280,10 @@ struct ChatView: View {
             }
         }
         .frame(width: 350)
-        .background(Color.white)
+        .background(DayflowColors.surface)
         .overlay(
             Rectangle()
-                .fill(Color(hex: "E0E0E0"))
+                .fill(DayflowColors.border)
                 .frame(width: 1),
             alignment: .leading
         )
@@ -297,7 +297,7 @@ struct ChatView: View {
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
                     .fill(
                         LinearGradient(
-                            colors: [Color.white.opacity(0.86), Color(hex: "FFF8EF").opacity(0.95)],
+                            colors: [DayflowColors.surface.opacity(0.86), Color(hex: "FFF8EF").opacity(0.95)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
@@ -449,7 +449,7 @@ struct ChatView: View {
                 }) {
                     Text(cliDetected ? "Unlock Beta" : "Install CLI to continue")
                         .font(.custom("Nunito-SemiBold", size: 15))
-                        .foregroundColor(cliDetected ? Color(hex: "593D2A") : Color(hex: "999999"))
+                        .foregroundColor(cliDetected ? Color(hex: "593D2A") : DayflowColors.textMuted)
                         .padding(.horizontal, 28)
                         .padding(.vertical, 12)
                         .background(
@@ -488,7 +488,7 @@ struct ChatView: View {
             .padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(Color.white)
+                    .fill(DayflowColors.surface)
                     .shadow(color: Color.black.opacity(0.08), radius: 20, x: 0, y: 8)
             )
             .frame(maxWidth: 420)
@@ -578,7 +578,7 @@ struct ChatView: View {
                     .background(
                         canSubmitCurrentInput
                             ? LinearGradient(
-                                colors: [Color(hex: "FAA457"), Color(hex: "F96E00")],
+                                colors: [Color(hex: "FAA457"), DayflowColors.accent],
                                 startPoint: .top,
                                 endPoint: .bottom
                             )
@@ -611,7 +611,7 @@ struct ChatView: View {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(
                     LinearGradient(
-                        colors: [Color.white, Color(hex: "FFF8F0")],
+                        colors: [DayflowColors.surface, Color(hex: "FFF8F0")],
                         startPoint: .top,
                         endPoint: .bottom
                     )
@@ -652,7 +652,7 @@ struct ChatView: View {
         .padding(4)
         .background(
             RoundedRectangle(cornerRadius: 11, style: .continuous)
-                .fill(Color.white.opacity(0.84))
+                .fill(DayflowColors.surface.opacity(0.84))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 11, style: .continuous)
@@ -675,7 +675,7 @@ struct ChatView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Follow up")
                 .font(.custom("Nunito", size: 11).weight(.semibold))
-                .foregroundColor(Color(hex: "999999"))
+                .foregroundColor(DayflowColors.textMuted)
 
             FlowLayout(spacing: 8) {
                 ForEach(chatService.currentSuggestions, id: \.self) { suggestion in
@@ -828,7 +828,7 @@ private struct MessageBubble: View {
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 10)
-            .background(Color.white)
+            .background(DayflowColors.surface)
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
@@ -864,7 +864,7 @@ private struct MessageBubble: View {
 
         return displayText
             .font(.custom("Nunito", size: 13).weight(.medium))
-            .foregroundColor(Color(hex: "333333"))
+            .foregroundColor(DayflowColors.textPrimary)
             .textSelection(.enabled)
             .fixedSize(horizontal: false, vertical: true)
     }
@@ -1234,7 +1234,7 @@ private struct ChatChartBlockView: View {
             if !title.isEmpty {
                 Text(title)
                     .font(.custom("Nunito", size: 12).weight(.semibold))
-                    .foregroundColor(Color(hex: "4A4A4A"))
+                    .foregroundColor(DayflowColors.textPrimary)
             }
             chartBody
                 .frame(height: 180)
@@ -1292,7 +1292,7 @@ private struct ChatChartBlockView: View {
                     AxisValueLabel {
                         Text(label)
                             .font(.system(size: 10))
-                            .foregroundColor(Color(hex: "666666"))
+                            .foregroundColor(DayflowColors.textMuted)
                             .lineLimit(1)
                     }
                 }
@@ -1327,7 +1327,7 @@ private struct ChatChartBlockView: View {
                     AxisValueLabel {
                         Text(label)
                             .font(.system(size: 10))
-                            .foregroundColor(Color(hex: "666666"))
+                            .foregroundColor(DayflowColors.textMuted)
                             .lineLimit(1)
                     }
                 }
@@ -1381,7 +1381,7 @@ private struct ChatChartBlockView: View {
                     AxisValueLabel {
                         Text(label)
                             .font(.system(size: 10))
-                            .foregroundColor(Color(hex: "666666"))
+                            .foregroundColor(DayflowColors.textMuted)
                             .lineLimit(1)
                     }
                 }
@@ -1393,7 +1393,7 @@ private struct ChatChartBlockView: View {
                     AxisValueLabel {
                         Text(label)
                             .font(.system(size: 10))
-                            .foregroundColor(Color(hex: "666666"))
+                            .foregroundColor(DayflowColors.textMuted)
                             .lineLimit(1)
                     }
                 }
@@ -1422,7 +1422,7 @@ private struct ChatChartBlockView: View {
                     AxisValueLabel {
                         Text(number, format: .number.precision(.fractionLength(1)))
                             .font(.system(size: 10))
-                            .foregroundColor(Color(hex: "666666"))
+                            .foregroundColor(DayflowColors.textMuted)
                     }
                 }
             }
@@ -1433,7 +1433,7 @@ private struct ChatChartBlockView: View {
                     AxisValueLabel {
                         Text(label)
                             .font(.system(size: 10))
-                            .foregroundColor(Color(hex: "666666"))
+                            .foregroundColor(DayflowColors.textMuted)
                             .lineLimit(1)
                     }
                 }
@@ -1542,7 +1542,7 @@ private struct ChatChartBlockView: View {
     }
 
     private static let defaultPalette: [Color] = [
-        Color(hex: "F96E00"),
+        DayflowColors.accent,
         Color(hex: "1F6FEB"),
         Color(hex: "2E7D32"),
         Color(hex: "8E24AA"),
@@ -1592,10 +1592,10 @@ private struct WorkStatusCard: View {
                 if showDetails, !status.thinkingText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     Text(status.thinkingText.trimmingCharacters(in: .whitespacesAndNewlines))
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundColor(Color(hex: "666666"))
+                        .foregroundColor(DayflowColors.textMuted)
                         .textSelection(.enabled)
                         .padding(8)
-                        .background(Color(hex: "FFFFFF").opacity(0.6))
+                        .background(DayflowColors.surface.opacity(0.6))
                         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 }
             }
@@ -1627,7 +1627,7 @@ private struct WorkStatusCard: View {
                 }
             }
             .font(.custom("Nunito", size: 12).weight(.semibold))
-            .foregroundColor(Color(hex: "4A4A4A"))
+            .foregroundColor(DayflowColors.textPrimary)
 
             Spacer()
         }
@@ -1673,7 +1673,7 @@ private struct WorkStatusCard: View {
         case .error:
             return Color(hex: "C62828")
         default:
-            return Color(hex: "F96E00")
+            return DayflowColors.accent
         }
     }
 
@@ -1691,7 +1691,7 @@ private struct WorkStatusCard: View {
         case .error:
             return Color(hex: "FFCDD2")
         default:
-            return Color(hex: "F96E00").opacity(0.2)
+            return DayflowColors.accent.opacity(0.2)
         }
     }
 }
@@ -1725,7 +1725,7 @@ private struct ToolStatusRow: View {
             if showDetails {
                 Text(tool.command)
                     .font(.system(size: 10, design: .monospaced))
-                    .foregroundColor(Color(hex: "666666"))
+                    .foregroundColor(DayflowColors.textMuted)
                     .textSelection(.enabled)
                     .lineLimit(3)
 
@@ -1736,7 +1736,7 @@ private struct ToolStatusRow: View {
                         .lineLimit(6)
                         .textSelection(.enabled)
                         .padding(6)
-                        .background(Color(hex: "FFFFFF").opacity(0.6))
+                        .background(DayflowColors.surface.opacity(0.6))
                         .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                 }
             }
@@ -1753,7 +1753,7 @@ private struct ToolStatusRow: View {
         case .running:
             ProgressView()
                 .scaleEffect(0.6)
-                .tint(Color(hex: "F96E00"))
+                .tint(DayflowColors.accent)
         case .completed:
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 12, weight: .semibold))
@@ -2019,7 +2019,7 @@ private struct WelcomeSuggestionRow: View {
             .padding(.vertical, 10)
             .background(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(isHovered ? Color.white.opacity(0.88) : Color.white.opacity(0.7))
+                    .fill(isHovered ? DayflowColors.surface.opacity(0.88) : DayflowColors.surface.opacity(0.7))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
@@ -2054,7 +2054,7 @@ private struct SuggestionChip: View {
         Button(action: action) {
             Text(text)
                 .font(.custom("Nunito", size: 12).weight(.medium))
-                .foregroundColor(Color(hex: "F96E00"))
+                .foregroundColor(DayflowColors.accent)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 8)
                 .background(
@@ -2063,7 +2063,7 @@ private struct SuggestionChip: View {
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .stroke(Color(hex: "F96E00").opacity(0.3), lineWidth: 1)
+                        .stroke(DayflowColors.accent.opacity(0.3), lineWidth: 1)
                 )
                 .scaleEffect(isHovered ? 1.02 : 1.0)
         }
@@ -2110,17 +2110,17 @@ private struct ProviderTogglePill: View {
 
     private var backgroundColor: Color {
         if !isEnabled { return Color(hex: "F2F2F2") }
-        return isSelected ? Color(hex: "FFF4E9") : Color.white
+        return isSelected ? Color(hex: "FFF4E9") : DayflowColors.surface
     }
 
     private var borderColor: Color {
-        if !isEnabled { return Color(hex: "E0E0E0") }
-        return isSelected ? Color(hex: "F96E00").opacity(0.25) : Color(hex: "E0E0E0")
+        if !isEnabled { return DayflowColors.border }
+        return isSelected ? DayflowColors.accent.opacity(0.25) : DayflowColors.border
     }
 
     private var textColor: Color {
         if !isEnabled { return Color(hex: "B0B0B0") }
-        return isSelected ? Color(hex: "F96E00") : Color(hex: "666666")
+        return isSelected ? DayflowColors.accent : DayflowColors.textMuted
     }
 
     var body: some View {
@@ -2169,7 +2169,7 @@ private struct DebugLogEntry: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 Text(entry.content)
                     .font(.system(size: 10, design: .monospaced))
-                    .foregroundColor(Color(hex: "333333"))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .textSelection(.enabled)
             }
             .frame(maxHeight: 150)
@@ -2244,7 +2244,7 @@ private struct ThinkingIndicator: View {
         HStack(spacing: 4) {
             Image(systemName: "sparkles")
                 .font(.system(size: 12, weight: .medium))
-                .foregroundColor(Color(hex: "F96E00"))
+                .foregroundColor(DayflowColors.accent)
 
             Text("Thinking")
                 .font(.custom("Nunito", size: 12).weight(.semibold))
@@ -2253,7 +2253,7 @@ private struct ThinkingIndicator: View {
             HStack(spacing: 3) {
                 ForEach(0..<3, id: \.self) { index in
                     Circle()
-                        .fill(Color(hex: "F96E00"))
+                        .fill(DayflowColors.accent)
                         .frame(width: 4, height: 4)
                         .scaleEffect(dotScale[index])
                 }
@@ -2271,7 +2271,7 @@ private struct ThinkingIndicator: View {
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color(hex: "F96E00").opacity(0.2), lineWidth: 1)
+                .stroke(DayflowColors.accent.opacity(0.2), lineWidth: 1)
         )
         .onAppear {
             startAnimation()

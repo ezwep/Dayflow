@@ -230,11 +230,11 @@ struct TimelineReviewOverlay: View {
                 } label: {
                     Image(systemName: "xmark")
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(Color(hex: "FF6D00").opacity(0.8))
+                        .foregroundColor(DayflowColors.accent.opacity(0.8))
                         .frame(width: 28, height: 28)
                         .background(
                             Circle()
-                                .fill(Color.white.opacity(0.7))
+                                .fill(DayflowColors.surface.opacity(0.7))
                                 .overlay(
                                     Circle()
                                         .stroke(Color(hex: "DABCA4"), lineWidth: 1)
@@ -341,7 +341,7 @@ struct TimelineReviewOverlay: View {
         VStack(spacing: 14) {
             Text("Swipe on each card on your Timeline to review your day.")
                 .font(.custom("Nunito", size: 14).weight(.medium))
-                .foregroundColor(Color(hex: "98806D"))
+                .foregroundColor(DayflowColors.textMuted)
                 .lineLimit(1)
                 .minimumScaleFactor(0.95)
 
@@ -359,10 +359,10 @@ struct TimelineReviewOverlay: View {
             VStack(spacing: 12) {
                 Text("All caught up!")
                     .font(.custom("InstrumentSerif-Regular", size: 40))
-                    .foregroundColor(Color(hex: "333333"))
+                    .foregroundColor(DayflowColors.textPrimary)
                 Text("You've reviewed all your activities so far.\nThe Timeline right panel will be updated with your rating.")
                     .font(.custom("Nunito", size: 16).weight(.medium))
-                    .foregroundColor(Color(hex: "333333"))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .multilineTextAlignment(.center)
             }
 
@@ -373,7 +373,7 @@ struct TimelineReviewOverlay: View {
             } label: {
                 Text("Close")
                     .font(.custom("Nunito", size: 14).weight(.semibold))
-                    .foregroundColor(Color(hex: "333333"))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .padding(.horizontal, 24)
                     .padding(.vertical, 10)
                     .background(
@@ -401,10 +401,10 @@ struct TimelineReviewOverlay: View {
         VStack(spacing: 12) {
             Text("Nothing to review yet")
                 .font(.custom("InstrumentSerif-Regular", size: 28))
-                .foregroundColor(Color(hex: "333333"))
+                .foregroundColor(DayflowColors.textPrimary)
             Text("Come back after a few timeline cards appear.")
                 .font(.custom("Nunito", size: 14).weight(.medium))
-                .foregroundColor(Color(hex: "707070"))
+                .foregroundColor(DayflowColors.textMuted)
         }
     }
 
@@ -866,7 +866,7 @@ private struct TimelineReviewCard: View {
     var body: some View {
         ZStack(alignment: .top) {
             RoundedRectangle(cornerRadius: 8)
-                .fill(Color.white)
+                .fill(DayflowColors.surface)
                 .shadow(color: Color.black.opacity(0.18), radius: 14, x: 0, y: 8)
 
             VStack(spacing: 0) {
@@ -904,7 +904,7 @@ private struct TimelineReviewCard: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text(activity.title)
                         .font(.custom("InstrumentSerif-Regular", size: 24))
-                        .foregroundColor(Color.black)
+                        .foregroundColor(DayflowColors.textPrimary)
                         .lineLimit(2)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -917,7 +917,7 @@ private struct TimelineReviewCard: View {
                     ScrollView(.vertical, showsIndicators: true) {
                         Text(summaryText)
                             .font(.custom("Nunito", size: 14).weight(.medium))
-                            .foregroundColor(Color(hex: "333333"))
+                            .foregroundColor(DayflowColors.textPrimary)
                             .lineSpacing(3)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.trailing, 4)
@@ -932,7 +932,7 @@ private struct TimelineReviewCard: View {
                         Spacer()
                         Text(progressText)
                             .font(.custom("Nunito", size: 10).weight(.medium))
-                            .foregroundColor(Color(hex: "AFAFAF"))
+                            .foregroundColor(DayflowColors.textMuted)
                     }
                 }
                 .frame(maxHeight: .infinity, alignment: .top)
@@ -1540,8 +1540,8 @@ private struct TimelineReviewPlaybackTimeline: View {
 
     private enum Design {
         static let baseColor = Color(hex: "A3978D").opacity(0.5)
-        static let progressColor = Color(hex: "FF6D00").opacity(0.65)
-        static let pillColor = Color(hex: "F96E00")
+        static let progressColor = DayflowColors.accent.opacity(0.65)
+        static let pillColor = DayflowColors.accent
         static let pillText = Color.white
         static let pillFont = Font.custom("Nunito", size: 8).weight(.semibold)
         static let pillTracking: CGFloat = -0.32
@@ -1675,7 +1675,7 @@ private struct TimelineReviewCategoryPill: View {
                 .frame(width: 8, height: 8)
             Text(name)
                 .font(.custom("Nunito", size: 10).weight(.bold))
-                .foregroundColor(Color(hex: "333333"))
+                .foregroundColor(DayflowColors.textPrimary)
         }
         .padding(.horizontal, 6)
         .padding(.vertical, 4)
@@ -1694,7 +1694,7 @@ private struct TimelineReviewTimeRangePill: View {
     var body: some View {
         Text(timeRange)
             .font(.custom("Nunito", size: 10).weight(.bold))
-            .foregroundColor(Color(hex: "656565"))
+            .foregroundColor(DayflowColors.textMuted)
             .padding(.horizontal, 6)
             .padding(.vertical, 4)
             .background(Color(hex: "F5F0E9").opacity(0.9))
@@ -1733,7 +1733,7 @@ private struct TimelineReviewRatingRow: View {
                 ZUndoIcon(size: 16)
                 Text("Undo")
                     .font(.custom("Nunito", size: 12).weight(.medium))
-                    .foregroundColor(Color(hex: "98806D"))
+                    .foregroundColor(DayflowColors.textMuted)
             }
         }
         .buttonStyle(.plain)
@@ -1748,7 +1748,7 @@ private struct TimelineReviewRatingRow: View {
                 TimelineReviewFooterIcon(rating: rating, size: 16)
                 Text(rating.title)
                     .font(.custom("Nunito", size: 12).weight(.medium))
-                    .foregroundColor(Color(hex: "98806D"))
+                    .foregroundColor(DayflowColors.textMuted)
             }
         }
         .buttonStyle(.plain)
@@ -1818,7 +1818,7 @@ private struct TimelineReviewFooterIcon: View {
                 path.addLine(to: CGPoint(x: size * 0.59375, y: size * 0.66238))
                 path.closeSubpath()
             }
-            .fill(Color.white)
+            .fill(DayflowColors.surface)
         }
         .frame(width: size, height: size)
         .rotationEffect(rotation)
@@ -1936,7 +1936,7 @@ private struct SummaryLabelRow: View {
                     }
                     Text(formatDuration(duration))
                         .font(.custom("Nunito", size: 16).weight(.semibold))
-                        .foregroundColor(Color(hex: "333333"))
+                        .foregroundColor(DayflowColors.textPrimary)
                         .padding(.leading, 18)
                 }
             }

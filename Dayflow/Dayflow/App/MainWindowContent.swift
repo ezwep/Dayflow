@@ -5,6 +5,7 @@ struct MainWindowContent: View {
     @EnvironmentObject private var categoryStore: CategoryStore
     @AppStorage("didOnboard") private var didOnboard = false
     @AppStorage("hasCompletedJournalOnboarding") private var hasCompletedJournalOnboarding = false
+    @AppStorage("dayflowAppearance") private var appearance: String = "dark"
     @StateObject private var journalCoordinator = JournalCoordinator()
     @State private var showVideoLaunch = true
     @State private var contentOpacity = 0.0
@@ -65,15 +66,21 @@ struct MainWindowContent: View {
         }
         .background {
             if didOnboard {
-                Image("MainUIBackground")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-                    .allowsHitTesting(false)
-                    .accessibilityHidden(true)
+                ZStack {
+                    DayflowColors.background
+                    RadialGradient(
+                        colors: [DayflowColors.accent.opacity(0.03), Color.clear],
+                        center: .topTrailing,
+                        startRadius: 100,
+                        endRadius: 600
+                    )
+                }
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
             }
         }
         .frame(minWidth: 900, maxWidth: .infinity, minHeight: 600, maxHeight: .infinity)
-        .preferredColorScheme(.light)
+        .preferredColorScheme(DayflowAppearance(rawValue: appearance)?.colorScheme)
     }
 }

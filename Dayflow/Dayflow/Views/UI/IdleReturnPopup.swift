@@ -29,37 +29,37 @@ struct IdleReturnPopup: View {
 
                 Text("You were away")
                     .font(.custom("Nunito", size: 16).weight(.bold))
-                    .foregroundColor(.black.opacity(0.85))
+                    .foregroundColor(DayflowColors.textPrimary)
             }
 
             HStack(spacing: 6) {
                 Text(displayTime(from: idleStartedAt))
                     .font(.custom("Nunito", size: 13).weight(.semibold))
-                    .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0))
+                    .foregroundColor(DayflowColors.accent)
 
                 Image(systemName: "arrow.right")
                     .font(.system(size: 11, weight: .semibold))
-                    .foregroundColor(.black.opacity(0.35))
+                    .foregroundColor(DayflowColors.textMuted)
 
                 Text(displayTime(from: idleEndedAt))
                     .font(.custom("Nunito", size: 13).weight(.semibold))
-                    .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0))
+                    .foregroundColor(DayflowColors.accent)
 
                 Text("(\(durationMinutes) min)")
                     .font(.custom("Nunito", size: 12))
-                    .foregroundColor(.black.opacity(0.5))
+                    .foregroundColor(DayflowColors.textMuted)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(red: 1.0, green: 0.88, blue: 0.65).opacity(0.3))
+                    .fill(DayflowColors.accent.opacity(0.15))
             )
 
             VStack(alignment: .leading, spacing: 6) {
                 Text("What were you doing?")
                     .font(.custom("Nunito", size: 13))
-                    .foregroundColor(.black.opacity(0.7))
+                    .foregroundColor(DayflowColors.textPrimary)
 
                 TextField("e.g. In a meeting, lunch break, phone call...", text: $description)
                     .textFieldStyle(.roundedBorder)
@@ -90,7 +90,7 @@ struct IdleReturnPopup: View {
                     .padding(.vertical, 8)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color(red: 0.25, green: 0.17, blue: 0))
+                            .fill(DayflowColors.accent)
                     )
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -100,12 +100,12 @@ struct IdleReturnPopup: View {
                 Button(action: onSkip) {
                     Text("Skip")
                         .font(.custom("Nunito", size: 13))
-                        .foregroundColor(.black.opacity(0.55))
+                        .foregroundColor(DayflowColors.textMuted)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 8)
                         .background(
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.white.opacity(0.7))
+                                .fill(DayflowColors.surface.opacity(0.7))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 8)
                                         .stroke(Color(red: 0.98, green: 0.76, blue: 0.42).opacity(0.5), lineWidth: 1)
@@ -117,15 +117,7 @@ struct IdleReturnPopup: View {
         }
         .padding(20)
         .frame(width: 380)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(Color(red: 1.0, green: 0.97, blue: 0.93))
-                .shadow(color: .black.opacity(0.12), radius: 20, x: 0, y: 8)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(Color(red: 0.98, green: 0.76, blue: 0.42).opacity(0.4), lineWidth: 1)
-                )
-        )
+        .dayflowGlass(cornerRadius: 14)
         .onAppear {
             isDescriptionFocused = true
         }

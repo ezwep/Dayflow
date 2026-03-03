@@ -34,7 +34,7 @@ struct ManualTimeBlockPopover: View {
 
                 Text(isEditing ? "Edit time block" : "Add time block")
                     .font(.custom("Nunito", size: 15).weight(.bold))
-                    .foregroundColor(.black.opacity(0.85))
+                    .foregroundColor(DayflowColors.textPrimary)
             }
 
             VStack(alignment: .leading, spacing: 8) {
@@ -42,7 +42,7 @@ struct ManualTimeBlockPopover: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Start")
                             .font(.custom("Nunito", size: 11))
-                            .foregroundColor(.black.opacity(0.5))
+                            .foregroundColor(DayflowColors.textMuted)
                         DatePicker("", selection: $startTime, displayedComponents: .hourAndMinute)
                             .labelsHidden()
                             .datePickerStyle(.compact)
@@ -50,13 +50,13 @@ struct ManualTimeBlockPopover: View {
 
                     Image(systemName: "arrow.right")
                         .font(.system(size: 11, weight: .semibold))
-                        .foregroundColor(.black.opacity(0.35))
+                        .foregroundColor(DayflowColors.textMuted)
                         .padding(.top, 16)
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text("End")
                             .font(.custom("Nunito", size: 11))
-                            .foregroundColor(.black.opacity(0.5))
+                            .foregroundColor(DayflowColors.textMuted)
                         DatePicker("", selection: $endTime, displayedComponents: .hourAndMinute)
                             .labelsHidden()
                             .datePickerStyle(.compact)
@@ -64,7 +64,7 @@ struct ManualTimeBlockPopover: View {
 
                     Text("(\(durationMinutes) min)")
                         .font(.custom("Nunito", size: 12))
-                        .foregroundColor(.black.opacity(0.5))
+                        .foregroundColor(DayflowColors.textMuted)
                         .padding(.top, 16)
                 }
             }
@@ -72,7 +72,7 @@ struct ManualTimeBlockPopover: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Description")
                     .font(.custom("Nunito", size: 13))
-                    .foregroundColor(.black.opacity(0.7))
+                    .foregroundColor(DayflowColors.textPrimary)
 
                 TextField("What were you doing?", text: $description)
                     .textFieldStyle(.roundedBorder)
@@ -88,7 +88,7 @@ struct ManualTimeBlockPopover: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Category")
                         .font(.custom("Nunito", size: 13))
-                        .foregroundColor(.black.opacity(0.7))
+                        .foregroundColor(DayflowColors.textPrimary)
 
                     CategoryWrappingLayout(categories: categories.filter { !$0.isSystem }, selectedCategory: $selectedCategory)
                 }
@@ -107,7 +107,7 @@ struct ManualTimeBlockPopover: View {
                     .padding(.vertical, 8)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color(red: 0.25, green: 0.17, blue: 0))
+                            .fill(DayflowColors.accent)
                     )
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -117,12 +117,12 @@ struct ManualTimeBlockPopover: View {
                 Button(action: onCancel) {
                     Text("Cancel")
                         .font(.custom("Nunito", size: 13))
-                        .foregroundColor(.black.opacity(0.55))
+                        .foregroundColor(DayflowColors.textMuted)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 8)
                         .background(
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.white.opacity(0.7))
+                                .fill(DayflowColors.surface.opacity(0.7))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 8)
                                         .stroke(Color(red: 0.98, green: 0.76, blue: 0.42).opacity(0.5), lineWidth: 1)
@@ -134,15 +134,7 @@ struct ManualTimeBlockPopover: View {
         }
         .padding(18)
         .frame(width: 360)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(red: 1.0, green: 0.97, blue: 0.93))
-                .shadow(color: .black.opacity(0.12), radius: 16, x: 0, y: 6)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color(red: 0.98, green: 0.76, blue: 0.42).opacity(0.4), lineWidth: 1)
-                )
-        )
+        .dayflowGlass(cornerRadius: 12)
         .onAppear {
             if isEditing {
                 description = initialDescription
@@ -229,18 +221,18 @@ private struct CategoryWrappingLayout: View {
                     .frame(width: 10, height: 10)
                 Text(category.name)
                     .font(.custom("Nunito", size: 12).weight(isSelected ? .semibold : .regular))
-                    .foregroundColor(isSelected ? .black.opacity(0.9) : .black.opacity(0.55))
+                    .foregroundColor(isSelected ? DayflowColors.textPrimary : DayflowColors.textMuted)
                     .lineLimit(1)
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             .background(
                 RoundedRectangle(cornerRadius: 7)
-                    .fill(isSelected ? Color.white : Color.white.opacity(0.4))
+                    .fill(isSelected ? DayflowColors.surface : DayflowColors.surface.opacity(0.4))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 7)
-                    .stroke(isSelected ? Color(hex: category.colorHex).opacity(0.7) : Color.black.opacity(0.08), lineWidth: isSelected ? 1.5 : 0.5)
+                    .stroke(isSelected ? Color(hex: category.colorHex).opacity(0.7) : DayflowColors.borderSubtle, lineWidth: isSelected ? 1.5 : 0.5)
             )
         }
         .buttonStyle(PlainButtonStyle())

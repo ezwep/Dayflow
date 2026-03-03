@@ -219,12 +219,12 @@ private enum JournalHeroTokens {
         endPoint: .bottom
     )
 
-    static let badgeStroke = Color.white.opacity(0.65)
-    static let badgeInnerHighlight = Color.white.opacity(0.32)
+    static let badgeStroke = DayflowColors.surface.opacity(0.65)
+    static let badgeInnerHighlight = DayflowColors.surface.opacity(0.32)
     static let badgeShadow = Color(hex: "D88931").opacity(0.38)
 
-    static let entryBackground = Color.white.opacity(0.36)
-    static let entryStroke = Color.white.opacity(0.62)
+    static let entryBackground = DayflowColors.surface.opacity(0.36)
+    static let entryStroke = DayflowColors.surface.opacity(0.62)
     static let entryShadow = Color(hex: "C86E1A").opacity(0.14)
     static let entryPrimary = Color(hex: "7A4116")
     static let entrySecondary = Color(hex: "9C5A26").opacity(0.86)
@@ -251,6 +251,5 @@ struct JournalHeroView_Previews: PreviewProvider {
     static var previews: some View {
         JournalHeroView()
             .frame(width: 1180, height: 820)
-            .preferredColorScheme(.light)
     }
 }

@@ -82,18 +82,18 @@ struct SidebarIconButton: View {
                             .resizable()
                             .interpolation(.high)
                             .renderingMode(.template)
-                            .foregroundColor(isSelected ? Color(hex: "F96E00") : Color(red: 0.6, green: 0.4, blue: 0.3))
+                            .foregroundColor(isSelected ? DayflowColors.accent : DayflowColors.textMuted)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 16, height: 16)
                     } else if let sys = icon.systemNameFallback {
                         Image(systemName: sys)
                             .font(.system(size: 15))
-                            .foregroundColor(isSelected ? Color(hex: "F96E00") : Color(red: 0.6, green: 0.4, blue: 0.3))
+                            .foregroundColor(isSelected ? DayflowColors.accent : DayflowColors.textMuted)
                     }
 
                     if showBadge {
                         Circle()
-                            .fill(Color(hex: "F96E00"))
+                            .fill(DayflowColors.accent)
                             .frame(width: 8, height: 8)
                             .offset(x: 10, y: -10)
                     }
@@ -104,7 +104,7 @@ struct SidebarIconButton: View {
                     .font(.custom("Nunito", size: 11))
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
-                    .foregroundColor(isSelected ? Color(hex: "F96E00") : Color(red: 0.6, green: 0.4, blue: 0.3))
+                    .foregroundColor(isSelected ? DayflowColors.accent : DayflowColors.textMuted)
             }
             .frame(width: 56, height: 56)
             .contentShape(Rectangle())

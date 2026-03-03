@@ -137,7 +137,7 @@ struct JournalView: View {
                     .padding(.vertical, 12)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.white)
+                            .fill(DayflowColors.surface)
                     )
                     .padding(.horizontal, 80)
                     .submitLabel(.go)

@@ -196,7 +196,7 @@ struct ScrubberView: View {
                         .foregroundColor(.white)
                         .padding(.horizontal, 8)  // minus 2px each side from 10
                         .padding(.vertical, 4)    // minus 2px each side from 6
-                        .background(Color.black.opacity(0.85))
+                        .background(DayflowColors.textPrimary.opacity(0.85))
                         .cornerRadius(12)
                         .scaleEffect(0.8) // shrink ~20%
                         .position(x: x, y: chipRowHeight/2) // lowered by ~3px
@@ -206,7 +206,7 @@ struct ScrubberView: View {
                 // Filmstrip with white background, square corners, no border
                 ZStack(alignment: .topLeading) {
                     Rectangle()
-                        .fill(Color.white)
+                        .fill(DayflowColors.surface)
 
                     // Thumbnails row
                     let tileWidth = filmstripHeight * aspect
@@ -224,7 +224,7 @@ struct ScrubberView: View {
                         } else if images.isEmpty {
                             ForEach(0..<columnsNeeded, id: \.self) { _ in
                                 Rectangle()
-                                    .fill(Color.black.opacity(0.06))
+                                    .fill(DayflowColors.textPrimary.opacity(0.06))
                                     .frame(width: tileWidth, height: filmstripHeight)
                             }
                         } else {
@@ -237,7 +237,7 @@ struct ScrubberView: View {
                                             .aspectRatio(contentMode: .fill)
                                             .scaleEffect(zoom, anchor: .center)
                                     } else {
-                                        Rectangle().fill(Color.black.opacity(0.06))
+                                        Rectangle().fill(DayflowColors.textPrimary.opacity(0.06))
                                     }
                                 }
                                 .frame(width: tileWidth, height: filmstripHeight)
@@ -255,13 +255,13 @@ struct ScrubberView: View {
                     // Vertical playhead bar with black outline; extend ~3px into chip row
                     let barHeight = filmstripHeight + 3 // extend slightly into chip area
                     Rectangle()
-                        .fill(Color.black)
+                        .fill(DayflowColors.textPrimary)
                         .frame(width: 5, height: barHeight)
                         .shadow(color: .black.opacity(0.25), radius: 1.0, x: 0, y: 0)
                         .offset(x: xInside - 2.5, y: -3)
                         .allowsHitTesting(false)
                     Rectangle()
-                        .fill(Color.white)
+                        .fill(DayflowColors.surface)
                         .frame(width: 3, height: barHeight)
                         .offset(x: xInside - 1.5, y: -3)
                         .allowsHitTesting(false)

@@ -24,19 +24,19 @@ struct SettingsOtherTabView: View {
                     )) {
                         Text("Launch Dayflow at login")
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.black.opacity(0.7))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.7))
                     }
                     .toggleStyle(.switch)
                     .pointingHandCursor()
 
                     Text("Keeps the menu bar controller running right after you sign in so capture can resume instantly.")
                         .font(.custom("Nunito", size: 11.5))
-                        .foregroundColor(.black.opacity(0.5))
+                        .foregroundColor(DayflowColors.textMuted)
 
                     Toggle(isOn: $viewModel.analyticsEnabled) {
                         Text("Share crash reports and anonymous usage data")
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.black.opacity(0.7))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.7))
                     }
                     .toggleStyle(.switch)
                     .pointingHandCursor()
@@ -44,43 +44,61 @@ struct SettingsOtherTabView: View {
                     Toggle(isOn: $viewModel.showDockIcon) {
                         Text("Show Dock icon")
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.black.opacity(0.7))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.7))
                     }
                     .toggleStyle(.switch)
                     .pointingHandCursor()
 
                     Text("When off, Dayflow runs as a menu bar–only app.")
                         .font(.custom("Nunito", size: 11.5))
-                        .foregroundColor(.black.opacity(0.5))
+                        .foregroundColor(DayflowColors.textMuted)
 
                     Toggle(isOn: $viewModel.showTimelineAppIcons) {
                         Text("Show app/website icons in timeline")
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.black.opacity(0.7))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.7))
                     }
                     .toggleStyle(.switch)
                     .pointingHandCursor()
 
                     Text("When off, timeline cards won't show app or website icons.")
                         .font(.custom("Nunito", size: 11.5))
-                        .foregroundColor(.black.opacity(0.5))
+                        .foregroundColor(DayflowColors.textMuted)
 
                     Toggle(isOn: $viewModel.use24HourTime) {
                         Text("Use 24-hour time format")
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.black.opacity(0.7))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.7))
                     }
                     .toggleStyle(.switch)
                     .pointingHandCursor()
 
                     Text("Displays times as 14:30 instead of 2:30 PM throughout the app.")
                         .font(.custom("Nunito", size: 11.5))
-                        .foregroundColor(.black.opacity(0.5))
+                        .foregroundColor(DayflowColors.textMuted)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Appearance")
+                            .font(.custom("Nunito", size: 13).weight(.semibold))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.85))
+
+                        Picker("", selection: $viewModel.appearance) {
+                            Text("Dark").tag("dark")
+                            Text("Light").tag("light")
+                            Text("System").tag("system")
+                        }
+                        .pickerStyle(.segmented)
+                        .frame(width: 240)
+
+                        Text("Choose between dark mode, light mode, or follow your system setting.")
+                            .font(.custom("Nunito", size: 11.5))
+                            .foregroundColor(DayflowColors.textMuted)
+                    }
 
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Inactivity threshold")
                             .font(.custom("Nunito", size: 13).weight(.semibold))
-                            .foregroundColor(.black.opacity(0.85))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.85))
                         HStack(spacing: 10) {
                             Button(action: {
                                 if viewModel.idleThresholdMinutes > 1 {
@@ -89,20 +107,20 @@ struct SettingsOtherTabView: View {
                             }) {
                                 Image(systemName: "minus")
                                     .font(.system(size: 12, weight: .bold))
-                                    .foregroundColor(.black.opacity(0.7))
+                                    .foregroundColor(DayflowColors.textPrimary.opacity(0.7))
                                     .frame(width: 28, height: 28)
-                                    .background(Color.white)
+                                    .background(DayflowColors.surface)
                                     .cornerRadius(6)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 6)
-                                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                                            .stroke(DayflowColors.border, lineWidth: 1)
                                     )
                             }
                             .buttonStyle(PlainButtonStyle())
 
                             Text("\(viewModel.idleThresholdMinutes) minute\(viewModel.idleThresholdMinutes == 1 ? "" : "s")")
                                 .font(.custom("Nunito", size: 14).weight(.semibold))
-                                .foregroundColor(.black.opacity(0.85))
+                                .foregroundColor(DayflowColors.textPrimary.opacity(0.85))
                                 .frame(minWidth: 80)
 
                             Button(action: {
@@ -112,26 +130,26 @@ struct SettingsOtherTabView: View {
                             }) {
                                 Image(systemName: "plus")
                                     .font(.system(size: 12, weight: .bold))
-                                    .foregroundColor(.black.opacity(0.7))
+                                    .foregroundColor(DayflowColors.textPrimary.opacity(0.7))
                                     .frame(width: 28, height: 28)
-                                    .background(Color.white)
+                                    .background(DayflowColors.surface)
                                     .cornerRadius(6)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 6)
-                                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                                            .stroke(DayflowColors.border, lineWidth: 1)
                                     )
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
                         Text("After this period of inactivity, a popup will ask what you were doing.")
                             .font(.custom("Nunito", size: 11.5))
-                            .foregroundColor(.black.opacity(0.5))
+                            .foregroundColor(DayflowColors.textMuted)
                     }
 
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Output language override")
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.black.opacity(0.7))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.7))
                         HStack(spacing: 10) {
                             TextField("English", text: $viewModel.outputLanguageOverride)
                                 .textFieldStyle(.roundedBorder)
@@ -155,9 +173,9 @@ struct SettingsOtherTabView: View {
                                     }
                                     .padding(.horizontal, 2)
                                 },
-                                background: Color.white,
-                                foreground: Color(red: 0.25, green: 0.17, blue: 0),
-                                borderColor: Color(hex: "FFE0A5"),
+                                background: DayflowColors.surface,
+                                foreground: DayflowColors.accent,
+                                borderColor: DayflowColors.accent.opacity(0.4),
                                 cornerRadius: 8,
                                 horizontalPadding: 12,
                                 verticalPadding: 7,
@@ -173,9 +191,9 @@ struct SettingsOtherTabView: View {
                                     Text("Reset")
                                         .font(.custom("Nunito", size: 11))
                                 },
-                                background: Color.white,
-                                foreground: Color(red: 0.25, green: 0.17, blue: 0),
-                                borderColor: Color(hex: "FFE0A5"),
+                                background: DayflowColors.surface,
+                                foreground: DayflowColors.accent,
+                                borderColor: DayflowColors.accent.opacity(0.4),
                                 cornerRadius: 8,
                                 horizontalPadding: 10,
                                 verticalPadding: 6,
@@ -184,13 +202,13 @@ struct SettingsOtherTabView: View {
                         }
                         Text("The default language is English. You can specify any language here (examples: English, 简体中文, Español, 日本語, 한국어, Français).")
                             .font(.custom("Nunito", size: 11.5))
-                            .foregroundColor(.black.opacity(0.5))
+                            .foregroundColor(DayflowColors.textMuted)
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
                     Text("Dayflow Dev v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""))")
                         .font(.custom("Nunito", size: 12))
-                        .foregroundColor(.black.opacity(0.45))
+                        .foregroundColor(DayflowColors.textMuted)
                 }
             }
 
@@ -219,7 +237,7 @@ struct SettingsOtherTabView: View {
 
                     Image(systemName: "arrow.right")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(.black.opacity(0.35))
+                        .foregroundColor(DayflowColors.textMuted)
                         .padding(.bottom, 12)
 
                     datePillField(
@@ -251,7 +269,7 @@ struct SettingsOtherTabView: View {
 
                 Text("Includes titles, summaries, and details for each card.")
                     .font(.custom("Nunito", size: 11.5))
-                    .foregroundColor(.black.opacity(0.55))
+                    .foregroundColor(DayflowColors.textMuted)
 
                 HStack(spacing: 10) {
                     DayflowSurfaceButton(
@@ -270,7 +288,7 @@ struct SettingsOtherTabView: View {
                             }
                             .frame(minWidth: 150)
                         },
-                        background: Color(red: 0.25, green: 0.17, blue: 0),
+                        background: DayflowColors.accent,
                         foreground: .white,
                         borderColor: .clear,
                         cornerRadius: 8,
@@ -283,20 +301,20 @@ struct SettingsOtherTabView: View {
                     if rangeInvalid {
                         Text("Start date must be on or before end date.")
                             .font(.custom("Nunito", size: 12))
-                            .foregroundColor(Color(hex: "E91515"))
+                            .foregroundColor(DayflowColors.error)
                     }
                 }
 
                 if let message = viewModel.exportStatusMessage {
                     Text(message)
                         .font(.custom("Nunito", size: 12))
-                        .foregroundColor(Color(red: 0.1, green: 0.5, blue: 0.22))
+                        .foregroundColor(DayflowColors.success)
                 }
 
                 if let error = viewModel.exportErrorMessage {
                     Text(error)
                         .font(.custom("Nunito", size: 12))
-                        .foregroundColor(Color(hex: "E91515"))
+                        .foregroundColor(DayflowColors.error)
                 }
             }
             .padding(.top, 4)
@@ -327,7 +345,7 @@ struct SettingsOtherTabView: View {
         VStack(alignment: .leading, spacing: 7) {
             Text(label)
                 .font(.custom("Nunito", size: 11.5))
-                .foregroundColor(.black.opacity(0.52))
+                .foregroundColor(DayflowColors.textMuted)
 
             Button {
                 guard !disabled else { return }
@@ -336,30 +354,30 @@ struct SettingsOtherTabView: View {
                 HStack(spacing: 10) {
                     Image(systemName: "calendar")
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0).opacity(disabled ? 0.4 : 0.75))
+                        .foregroundColor(DayflowColors.accent.opacity(disabled ? 0.4 : 0.75))
 
                     Text(formattedTimelineDate(date))
                         .font(.custom("Nunito", size: 14))
-                        .foregroundColor(.black.opacity(disabled ? 0.35 : 0.82))
+                        .foregroundColor(DayflowColors.textPrimary.opacity(disabled ? 0.35 : 0.82))
 
                     Spacer(minLength: 4)
 
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .font(.system(size: 11, weight: .semibold))
-                        .foregroundColor(.black.opacity(disabled ? 0.2 : 0.35))
+                        .foregroundColor(DayflowColors.textMuted.opacity(disabled ? 0.2 : 0.35))
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 9)
                 .frame(minWidth: 176)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.white.opacity(disabled ? 0.45 : 0.88))
+                        .fill(DayflowColors.surface.opacity(disabled ? 0.45 : 0.88))
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(
                                     isExpanded
-                                        ? Color(hex: "F9C36B")
-                                        : Color(hex: "FFE0A5"),
+                                        ? DayflowColors.accent
+                                        : DayflowColors.accent.opacity(0.4),
                                     lineWidth: 1.2
                                 )
                         )
@@ -381,7 +399,7 @@ struct SettingsOtherTabView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(label)
                 .font(.custom("Nunito", size: 11.5))
-                .foregroundColor(.black.opacity(0.5))
+                .foregroundColor(DayflowColors.textMuted)
 
             DatePicker("", selection: date, displayedComponents: .date)
                 .datePickerStyle(.graphical)
@@ -393,10 +411,10 @@ struct SettingsOtherTabView: View {
                 .padding(10)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.white.opacity(disabled ? 0.45 : 0.82))
+                        .fill(DayflowColors.surface.opacity(disabled ? 0.45 : 0.82))
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color(hex: "FFE0A5"), lineWidth: 1.2)
+                                .stroke(DayflowColors.accent.opacity(0.4), lineWidth: 1.2)
                         )
                 )
                 .shadow(color: .black.opacity(disabled ? 0 : 0.04), radius: 7, x: 0, y: 2)

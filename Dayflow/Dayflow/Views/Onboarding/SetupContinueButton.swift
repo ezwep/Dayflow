@@ -33,7 +33,7 @@ struct SetupContinueButton: View {
             .padding(.vertical, 18)
             .frame(width: 160, alignment: .center)
             .background(
-                Color(red: 0.25, green: 0.17, blue: 0)
+                DayflowColors.accent
             )
             .cornerRadius(12)
             .shadow(color: .black.opacity(0.25), radius: 0.25, x: 0, y: 0.5)

@@ -38,7 +38,7 @@ struct HowItWorksView: View {
                         .font(.custom("InstrumentSerif-Regular", size: 48))
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity, minHeight: 60)
-                        .foregroundColor(.black)
+                        .foregroundColor(DayflowColors.textPrimary)
                         .opacity(titleOpacity)
                         .onAppear {
                             withAnimation(.easeOut(duration: 0.6)) {
@@ -69,7 +69,7 @@ struct HowItWorksView: View {
                         action: onBack,
                         content: { Text("Back").font(.custom("Nunito", size: 14)).fontWeight(.semibold) },
                         background: .white,
-                        foreground: Color(red: 0.25, green: 0.17, blue: 0),
+                        foreground: DayflowColors.accent,
                         borderColor: .clear,
                         cornerRadius: 8,
                         horizontalPadding: 20,
@@ -88,7 +88,7 @@ struct HowItWorksView: View {
                                 Text("Star Dayflow on GitHub").font(.custom("Nunito", size: 14)).fontWeight(.medium)
                             }
                         },
-                        background: Color(red: 0.25, green: 0.17, blue: 0),
+                        background: DayflowColors.accent,
                         foreground: .white,
                         borderColor: .clear,
                         cornerRadius: 8,
@@ -102,7 +102,7 @@ struct HowItWorksView: View {
                     DayflowSurfaceButton(
                         action: onNext,
                         content: { Text("Next").font(.custom("Nunito", size: 14)).fontWeight(.semibold) },
-                        background: Color(red: 0.25, green: 0.17, blue: 0),
+                        background: DayflowColors.accent,
                         foreground: .white,
                         borderColor: .clear,
                         cornerRadius: 8,
@@ -120,7 +120,6 @@ struct HowItWorksView: View {
                 .padding(.horizontal, 40)
                 .padding(.bottom, 40)
             }
-            .preferredColorScheme(.light)
     }
 }
 

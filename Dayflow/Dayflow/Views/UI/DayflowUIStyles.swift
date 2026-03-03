@@ -12,7 +12,7 @@ extension View {
     /// Applies complete Dayflow style with rounded rectangle shape
     func dayflowStyle(
         cornerRadius: CGFloat = 735.4068,
-        backgroundColor: Color = .white
+        backgroundColor: Color = DayflowColors.surface
     ) -> some View {
         self
             .background(backgroundColor)
@@ -20,7 +20,7 @@ extension View {
     }
     
     /// Applies complete Dayflow style with circle shape
-    func dayflowCircleStyle(backgroundColor: Color = .white) -> some View {
+    func dayflowCircleStyle(backgroundColor: Color = DayflowColors.surface) -> some View {
         self
             .background(backgroundColor)
             .clipShape(Circle())
@@ -69,7 +69,7 @@ struct DayflowPillButton: View {
     init(
         text: String,
         font: Font = .custom("InstrumentSerif-Regular", size: 18),
-        foregroundColor: Color = Color(red: 0.2, green: 0.2, blue: 0.2),
+        foregroundColor: Color = DayflowColors.textPrimary,
         horizontalPadding: CGFloat = 11.77829,
         height: CGFloat = 30.4514,
         fixedWidth: CGFloat? = nil

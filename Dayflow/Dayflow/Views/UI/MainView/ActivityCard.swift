@@ -151,23 +151,23 @@ struct ActivityCard: View {
                             Font.custom("Nunito", size: 16)
                                 .weight(.semibold)
                         )
-                        .foregroundColor(.black)
+                        .foregroundColor(DayflowColors.textPrimary)
 
                     HStack(alignment: .center, spacing: 6) {
                         Text("\(displayTime(from: activity.startTime)) - \(displayTime(from: activity.endTime))")
                             .font(
                                 Font.custom("Nunito", size: 12)
                             )
-                            .foregroundColor(Color(red: 0.4, green: 0.4, blue: 0.4))
+                            .foregroundColor(DayflowColors.textMuted)
                             .lineLimit(1)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 4)
-                            .background(Color(red: 0.96, green: 0.94, blue: 0.91).opacity(0.9))
+                            .background(DayflowColors.surface)
                             .cornerRadius(6)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 6)
                                     .inset(by: 0.38)
-                                    .stroke(Color(red: 0.9, green: 0.9, blue: 0.9), lineWidth: 0.75)
+                                    .stroke(DayflowColors.borderSubtle, lineWidth: 0.75)
                             )
 
                         Spacer(minLength: 6)
@@ -181,17 +181,17 @@ struct ActivityCard: View {
 
                                     Text(badge.name)
                                         .font(Font.custom("Nunito", size: 12))
-                                        .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
+                                        .foregroundColor(DayflowColors.textPrimary)
                                         .lineLimit(1)
                                 }
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
-                                .background(Color.white.opacity(0.76))
+                                .background(DayflowColors.surface.opacity(0.76))
                                 .cornerRadius(6)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 6)
                                         .inset(by: 0.25)
-                                        .stroke(Color(red: 0.88, green: 0.88, blue: 0.88), lineWidth: 0.5)
+                                        .stroke(DayflowColors.borderSubtle, lineWidth: 0.5)
                                 )
                             }
 
@@ -203,7 +203,7 @@ struct ActivityCard: View {
                                     }) {
                                         Image(systemName: "pencil.circle")
                                             .font(.system(size: 16, weight: .medium))
-                                            .foregroundColor(Color(red: 0.62, green: 0.44, blue: 0.36))
+                                            .foregroundColor(DayflowColors.accent)
                                             .frame(width: 24, height: 24)
                                     }
                                     .buttonStyle(PlainButtonStyle())
@@ -244,7 +244,7 @@ struct ActivityCard: View {
             if isFailedCard(activity), let statusLine = retryCoordinator.statusLine(for: activity.batchId) {
                 Text(statusLine)
                     .font(.custom("Nunito", size: 11))
-                    .foregroundColor(Color(red: 0.5, green: 0.5, blue: 0.5))
+                    .foregroundColor(DayflowColors.textMuted)
                     .lineLimit(1)
             }
 
@@ -285,13 +285,13 @@ struct ActivityCard: View {
                         Font.custom("Nunito", size: 12)
                             .weight(.semibold)
                     )
-                    .foregroundColor(Color(red: 0.55, green: 0.55, blue: 0.55))
+                    .foregroundColor(DayflowColors.textMuted)
 
                 renderMarkdownText(activity.summary)
                     .font(
                         Font.custom("Nunito", size: 12)
                     )
-                    .foregroundColor(.black)
+                    .foregroundColor(DayflowColors.textPrimary)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
                     .textSelection(.enabled)
@@ -304,13 +304,13 @@ struct ActivityCard: View {
                             Font.custom("Nunito", size: 12)
                                 .weight(.semibold)
                         )
-                        .foregroundColor(Color(red: 0.55, green: 0.55, blue: 0.55))
+                        .foregroundColor(DayflowColors.textMuted)
 
                     renderMarkdownText(formattedDetailedSummary(activity.detailedSummary))
                         .font(
                             Font.custom("Nunito", size: 12)
                         )
-                        .foregroundColor(.black)
+                        .foregroundColor(DayflowColors.textPrimary)
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
                         .textSelection(.enabled)
@@ -390,12 +390,12 @@ struct ActivityCard: View {
 
                 Text("Processing")
                     .font(.custom("Nunito", size: 13))
-                    .foregroundColor(Color(red: 0.4, green: 0.4, blue: 0.4))
+                    .foregroundColor(DayflowColors.textMuted)
                     .lineLimit(1)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
-            .background(Color(red: 0.91, green: 0.85, blue: 0.8))
+            .background(DayflowColors.surface)
             .cornerRadius(200)
         } else {
             // Retry button - orange pill
@@ -409,7 +409,7 @@ struct ActivityCard: View {
                 .foregroundColor(.white)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(Color(red: 1, green: 0.54, blue: 0.17))
+                .background(DayflowColors.cta)
                 .cornerRadius(200)
             }
             .buttonStyle(PlainButtonStyle())
@@ -511,7 +511,7 @@ struct ActivityCard: View {
             if let errorMessage = slideshowError {
                 Text(errorMessage)
                     .font(Font.custom("Nunito", size: 11))
-                    .foregroundColor(Color(red: 0.76, green: 0.16, blue: 0.2))
+                    .foregroundColor(DayflowColors.error)
             }
         }
     }
@@ -675,14 +675,14 @@ private struct ScreenshotSlideshowModal: View {
                     if let startTime, let endTime {
                         Text("\(Self.displayTime(from: startTime)) to \(Self.displayTime(from: endTime))")
                             .font(.caption)
-                            .foregroundColor(Color(red: 0.4, green: 0.4, blue: 0.4))
+                            .foregroundColor(DayflowColors.textMuted)
                     }
                 }
                 Spacer()
                 Button(action: { dismiss() }) {
                     Image(systemName: "xmark.circle.fill")
                         .font(.system(size: 20))
-                        .foregroundColor(Color.black.opacity(0.5))
+                        .foregroundColor(DayflowColors.textMuted)
                 }
                 .buttonStyle(PlainButtonStyle())
                 .hoverScaleEffect(scale: 1.02)
@@ -690,7 +690,7 @@ private struct ScreenshotSlideshowModal: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .background(Color.white)
+            .background(DayflowColors.surface)
 
             Divider()
 
@@ -772,10 +772,10 @@ private struct ScreenshotSlideshowModal: View {
                 .padding(.horizontal)
                 .padding(.bottom, 12)
             }
-            .background(Color.white)
+            .background(DayflowColors.surface)
         }
         .frame(minWidth: 960, minHeight: 640)
-        .background(Color.white)
+        .background(DayflowColors.surface)
         .onAppear {
             playbackModel.start()
             setupKeyMonitor()

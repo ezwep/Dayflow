@@ -172,13 +172,13 @@ struct LLMProviderSetupView: View {
                         HStack(spacing: 12) {
                             Image(systemName: "chevron.left")
                                 .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(.black.opacity(0.7))
+                                .foregroundColor(DayflowColors.textPrimary.opacity(0.7))
                                 .frame(width: 20, alignment: .center)
                             
                             Text("Back")
                                 .font(.custom("Nunito", size: 15))
                                 .fontWeight(.medium)
-                                .foregroundColor(.black.opacity(0.7))
+                                .foregroundColor(DayflowColors.textPrimary.opacity(0.7))
                         }
                     }
                     .buttonStyle(.plain)
@@ -195,7 +195,7 @@ struct LLMProviderSetupView: View {
                     Text(headerTitle)
                         .font(.custom("Nunito", size: 32))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(0.9))
+                        .foregroundColor(DayflowColors.textPrimary.opacity(0.9))
                     
                     Spacer()
                 }
@@ -237,7 +237,6 @@ struct LLMProviderSetupView: View {
             setupState.configureSteps(for: activeProviderType)
             animateAppearance()
         }
-        .preferredColorScheme(.light)
     }
     
     private var nextButtonText: String {
@@ -260,7 +259,7 @@ struct LLMProviderSetupView: View {
                         Text("Complete Setup").font(.custom("Nunito", size: 14)).fontWeight(.semibold)
                     }
                 },
-                background: Color(red: 0.25, green: 0.17, blue: 0),
+                background: DayflowColors.accent,
                 foreground: .white,
                 borderColor: .clear,
                 cornerRadius: 8,
@@ -279,7 +278,7 @@ struct LLMProviderSetupView: View {
                         }
                     }
                 },
-                background: Color(red: 0.25, green: 0.17, blue: 0),
+                background: DayflowColors.accent,
                 foreground: .white,
                 borderColor: .clear,
                 cornerRadius: 8,
@@ -303,10 +302,10 @@ struct LLMProviderSetupView: View {
                     Text("Choose your local AI engine")
                         .font(.custom("Nunito", size: 24))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(0.9))
+                        .foregroundColor(DayflowColors.textPrimary.opacity(0.9))
                     Text("For local use, LM Studio is the most reliable; Ollama has a known thinking bug in onboarding (can't turn thinking off) and performance is unreliable.")
                         .font(.custom("Nunito", size: 14))
-                        .foregroundColor(.black.opacity(0.6))
+                        .foregroundColor(DayflowColors.textMuted)
                 }
                 HStack(alignment: .center, spacing: 12) {
                     DayflowSurfaceButton(
@@ -325,7 +324,7 @@ struct LLMProviderSetupView: View {
                                 .font(.custom("Nunito", size: 14))
                                 .fontWeight(.semibold)
                         },
-                        background: Color(red: 0.25, green: 0.17, blue: 0),
+                        background: DayflowColors.accent,
                         foreground: .white,
                         borderColor: .clear,
                         cornerRadius: 8,
@@ -334,7 +333,7 @@ struct LLMProviderSetupView: View {
                 }
                 Text("Already have a local server? Make sure it’s OpenAI-compatible. You can set a custom base URL in the next step.")
                     .font(.custom("Nunito", size: 13))
-                    .foregroundColor(.black.opacity(0.6))
+                    .foregroundColor(DayflowColors.textMuted)
                 HStack { Spacer(); nextButton }
             }
         case .localModelInstall:
@@ -342,11 +341,11 @@ struct LLMProviderSetupView: View {
                 Text("Install Qwen3-VL 4B")
                     .font(.custom("Nunito", size: 24))
                     .fontWeight(.semibold)
-                    .foregroundColor(.black.opacity(0.9))
+                    .foregroundColor(DayflowColors.textPrimary.opacity(0.9))
                 if setupState.localEngine == .ollama {
                     Text("After installing Ollama, run this in your terminal to download the model (≈5GB):")
                         .font(.custom("Nunito", size: 14))
-                        .foregroundColor(.black.opacity(0.6))
+                        .foregroundColor(DayflowColors.textMuted)
                     TerminalCommandView(
                         title: "Run this command:",
                         subtitle: "Downloads Qwen3 Vision 4B for Ollama",
@@ -356,7 +355,7 @@ struct LLMProviderSetupView: View {
                     VStack(alignment: .leading, spacing: 16) {
                         Text("After installing LM Studio, download the recommended model:")
                             .font(.custom("Nunito", size: 14))
-                            .foregroundColor(.black.opacity(0.6))
+                            .foregroundColor(DayflowColors.textMuted)
 
                         DayflowSurfaceButton(
                             action: openLMStudioModelDownload,
@@ -366,7 +365,7 @@ struct LLMProviderSetupView: View {
                                     Text("Download Qwen3-VL 4B in LM Studio").font(.custom("Nunito", size: 14)).fontWeight(.semibold)
                                 }
                             },
-                            background: Color(red: 0.25, green: 0.17, blue: 0),
+                            background: DayflowColors.accent,
                             foreground: .white,
                             borderColor: .clear,
                             cornerRadius: 8,
@@ -378,11 +377,11 @@ struct LLMProviderSetupView: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("This will open LM Studio and prompt you to download the model (≈3GB).")
                                 .font(.custom("Nunito", size: 13))
-                                .foregroundColor(.black.opacity(0.65))
+                                .foregroundColor(DayflowColors.textMuted)
 
                             Text("Once downloaded, turn on 'Local Server' in LM Studio (default http://localhost:1234)")
                                 .font(.custom("Nunito", size: 13))
-                                .foregroundColor(.black.opacity(0.65))
+                                .foregroundColor(DayflowColors.textMuted)
                         }
                         .padding(.top, 4)
 
@@ -391,13 +390,13 @@ struct LLMProviderSetupView: View {
                             Text("Manual setup:")
                                 .font(.custom("Nunito", size: 12))
                                 .fontWeight(.semibold)
-                                .foregroundColor(.black.opacity(0.5))
+                                .foregroundColor(DayflowColors.textMuted)
                             Text("1. Open LM Studio → Models tab")
                                 .font(.custom("Nunito", size: 12))
-                                .foregroundColor(.black.opacity(0.45))
+                                .foregroundColor(DayflowColors.textMuted)
                             Text("2. Search for 'Qwen3-VL-4B' and install the Instruct variant")
                                 .font(.custom("Nunito", size: 12))
-                                .foregroundColor(.black.opacity(0.45))
+                                .foregroundColor(DayflowColors.textMuted)
                         }
                         .padding(.top, 8)
                     }
@@ -406,10 +405,10 @@ struct LLMProviderSetupView: View {
                         Text("Use any OpenAI-compatible VLM")
                             .font(.custom("Nunito", size: 16))
                             .fontWeight(.semibold)
-                            .foregroundColor(.black.opacity(0.85))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.85))
                         Text("Make sure your server exposes the OpenAI Chat Completions API and has Qwen3-VL 4B (or Qwen2.5-VL 3B if you need the legacy model) installed.")
                             .font(.custom("Nunito", size: 14))
-                            .foregroundColor(.black.opacity(0.75))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.75))
                     }
                 }
                 HStack { Spacer(); nextButton }
@@ -470,7 +469,7 @@ struct LLMProviderSetupView: View {
                     Text("Choose your Gemini model. If you're on the free tier, pick 3 Flash, it's the most powerful model and is completely free to use. If you're on a paid plan, which is not recommended, I recommend 2.5 Flash-Lite to minimize costs.")
                         .font(.custom("Nunito", size: 16))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(0.85))
+                        .foregroundColor(DayflowColors.textPrimary.opacity(0.85))
 
                     Picker("Gemini model", selection: $setupState.geminiModel) {
                         ForEach(GeminiModel.allCases, id: \.self) { model in
@@ -481,7 +480,7 @@ struct LLMProviderSetupView: View {
 
                     Text(GeminiModelPreference(primary: setupState.geminiModel).fallbackSummary)
                         .font(.custom("Nunito", size: 13))
-                        .foregroundColor(.black.opacity(0.55))
+                        .foregroundColor(DayflowColors.textMuted)
                 }
                 .onChange(of: setupState.geminiModel) {
                     setupState.persistGeminiModelSelection(source: "onboarding_picker")
@@ -499,11 +498,11 @@ struct LLMProviderSetupView: View {
                     Text("Download the AI model")
                         .font(.custom("Nunito", size: 24))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(0.9))
+                        .foregroundColor(DayflowColors.textPrimary.opacity(0.9))
                     
                     Text("This model enables Dayflow to understand what's on your screen")
                         .font(.custom("Nunito", size: 14))
-                        .foregroundColor(.black.opacity(0.6))
+                        .foregroundColor(DayflowColors.textMuted)
                 }
                 
                 TerminalCommandView(
@@ -524,11 +523,11 @@ struct LLMProviderSetupView: View {
                     Text(title)
                         .font(.custom("Nunito", size: 24))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(0.9))
+                        .foregroundColor(DayflowColors.textPrimary.opacity(0.9))
                     if !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         Text(description)
                             .font(.custom("Nunito", size: 14))
-                            .foregroundColor(.black.opacity(0.6))
+                            .foregroundColor(DayflowColors.textMuted)
                             .fixedSize(horizontal: false, vertical: true)
                             .multilineTextAlignment(.leading)
                             .lineLimit(nil)
@@ -540,7 +539,7 @@ struct LLMProviderSetupView: View {
                                 Text(" LLM, but we strongly recommend using Qwen3-VL 4B based on our internal benchmarks.")
                             )
                             .font(.custom("Nunito", size: 14))
-                            .foregroundColor(.black.opacity(0.6))
+                            .foregroundColor(DayflowColors.textMuted)
                             .fixedSize(horizontal: false, vertical: true)
                             .multilineTextAlignment(.leading)
                         }
@@ -572,7 +571,7 @@ struct LLMProviderSetupView: View {
                                 VStack(alignment: .leading, spacing: 12) {
                                     Text("Which tool are you using?")
                                         .font(.custom("Nunito", size: 14))
-                                        .foregroundColor(.black.opacity(0.65))
+                                        .foregroundColor(DayflowColors.textMuted)
                                     Picker("Engine", selection: $setupState.localEngine) {
                                         Text("LM Studio").tag(LocalEngine.lmstudio)
                                         Text("Custom model").tag(LocalEngine.custom)
@@ -634,27 +633,27 @@ struct LLMProviderSetupView: View {
                     Text("Get your Gemini API key")
                         .font(.custom("Nunito", size: 24))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(0.9))
+                        .foregroundColor(DayflowColors.textPrimary.opacity(0.9))
                     
                     Text("Google's Gemini offers a generous free tier that should allow you to run Dayflow ~15 hours a day for free - no credit card required")
                         .font(.custom("Nunito", size: 14))
-                        .foregroundColor(.black.opacity(0.6))
+                        .foregroundColor(DayflowColors.textMuted)
                 }
                 
                 VStack(alignment: .leading, spacing: 16) {
                     HStack(alignment: .top, spacing: 12) {
                         Text("1.")
                             .font(.custom("Nunito", size: 14))
-                            .foregroundColor(.black.opacity(0.6))
+                            .foregroundColor(DayflowColors.textMuted)
                             .frame(width: 20, alignment: .leading)
                         
                         Group {
                             Text("Visit Google AI Studio ")
                                 .font(.custom("Nunito", size: 14))
-                                .foregroundColor(.black.opacity(0.8))
+                                .foregroundColor(DayflowColors.textPrimary.opacity(0.8))
                             + Text("(aistudio.google.com)")
                                 .font(.custom("Nunito", size: 14))
-                                .foregroundColor(Color(red: 1, green: 0.42, blue: 0.02))
+                                .foregroundColor(DayflowColors.accent)
                                 .underline()
                         }
                         .onTapGesture { openGoogleAIStudio() }
@@ -664,23 +663,23 @@ struct LLMProviderSetupView: View {
                     HStack(alignment: .top, spacing: 12) {
                         Text("2.")
                             .font(.custom("Nunito", size: 14))
-                            .foregroundColor(.black.opacity(0.6))
+                            .foregroundColor(DayflowColors.textMuted)
                             .frame(width: 20, alignment: .leading)
                         
                         Text("Click \"Get API key\" in the top right")
                             .font(.custom("Nunito", size: 14))
-                            .foregroundColor(.black.opacity(0.8))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.8))
                     }
                     
                     HStack(alignment: .top, spacing: 12) {
                         Text("3.")
                             .font(.custom("Nunito", size: 14))
-                            .foregroundColor(.black.opacity(0.6))
+                            .foregroundColor(DayflowColors.textMuted)
                             .frame(width: 20, alignment: .leading)
                         
                         Text("Create a new API key and copy it")
                             .font(.custom("Nunito", size: 14))
-                            .foregroundColor(.black.opacity(0.8))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.8))
                     }
                 }
                 .padding(.vertical, 12)
@@ -695,7 +694,7 @@ struct LLMProviderSetupView: View {
                                 Text("Open Google AI Studio").font(.custom("Nunito", size: 14)).fontWeight(.semibold)
                             }
                         },
-                        background: Color(red: 0.25, green: 0.17, blue: 0),
+                        background: DayflowColors.accent,
                         foreground: .white,
                         borderColor: .clear,
                         cornerRadius: 8,
@@ -1320,7 +1319,7 @@ struct LocalLLMTestView: View {
         self.onTestComplete = onTestComplete
     }
 
-    private let accentColor = Color(red: 0.25, green: 0.17, blue: 0)
+    private let accentColor = DayflowColors.accent
     private let successAccentColor = Color(red: 0.34, green: 1, blue: 0.45)
     private var trimmedAPIKey: String {
         apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -1336,7 +1335,7 @@ struct LocalLLMTestView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Base URL")
                         .font(.custom("Nunito", size: 13))
-                        .foregroundColor(.black.opacity(0.6))
+                        .foregroundColor(DayflowColors.textMuted)
                     TextField(basePlaceholder ?? engine.defaultBaseURL, text: $baseURL)
                         .textFieldStyle(.roundedBorder)
                 }
@@ -1344,7 +1343,7 @@ struct LocalLLMTestView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Model ID")
                         .font(.custom("Nunito", size: 13))
-                        .foregroundColor(.black.opacity(0.6))
+                        .foregroundColor(DayflowColors.textMuted)
                     TextField(modelPlaceholder ?? LocalModelPreferences.defaultModelId(for: engine), text: $modelId)
                         .textFieldStyle(.roundedBorder)
                 }
@@ -1353,13 +1352,13 @@ struct LocalLLMTestView: View {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("API key (optional)")
                             .font(.custom("Nunito", size: 13))
-                            .foregroundColor(.black.opacity(0.6))
+                            .foregroundColor(DayflowColors.textMuted)
                         SecureField("sk-live-...", text: $apiKey)
                             .textFieldStyle(.roundedBorder)
                             .disableAutocorrection(true)
                         Text("Stored locally in UserDefaults and sent as a Bearer token for custom endpoints (LiteLLM, OpenRouter, etc.)")
                             .font(.custom("Nunito", size: 11))
-                            .foregroundColor(.black.opacity(0.5))
+                            .foregroundColor(DayflowColors.textMuted)
                     }
                 }
             }
@@ -1392,12 +1391,12 @@ struct LocalLLMTestView: View {
             if let msg = resultMessage {
                 Text(msg)
                     .font(.custom("Nunito", size: 13))
-                    .foregroundColor(success ? .black.opacity(0.7) : Color(hex: "E91515"))
+                    .foregroundColor(success ? DayflowColors.textPrimary.opacity(0.7) : Color(hex: "E91515"))
                     .padding(.vertical, 6)
                 if !success {
                     Text("If you get stuck here, you can go back and choose the ‘Bring your own key’ option — it only takes a minute to set up.")
                         .font(.custom("Nunito", size: 12))
-                        .foregroundColor(.black.opacity(0.55))
+                        .foregroundColor(DayflowColors.textMuted)
                         .padding(.top, 2)
                 }
             }
@@ -1514,7 +1513,7 @@ struct ChatCLITestView: View {
     let secondaryTool: CLITool?
     let onTestComplete: (Bool) -> Void
 
-    private let accentColor = Color(red: 0.25, green: 0.17, blue: 0)
+    private let accentColor = DayflowColors.accent
     private let successAccentColor = Color(red: 0.34, green: 1, blue: 0.45)
 
     // Primary test state
@@ -1533,7 +1532,7 @@ struct ChatCLITestView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("We'll ask your CLI a simple question to verify it's working and signed in.")
                 .font(.custom("Nunito", size: 13))
-                .foregroundColor(.black.opacity(0.6))
+                .foregroundColor(DayflowColors.textMuted)
                 .fixedSize(horizontal: false, vertical: true)
 
             // Primary test
@@ -1582,7 +1581,7 @@ struct ChatCLITestView: View {
                 Text(label)
                     .font(.custom("Nunito", size: 12))
                     .fontWeight(.semibold)
-                    .foregroundColor(.black.opacity(0.55))
+                    .foregroundColor(DayflowColors.textMuted)
             }
 
             DayflowSurfaceButton(
@@ -1614,20 +1613,20 @@ struct ChatCLITestView: View {
             if tool == nil {
                 Text("Select ChatGPT or Claude above before running the test.")
                     .font(.custom("Nunito", size: 12))
-                    .foregroundColor(.black.opacity(0.6))
+                    .foregroundColor(DayflowColors.textMuted)
             }
 
             if let msg = message {
                 HStack(alignment: .center, spacing: 8) {
                     Text(msg)
                         .font(.custom("Nunito", size: 13))
-                        .foregroundColor(testSuccess ? .black.opacity(0.7) : Color(hex: "E91515"))
+                        .foregroundColor(testSuccess ? DayflowColors.textPrimary.opacity(0.7) : Color(hex: "E91515"))
 
                     if debug != nil {
                         Button(action: onCopyLogs) {
                             Text("Copy logs")
                                 .font(.custom("Nunito", size: 11))
-                                .foregroundColor(.black.opacity(0.4))
+                                .foregroundColor(DayflowColors.textMuted)
                                 .underline()
                         }
                         .buttonStyle(.plain)
@@ -1642,11 +1641,11 @@ struct ChatCLITestView: View {
                     Text("Debug output:")
                         .font(.custom("Nunito", size: 11))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(0.5))
+                        .foregroundColor(DayflowColors.textMuted)
                     ScrollView {
                         Text(debug)
                             .font(.system(size: 11, design: .monospaced))
-                            .foregroundColor(.black.opacity(0.6))
+                            .foregroundColor(DayflowColors.textMuted)
                             .textSelection(.enabled)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
@@ -2009,13 +2008,13 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
     let onSelectSecondaryTool: (CLITool?) -> Void
     @ViewBuilder let nextButton: () -> NextButton
 
-    private let accentColor = Color(red: 0.25, green: 0.17, blue: 0)
+    private let accentColor = DayflowColors.accent
 
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             Text("Dayflow can talk to ChatGPT (via the Codex CLI) or Claude Code. You only need one installed and signed in on this Mac. After installing, run `codex auth` or `claude login` in Terminal to connect it to your account.")
                 .font(.custom("Nunito", size: 14))
-                .foregroundColor(.black.opacity(0.6))
+                .foregroundColor(DayflowColors.textMuted)
 
             HStack(alignment: .top, spacing: 14) {
                 ChatCLIToolStatusRow(
@@ -2034,10 +2033,10 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
                 Text("Primary provider")
                     .font(.custom("Nunito", size: 13))
                     .fontWeight(.semibold)
-                    .foregroundColor(.black.opacity(0.65))
+                    .foregroundColor(DayflowColors.textMuted)
                 Text("Dayflow sends all requests to this provider first.")
                     .font(.custom("Nunito", size: 11.5))
-                    .foregroundColor(.black.opacity(0.45))
+                    .foregroundColor(DayflowColors.textMuted)
                 HStack(spacing: 12) {
                     ForEach(CLITool.allCases, id: \.self) { tool in
                         selectionButton(for: tool, isSelected: selectedTool == tool, action: {
@@ -2051,7 +2050,7 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
                 }
             }
             .padding(16)
-            .background(Color.white.opacity(0.5))
+            .background(DayflowColors.surface.opacity(0.5))
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
@@ -2064,10 +2063,10 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
                     Text("Secondary provider (optional)")
                         .font(.custom("Nunito", size: 13))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(0.65))
+                        .foregroundColor(DayflowColors.textMuted)
                     Text("If the primary fails, Dayflow automatically tries this one as backup.")
                         .font(.custom("Nunito", size: 11.5))
-                        .foregroundColor(.black.opacity(0.45))
+                        .foregroundColor(DayflowColors.textMuted)
                     HStack(spacing: 12) {
                         // "None" option
                         secondaryNoneButton
@@ -2080,7 +2079,7 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
                     }
                 }
                 .padding(16)
-                .background(Color.white.opacity(0.5))
+                .background(DayflowColors.surface.opacity(0.5))
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
@@ -2159,14 +2158,14 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
                 Text("None")
                     .font(.custom("Nunito", size: 13))
                     .fontWeight(.semibold)
-                    .foregroundColor(.black.opacity(0.85))
+                    .foregroundColor(DayflowColors.textPrimary.opacity(0.85))
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(isSelected ? Color.white.opacity(0.9) : Color.white.opacity(0.5))
+                    .fill(isSelected ? DayflowColors.surface.opacity(0.9) : DayflowColors.surface.opacity(0.5))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
@@ -2193,10 +2192,10 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
                     Text(tool.shortName)
                         .font(.custom("Nunito", size: 13))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black.opacity(enabled ? 0.85 : 0.4))
+                        .foregroundColor(DayflowColors.textPrimary.opacity(enabled ? 0.85 : 0.4))
                     Text(enabled ? "Ready to use" : "Install to enable")
                         .font(.custom("Nunito", size: 11))
-                        .foregroundColor(.black.opacity(enabled ? 0.5 : 0.35))
+                        .foregroundColor(DayflowColors.textMuted.opacity(enabled ? 0.75 : 0.55))
                 }
             }
             .padding(.horizontal, 12)
@@ -2204,7 +2203,7 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(isSelected ? Color.white.opacity(0.9) : Color.white.opacity(0.5))
+                    .fill(isSelected ? DayflowColors.surface.opacity(0.9) : DayflowColors.surface.opacity(0.5))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
@@ -2223,7 +2222,7 @@ struct ChatCLIToolStatusRow: View {
     let status: CLIDetectionState
     let onInstall: () -> Void
 
-    private let accentColor = Color(red: 0.25, green: 0.17, blue: 0)
+    private let accentColor = DayflowColors.accent
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -2231,15 +2230,15 @@ struct ChatCLIToolStatusRow: View {
             HStack(spacing: 10) {
                 Image(systemName: tool.iconName)
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.black.opacity(0.75))
+                    .foregroundColor(DayflowColors.textPrimary.opacity(0.75))
                     .frame(width: 30, height: 30)
-                    .background(Color.white.opacity(0.7))
+                    .background(DayflowColors.surface.opacity(0.7))
                     .cornerRadius(6)
 
                 Text(tool.shortName)
                     .font(.custom("Nunito", size: 15))
                     .fontWeight(.semibold)
-                    .foregroundColor(.black.opacity(0.9))
+                    .foregroundColor(DayflowColors.textPrimary.opacity(0.9))
 
                 Spacer()
 
@@ -2250,7 +2249,7 @@ struct ChatCLIToolStatusRow: View {
             if let detail = status.detailMessage, !detail.isEmpty {
                 Text(detail)
                     .font(.custom("Nunito", size: 11))
-                    .foregroundColor(.black.opacity(0.55))
+                    .foregroundColor(DayflowColors.textMuted)
                     .lineLimit(1)
             }
 
@@ -2278,7 +2277,7 @@ struct ChatCLIToolStatusRow: View {
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white.opacity(0.6))
+        .background(DayflowColors.surface.opacity(0.6))
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)

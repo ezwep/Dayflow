@@ -56,15 +56,15 @@ struct DayflowButton: View {
             Text(title)
                 .font(.custom("Nunito", size: fontSize))
                 .fontWeight(.semibold)
-                .foregroundColor(isSubtle ? .black.opacity(0.7) : .white)
+                .foregroundColor(isSubtle ? DayflowColors.textPrimary.opacity(0.7) : .white)
                 .frame(width: width, height: 56, alignment: .center)
                 .background(
                     ZStack {
                         // Main background
                         if isSubtle {
-                            Color.white.opacity(0.9)
+                            DayflowColors.surface.opacity(0.9)
                         } else {
-                            Color(red: 1, green: 0.42, blue: 0.02)
+                            DayflowColors.cta
                         }
                         
                         // Pulse effect
@@ -73,7 +73,7 @@ struct DayflowButton: View {
                                 if isSubtle {
                                     Color.gray.opacity(0.1)
                                 } else {
-                                    Color(red: 1, green: 0.42, blue: 0.02)
+                                    DayflowColors.cta
                                         .opacity(0.3)
                                 }
                             }
@@ -108,7 +108,7 @@ struct DayflowButton: View {
                         .inset(by: 0.75)
                         .stroke(
                             isSubtle 
-                                ? Color.black.opacity(isHovered ? 0.15 : 0.1)
+                                ? DayflowColors.border
                                 : .white.opacity(isHovered ? 0.25 : 0.17),
                             lineWidth: 1.5
                         )

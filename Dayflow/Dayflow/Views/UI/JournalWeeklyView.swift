@@ -235,7 +235,7 @@ private struct JournalWeeklyCircleButton: View {
                 .frame(width: 34, height: 34)
                 .background(
                     Circle()
-                        .fill(Color.white)
+                        .fill(DayflowColors.surface)
                         .shadow(color: Color.black.opacity(0.08), radius: 8, y: 4)
                 )
         }
@@ -308,7 +308,7 @@ private struct JournalWeeklyEntryCard: View {
         .padding(.horizontal, 18)
         .padding(.vertical, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white)
+        .background(DayflowColors.surface)
         .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .shadow(color: Color.black.opacity(0.08), radius: 14, y: 10)
     }
@@ -429,7 +429,7 @@ private enum JournalWeeklyTokens {
     static let dayActive = Color(hex: "FFB859")
     static let dayMuted = Color(hex: "F2E4D4")
     static let toggleBackground = Color(hex: "F5EEE6")
-    static let toggleContainer = Color.white.opacity(0.8)
+    static let toggleContainer = DayflowColors.surface.opacity(0.8)
     static let setReminderBackground = LinearGradient(colors: [Color(hex: "FFE5C5"), Color(hex: "FFD29D")], startPoint: .top, endPoint: .bottom)
     static let setReminderBorder = Color(hex: "FFC689").opacity(0.7)
     static let setReminderBadge = Color(hex: "FFAA5F")

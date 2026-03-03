@@ -77,7 +77,6 @@ struct DailyView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        .environment(\.colorScheme, .light)
     }
 
     private var lockScreen: some View {
@@ -130,7 +129,7 @@ struct DailyView: View {
                                 .fontWeight(.semibold)
                         }
                     },
-                    background: Color(red: 0.25, green: 0.17, blue: 0),
+                    background: DayflowColors.accent,
                     foreground: .white,
                     borderColor: .clear,
                     cornerRadius: 8,
@@ -177,7 +176,7 @@ struct DailyView: View {
                     .padding(.vertical, 12)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.white)
+                            .fill(DayflowColors.surface)
                     )
                     .padding(.horizontal, 80)
                     .submitLabel(.go)
@@ -385,7 +384,7 @@ struct DailyView: View {
             }
             .background(
                 RoundedRectangle(cornerRadius: 4, style: .continuous)
-                    .fill(Color.white.opacity(0.78))
+                    .fill(DayflowColors.surface.opacity(0.78))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 4, style: .continuous)
@@ -1591,9 +1590,9 @@ private struct DailyBulletCard: View {
                 .fill(
                     LinearGradient(
                         gradient: Gradient(stops: [
-                            .init(color: Color.white.opacity(0.6), location: 0.011932),
-                            .init(color: Color.white, location: 0.5104),
-                            .init(color: Color.white.opacity(0.6), location: 0.98092)
+                            .init(color: DayflowColors.surface.opacity(0.6), location: 0.011932),
+                            .init(color: DayflowColors.surface, location: 0.5104),
+                            .init(color: DayflowColors.surface.opacity(0.6), location: 0.98092)
                         ]),
                         startPoint: UnitPoint(x: 1, y: 0.45),
                         endPoint: UnitPoint(x: 0, y: 0.55)

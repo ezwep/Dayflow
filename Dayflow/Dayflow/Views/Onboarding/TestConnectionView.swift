@@ -94,7 +94,7 @@ struct TestConnectionView: View {
         if testResult?.isSuccess == true {
             return Color(red: 0.34, green: 1, blue: 0.45).opacity(0.2)
         } else {
-            return Color(red: 1, green: 0.42, blue: 0.02)
+            return DayflowColors.cta
         }
     }
 

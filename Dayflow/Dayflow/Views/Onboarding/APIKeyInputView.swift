@@ -29,11 +29,11 @@ struct APIKeyInputView: View {
             Text(title)
                 .font(.custom("Nunito", size: 16))
                 .fontWeight(.semibold)
-                .foregroundColor(.black.opacity(0.9))
+                .foregroundColor(DayflowColors.textPrimary)
             
             Text(subtitle)
                 .font(.custom("Nunito", size: 14))
-                .foregroundColor(.black.opacity(0.6))
+                .foregroundColor(DayflowColors.textMuted)
             
             // Input field container
             VStack(alignment: .leading, spacing: 8) {
@@ -56,7 +56,7 @@ struct APIKeyInputView: View {
                     Button(action: { showPassword.toggle() }) {
                         Image(systemName: showPassword ? "eye.slash" : "eye")
                             .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.black.opacity(0.4))
+                            .foregroundColor(DayflowColors.textMuted)
                     }
                     .buttonStyle(.plain)
                     .pointingHandCursor()
@@ -71,7 +71,7 @@ struct APIKeyInputView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
-                .background(Color.white.opacity(0.8))
+                .background(DayflowColors.surface.opacity(0.8))
                 .cornerRadius(8)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
@@ -96,7 +96,7 @@ struct APIKeyInputView: View {
                 
                 Text("Your API key is encrypted and stored in your macOS Keychain - never uploaded anywhere")
                     .font(.custom("Nunito", size: 12))
-                    .foregroundColor(.black.opacity(0.5))
+                    .foregroundColor(DayflowColors.textMuted)
             }
         }
     }
@@ -109,7 +109,7 @@ struct APIKeyInputView: View {
             case .invalid:
                 return Color(hex: "E91515").opacity(0.6)
             case .none:
-                return Color(red: 1, green: 0.42, blue: 0.02).opacity(0.6)
+                return DayflowColors.cta.opacity(0.6)
             }
         } else {
             return Color.black.opacity(0.1)

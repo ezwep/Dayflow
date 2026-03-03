@@ -72,16 +72,16 @@ struct DaySummaryView: View {
         static let focusCardsSpacing: CGFloat = 8
         static let distractionsSpacing: CGFloat = 16
 
-        static let dividerColor = Color(hex: "E7E5E3")
+        static let dividerColor = DayflowColors.border
 
-        static let titleColor = Color(hex: "333333")
-        static let subtitleColor = Color(hex: "707070")
+        static let titleColor = DayflowColors.textPrimary
+        static let subtitleColor = DayflowColors.textMuted
 
-        static let focusTitleColor = Color(hex: "333333")
-        static let focusValueColor = Color(hex: "F3854B")
-        static let focusCardBackground = Color(hex: "F7F7F7")
-        static let focusCardBorder = Color.white
-        static let focusIconColor = Color(hex: "CFC7BE")
+        static let focusTitleColor = DayflowColors.textPrimary
+        static let focusValueColor = DayflowColors.accent
+        static let focusCardBackground = DayflowColors.surfaceElevated
+        static let focusCardBorder = DayflowColors.surface
+        static let focusIconColor = DayflowColors.textMuted
         static let focusEditButtonSize: CGFloat = 20
         static let focusEditorWidth: CGFloat = contentWidth + (horizontalPadding * 2)
         static let focusEditorOffsetY: CGFloat = 28
@@ -92,12 +92,12 @@ struct DaySummaryView: View {
 
         static let gateCornerRadius: CGFloat = 16
         static let gateBlurRadius: CGFloat = 3
-        static let gateTitleColor = Color(hex: "3A2F28")
-        static let gateSubtitleColor = Color(hex: "8A7B6C")
-        static let gateOverlineColor = Color(hex: "C9875E")
-        static let gateBorderColor = Color(hex: "F0D9C5")
-        static let gateAccent = Color(hex: "F3854B")
-        static let gateButtonText = Color(hex: "5A3C2C")
+        static let gateTitleColor = DayflowColors.textPrimary
+        static let gateSubtitleColor = DayflowColors.textMuted
+        static let gateOverlineColor = DayflowColors.accent
+        static let gateBorderColor = DayflowColors.border
+        static let gateAccent = DayflowColors.accent
+        static let gateButtonText = DayflowColors.textPrimary
         static let gateButtonShadow = Color.black.opacity(0.08)
         static let gateGlow = Color(hex: "FAD2B3")
         static let gateBackgroundStart = Color(hex: "FFF7EE")
@@ -1101,27 +1101,27 @@ private struct TotalFocusCard: View {
             HStack(spacing: 6) {
                 Text("Total focus time")
                     .font(.custom("InstrumentSerif-Regular", size: 16))
-                    .foregroundColor(Color(hex: "333333"))
+                    .foregroundColor(DayflowColors.textPrimary)
 
                 Image(systemName: "info.circle")
                     .font(.system(size: 12))
-                    .foregroundColor(Color(hex: "CFC7BE"))
+                    .foregroundColor(DayflowColors.textMuted)
 
                 Spacer()
             }
 
             Text(value)
                 .font(.custom("InstrumentSerif-Regular", size: 34))
-                .foregroundColor(Color(hex: "F3854B"))
+                .foregroundColor(DayflowColors.accent)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(hex: "F7F7F7"))
+        .background(DayflowColors.surfaceElevated)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.white, lineWidth: 1)
+                .stroke(DayflowColors.surface, lineWidth: 1)
         )
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
@@ -1133,7 +1133,7 @@ struct ShockwaveView: View {
 
     var body: some View {
         Circle()
-            .stroke(Color(hex: "F3854B"), lineWidth: 3)
+            .stroke(DayflowColors.accent, lineWidth: 3)
             .scaleEffect(scale)
             .opacity(opacity)
     }
@@ -1146,7 +1146,7 @@ struct SuccessParticlesView: View {
         ZStack {
             ForEach(0..<15, id: \.self) { index in
                 Rectangle()
-                    .fill(index.isMultiple(of: 2) ? Color(hex: "F3854B") : Color(hex: "3A2F28"))
+                    .fill(index.isMultiple(of: 2) ? DayflowColors.accent : DayflowColors.textPrimary)
                     .frame(width: 8, height: 8)
                     .modifier(ParticleModifier(trigger: trigger))
             }
@@ -1269,11 +1269,11 @@ private struct CategorySelectionEditor: View {
         static let rowSpacing: CGFloat = 4
         static let horizontalPadding: CGFloat = 10
         static let verticalPadding: CGFloat = 10
-        static let dividerColor = Color(red: 0.91, green: 0.89, blue: 0.86)
-        static let helperTextColor = Color(hex: "6C6761")
+        static let dividerColor = DayflowColors.border
+        static let helperTextColor = DayflowColors.textMuted
         static let helperTextSize: CGFloat = 11
-        static let backgroundColor = Color(red: 0.98, green: 0.96, blue: 0.95).opacity(0.86)
-        static let borderColor = Color(red: 0.91, green: 0.88, blue: 0.87)
+        static let backgroundColor = DayflowColors.surfaceElevated.opacity(0.86)
+        static let borderColor = DayflowColors.border
         static let cornerRadius: CGFloat = 6
     }
 
@@ -1311,7 +1311,7 @@ private struct CategorySelectionEditor: View {
             Button(action: onDone) {
                 Image(systemName: "checkmark")
                     .font(.system(size: 8))
-                    .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .frame(width: 8, height: 8)
             }
             .buttonStyle(.plain)
@@ -1319,7 +1319,7 @@ private struct CategorySelectionEditor: View {
             .pointingHandCursorOnHover(reassertOnPressEnd: true)
             .padding(6)
             .background(
-                Color(red: 0.98, green: 0.98, blue: 0.98).opacity(0.8)
+                DayflowColors.surfaceElevated.opacity(0.8)
                     .background(.ultraThinMaterial)
             )
             .clipShape(
@@ -1327,7 +1327,7 @@ private struct CategorySelectionEditor: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: Design.cornerRadius)
-                .stroke(Color(red: 0.89, green: 0.89, blue: 0.89), lineWidth: 1)
+                .stroke(DayflowColors.borderSubtle, lineWidth: 1)
             )
             .offset(x: -8, y: 8)
         }
@@ -1432,5 +1432,5 @@ private struct FocusCategoryFlowLayout: Layout {
         onReviewTap: { }
     )
     .frame(width: 358, height: 700)
-    .background(Color(red: 0.98, green: 0.97, blue: 0.96))
+    .background(DayflowColors.background)
 }

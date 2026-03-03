@@ -134,12 +134,12 @@ struct SettingsView: View {
         VStack(alignment: .leading, spacing: 18) {
             Text("Settings")
                 .font(.custom("InstrumentSerif-Regular", size: 42))
-                .foregroundColor(.black.opacity(0.9))
+                .foregroundColor(DayflowColors.textPrimary)
                 .padding(.leading, 10)
 
             Text("Manage how Dayflow runs")
                 .font(.custom("Nunito", size: 14))
-                .foregroundColor(.black.opacity(0.55))
+                .foregroundColor(DayflowColors.textMuted)
                 .padding(.leading, 10)
                 .padding(.bottom, 12)
 
@@ -152,7 +152,7 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text("Dayflow Dev v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""))")
                     .font(.custom("Nunito", size: 12))
-                    .foregroundColor(.black.opacity(0.45))
+                    .foregroundColor(DayflowColors.textMuted)
                     .padding(.leading, 10)
                 Button {
                     NotificationCenter.default.post(name: .showWhatsNew, object: nil)
@@ -165,7 +165,7 @@ struct SettingsView: View {
                     .font(.custom("Nunito", size: 12))
                 }
                 .buttonStyle(PlainButtonStyle())
-                .foregroundColor(Color(red: 0.45, green: 0.26, blue: 0.04))
+                .foregroundColor(DayflowColors.accent)
                 .padding(.leading, 10)
                 .pointingHandCursor()
             }
@@ -192,10 +192,10 @@ struct SettingsView: View {
                 Text(tab.title)
                     .font(.custom("Nunito", size: 15))
                     .fontWeight(.semibold)
-                    .foregroundColor(.black.opacity(selectedTab == tab ? 0.9 : 0.6))
+                    .foregroundColor(DayflowColors.textPrimary.opacity(selectedTab == tab ? 0.9 : 0.6))
                 Text(tab.subtitle)
                     .font(.custom("Nunito", size: 12))
-                    .foregroundColor(.black.opacity(selectedTab == tab ? 0.55 : 0.35))
+                    .foregroundColor(DayflowColors.textMuted.opacity(selectedTab == tab ? 0.55 : 0.35))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.vertical, 14)
@@ -203,19 +203,19 @@ struct SettingsView: View {
             .background {
                 if selectedTab == tab {
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.white.opacity(0.85))
+                        .fill(DayflowColors.surface.opacity(0.85))
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color(hex: "FFE0A5"), lineWidth: 1)
+                                .stroke(DayflowColors.accent.opacity(0.4), lineWidth: 1)
                         )
-                        .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 6)
+                        .shadow(color: DayflowColors.border, radius: 10, x: 0, y: 6)
                         .matchedGeometryEffect(id: "sidebarSelection", in: sidebarSelectionNamespace)
                 } else {
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.white.opacity(0.45))
+                        .fill(DayflowColors.surface.opacity(0.45))
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                                .stroke(DayflowColors.surface.opacity(0.3), lineWidth: 1)
                         )
                 }
             }

@@ -16,11 +16,11 @@ struct BugReportView: View {
             VStack(spacing: 16) {
                 Text("Thanks for using Dayflow")
                     .font(.custom("InstrumentSerif-Regular", size: 40))
-                    .foregroundColor(.black.opacity(0.9))
+                    .foregroundColor(DayflowColors.textPrimary)
 
                 Text("Email works great if you want to drop a quick note, Discord if you want to join the community, and if you’d prefer to chat, find some time on my calendar - I’d love to dig into why Dayflow is or isn’t working well for you.")
                     .font(.custom("Nunito", size: 16))
-                    .foregroundColor(.black.opacity(0.65))
+                    .foregroundColor(DayflowColors.textMuted)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: 520)
@@ -29,7 +29,7 @@ struct BugReportView: View {
                 VStack(spacing: 12) {
                     Text("Reach out")
                         .font(.custom("Nunito", size: 14).weight(.medium))
-                        .foregroundColor(.black.opacity(0.55))
+                        .foregroundColor(DayflowColors.textMuted)
                         .textCase(.uppercase)
                         .tracking(0.75)
 
@@ -44,9 +44,9 @@ struct BugReportView: View {
                                         .font(.custom("Nunito", size: 16).weight(.semibold))
                                 }
                             },
-                            background: Color.white,
-                            foreground: Color.black,
-                            borderColor: Color.black.opacity(0.12),
+                            background: DayflowColors.surface,
+                            foreground: DayflowColors.textPrimary,
+                            borderColor: DayflowColors.borderSubtle,
                             cornerRadius: 18,
                             horizontalPadding: 28,
                             verticalPadding: 16,
@@ -66,9 +66,9 @@ struct BugReportView: View {
                                         .font(.custom("Nunito", size: 16).weight(.semibold))
                                 }
                             },
-                            background: Color.white,
-                            foreground: Color.black,
-                            borderColor: Color.black.opacity(0.12),
+                            background: DayflowColors.surface,
+                            foreground: DayflowColors.textPrimary,
+                            borderColor: DayflowColors.borderSubtle,
                             cornerRadius: 18,
                             horizontalPadding: 28,
                             verticalPadding: 16,
@@ -85,9 +85,9 @@ struct BugReportView: View {
                                         .font(.custom("Nunito", size: 16).weight(.semibold))
                                 }
                             },
-                            background: Color.white,
-                            foreground: Color.black,
-                            borderColor: Color.black.opacity(0.12),
+                            background: DayflowColors.surface,
+                            foreground: DayflowColors.textPrimary,
+                            borderColor: DayflowColors.borderSubtle,
                             cornerRadius: 18,
                             horizontalPadding: 28,
                             verticalPadding: 16,
@@ -99,7 +99,7 @@ struct BugReportView: View {
                 VStack(spacing: 12) {
                     Text("Quick utilities")
                         .font(.custom("Nunito", size: 14).weight(.medium))
-                        .foregroundColor(.black.opacity(0.55))
+                        .foregroundColor(DayflowColors.textMuted)
                         .textCase(.uppercase)
                         .tracking(0.75)
 
@@ -114,9 +114,9 @@ struct BugReportView: View {
                                         .font(.custom("Nunito", size: 15).weight(.semibold))
                                 }
                             },
-                            background: Color.white,
-                            foreground: Color.black,
-                            borderColor: Color.black.opacity(0.12),
+                            background: DayflowColors.surface,
+                            foreground: DayflowColors.textPrimary,
+                            borderColor: DayflowColors.borderSubtle,
                             cornerRadius: 14,
                             horizontalPadding: 22,
                             verticalPadding: 14,
@@ -134,9 +134,9 @@ struct BugReportView: View {
                                         .font(.custom("Nunito", size: 15).weight(.semibold))
                                 }
                             },
-                            background: Color.white,
-                            foreground: Color.black,
-                            borderColor: Color.black.opacity(0.12),
+                            background: DayflowColors.surface,
+                            foreground: DayflowColors.textPrimary,
+                            borderColor: DayflowColors.borderSubtle,
                             cornerRadius: 14,
                             horizontalPadding: 20,
                             verticalPadding: 14,

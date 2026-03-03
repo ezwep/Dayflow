@@ -30,7 +30,7 @@ struct ScreenRecordingPermissionView: View {
             VStack(alignment: .leading, spacing: 24) {
                 Text("Last step!")
                     .font(.custom("Nunito", size: 20))
-                    .foregroundColor(.black.opacity(0.7))
+                    .foregroundColor(DayflowColors.textMuted)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.bottom, 20)
@@ -38,11 +38,11 @@ struct ScreenRecordingPermissionView: View {
                 Text("Screen Recording")
                     .font(.custom("Nunito", size: 32))
                     .fontWeight(.bold)
-                    .foregroundColor(.black.opacity(0.9))
+                    .foregroundColor(DayflowColors.textPrimary)
                 
                 Text("Screen recordings are stored locally on your Mac and can be processed entirely on-device using local AI models.")
                     .font(.custom("Nunito", size: 16))
-                    .foregroundColor(.black.opacity(0.6))
+                    .foregroundColor(DayflowColors.textMuted)
                     .fixedSize(horizontal: false, vertical: true)
                 
                 // State-based messaging
@@ -80,7 +80,7 @@ struct ScreenRecordingPermissionView: View {
                                         .fontWeight(.medium)
                                 }
                             },
-                            background: Color(red: 0.25, green: 0.17, blue: 0),
+                            background: DayflowColors.accent,
                             foreground: .white,
                             borderColor: .clear,
                             cornerRadius: 8,
@@ -98,7 +98,7 @@ struct ScreenRecordingPermissionView: View {
                                         .font(.custom("Nunito", size: 16))
                                         .fontWeight(.medium)
                                 },
-                                background: Color(red: 0.25, green: 0.17, blue: 0),
+                                background: DayflowColors.accent,
                                 foreground: .white,
                                 borderColor: .clear,
                                 cornerRadius: 8,
@@ -114,7 +114,7 @@ struct ScreenRecordingPermissionView: View {
                                         .fontWeight(.medium)
                                 },
                                 background: .white,
-                                foreground: Color(red: 0.25, green: 0.17, blue: 0),
+                                foreground: DayflowColors.accent,
                                 borderColor: .clear,
                                 cornerRadius: 8,
                                 horizontalPadding: 24,
@@ -134,7 +134,7 @@ struct ScreenRecordingPermissionView: View {
                         action: onBack,
                         content: { Text("Back").font(.custom("Nunito", size: 14)).fontWeight(.semibold) },
                         background: .white,
-                        foreground: Color(red: 0.25, green: 0.17, blue: 0),
+                        foreground: DayflowColors.accent,
                         borderColor: .clear,
                         cornerRadius: 8,
                         horizontalPadding: 20,
@@ -149,7 +149,7 @@ struct ScreenRecordingPermissionView: View {
                             }
                         },
                         content: { Text("Next").font(.custom("Nunito", size: 14)).fontWeight(.semibold) },
-                        background: permissionState == .granted ? Color(red: 0.25, green: 0.17, blue: 0) : Color(red: 0.25, green: 0.17, blue: 0).opacity(0.3),
+                        background: permissionState == .granted ? DayflowColors.accent : DayflowColors.accent.opacity(0.3),
                         foreground: permissionState == .granted ? .white : .white.opacity(0.5),
                         borderColor: .clear,
                         cornerRadius: 8,

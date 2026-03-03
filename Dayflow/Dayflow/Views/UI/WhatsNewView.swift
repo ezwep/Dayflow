@@ -129,7 +129,7 @@ struct WhatsNewView: View {
                         VStack(alignment: .leading, spacing: 6) {
                     Text("What's New in \(releaseNote.version) 🎉")
                         .font(.custom("InstrumentSerif-Regular", size: 32))
-                        .foregroundColor(.black.opacity(0.9))
+                        .foregroundColor(DayflowColors.textPrimary)
                 }
 
                         Spacer()
@@ -151,13 +151,13 @@ struct WhatsNewView: View {
                         ForEach(Array(releaseNote.highlights.enumerated()), id: \.offset) { _, highlight in
                             HStack(alignment: .top, spacing: 12) {
                                 Circle()
-                                    .fill(Color(red: 0.25, green: 0.17, blue: 0).opacity(0.6))
+                                    .fill(DayflowColors.accent.opacity(0.6))
                                     .frame(width: 6, height: 6)
                                     .padding(.top, 7)
 
                                 Text(highlight)
                                     .font(.custom("Nunito", size: 15))
-                                    .foregroundColor(.black.opacity(0.75))
+                                    .foregroundColor(DayflowColors.textPrimary)
                                     .fixedSize(horizontal: false, vertical: true)
                             }
                         }
@@ -188,7 +188,7 @@ struct WhatsNewView: View {
         .frame(width: 780)
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color.white)
+                .fill(DayflowColors.surface)
                 .shadow(color: Color.black.opacity(0.25), radius: 40, x: 0, y: 20)
         )
         .onAppear {
@@ -198,8 +198,6 @@ struct WhatsNewView: View {
                 didHydrateSurveyState = true
             }
         }
-        .environment(\.colorScheme, .light)
-        .preferredColorScheme(.light)
     }
 
     private func dismiss() {
@@ -226,11 +224,11 @@ struct WhatsNewView: View {
             Text(cta.title)
                 .font(.custom("Nunito", size: 16))
                 .fontWeight(.bold)
-                .foregroundColor(.black.opacity(0.86))
+                .foregroundColor(DayflowColors.textPrimary)
 
             Text(cta.description)
                 .font(.custom("Nunito", size: 14))
-                .foregroundColor(.black.opacity(0.75))
+                .foregroundColor(DayflowColors.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
 
             DayflowSurfaceButton(
@@ -244,7 +242,7 @@ struct WhatsNewView: View {
                             .fontWeight(.semibold)
                     }
                 },
-                background: Color(red: 0.25, green: 0.17, blue: 0),
+                background: DayflowColors.accent,
                 foreground: .white,
                 borderColor: .clear,
                 cornerRadius: 8,
@@ -273,7 +271,7 @@ struct WhatsNewView: View {
             Text("How often does Dayflow feel valuable to you?")
                 .font(.custom("Nunito", size: 15))
                 .fontWeight(.semibold)
-                .foregroundColor(.black.opacity(0.85))
+                .foregroundColor(DayflowColors.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
 
             VStack(alignment: .leading, spacing: 10) {
@@ -281,11 +279,11 @@ struct WhatsNewView: View {
                     Button(action: { selectValueFrequency(option) }) {
                         HStack(spacing: 10) {
                             Image(systemName: valueFrequencySelection == option ? "largecircle.fill.circle" : "circle")
-                                .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0))
+                                .foregroundColor(DayflowColors.accent)
 
                             Text(option.title)
                                 .font(.custom("Nunito", size: 14))
-                                .foregroundColor(.black.opacity(0.8))
+                                .foregroundColor(DayflowColors.textPrimary)
                                 .fixedSize(horizontal: false, vertical: true)
 
                             Spacer(minLength: 0)
@@ -294,11 +292,11 @@ struct WhatsNewView: View {
                         .padding(.horizontal, 12)
                         .background(
                             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                .fill(valueFrequencySelection == option ? Color(red: 1.0, green: 0.95, blue: 0.9) : Color.white)
+                                .fill(valueFrequencySelection == option ? Color(red: 1.0, green: 0.95, blue: 0.9) : DayflowColors.surface)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                .stroke(Color(red: 0.25, green: 0.17, blue: 0).opacity(valueFrequencySelection == option ? 0.22 : 0.1), lineWidth: 1)
+                                .stroke(DayflowColors.accent.opacity(valueFrequencySelection == option ? 0.22 : 0.1), lineWidth: 1)
                         )
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -313,12 +311,12 @@ struct WhatsNewView: View {
             Text("Which of these would make Dayflow more helpful to you?")
                 .font(.custom("Nunito", size: 15))
                 .fontWeight(.semibold)
-                .foregroundColor(.black.opacity(0.85))
+                .foregroundColor(DayflowColors.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
 
             Text("(pick all that apply)")
                 .font(.custom("Nunito", size: 12))
-                .foregroundColor(.black.opacity(0.58))
+                .foregroundColor(DayflowColors.textMuted)
 
             VStack(alignment: .leading, spacing: 10) {
                 ForEach(randomizedHelpfulOptions, id: \.self) { option in
@@ -355,7 +353,7 @@ struct WhatsNewView: View {
                             .font(.custom("Nunito", size: 15))
                             .fontWeight(.semibold)
                     },
-                    background: canSubmitValueSurvey ? Color(red: 0.25, green: 0.17, blue: 0) : Color.black.opacity(0.08),
+                    background: canSubmitValueSurvey ? DayflowColors.accent : Color.black.opacity(0.08),
                     foreground: .white.opacity(canSubmitValueSurvey ? 1 : 0.7),
                     borderColor: .clear,
                     cornerRadius: 8,
@@ -371,7 +369,7 @@ struct WhatsNewView: View {
             if hasSubmittedValueSurvey {
                 Label("Thanks for sharing!", systemImage: "checkmark.circle.fill")
                     .font(.custom("Nunito", size: 14))
-                    .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0))
+                    .foregroundColor(DayflowColors.accent)
             }
         }
     }
@@ -380,10 +378,10 @@ struct WhatsNewView: View {
         Button(action: action) {
             HStack(spacing: 10) {
                 Image(systemName: isSelected ? "checkmark.square.fill" : "square")
-                    .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0))
+                    .foregroundColor(DayflowColors.accent)
                 Text(title)
                     .font(.custom("Nunito", size: 14))
-                    .foregroundColor(.black.opacity(0.8))
+                    .foregroundColor(DayflowColors.textPrimary)
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 0)
             }
@@ -391,11 +389,11 @@ struct WhatsNewView: View {
             .padding(.horizontal, 12)
             .background(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(isSelected ? Color(red: 1.0, green: 0.95, blue: 0.9) : Color.white)
+                    .fill(isSelected ? Color(red: 1.0, green: 0.95, blue: 0.9) : DayflowColors.surface)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(Color(red: 0.25, green: 0.17, blue: 0).opacity(isSelected ? 0.22 : 0.1), lineWidth: 1)
+                    .stroke(DayflowColors.accent.opacity(isSelected ? 0.22 : 0.1), lineWidth: 1)
             )
         }
         .buttonStyle(PlainButtonStyle())

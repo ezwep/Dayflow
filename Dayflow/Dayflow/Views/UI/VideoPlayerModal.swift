@@ -152,7 +152,7 @@ struct VideoExpansionOverlay: View {
                 let vh = fitsWidth ? h : (geo.size.width / a)
 
                 ZStack {
-                    Color.white
+                    DayflowColors.surface
                     HStack(spacing: 0) {
                         Spacer(minLength: 0)
                         videoPlayerView(width: vw, height: vh)
@@ -173,7 +173,7 @@ struct VideoExpansionOverlay: View {
         .frame(width: targetWidth, height: targetHeight)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white)
+                .fill(DayflowColors.surface)
                 .shadow(color: .black.opacity(0.25), radius: 30, x: 0, y: 10)
         )
         .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -197,13 +197,13 @@ struct VideoExpansionOverlay: View {
             Button(action: { closeModal() }) {
                 Image(systemName: "xmark.circle.fill")
                     .font(.system(size: 20))
-                    .foregroundColor(Color.black.opacity(0.5))
+                    .foregroundColor(DayflowColors.textMuted)
             }
         .buttonStyle(ScaleButtonStyle())
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
-        .background(Color.white)
+        .background(DayflowColors.surface)
         .overlay(
             Rectangle().stroke(Color.gray.opacity(0.25), lineWidth: 1)
         )
@@ -283,7 +283,7 @@ struct VideoExpansionOverlay: View {
                 .padding(.bottom, 12)
             }
         }
-        .background(Color.white)
+        .background(DayflowColors.surface)
     }
 
     // Animation helpers
@@ -597,13 +597,13 @@ struct VideoPlayerModal: View {
                     Button(action: { dismiss() }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 20))
-                            .foregroundColor(Color.black.opacity(0.5))
+                            .foregroundColor(DayflowColors.textMuted)
                     }
                     .buttonStyle(ScaleButtonStyle())
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 10)
-                .background(Color.white)
+                .background(DayflowColors.surface)
                 .overlay(
                     Rectangle().stroke(Color.gray.opacity(0.25), lineWidth: 1)
                 )
@@ -619,7 +619,7 @@ struct VideoPlayerModal: View {
                 let vh = fitsWidth ? h : (geo.size.width / a)
 
                 ZStack {
-                    Color.white
+                    DayflowColors.surface
                     HStack(spacing: 0) {
                         Spacer(minLength: 0)
                         ZStack {
@@ -714,7 +714,7 @@ struct VideoPlayerModal: View {
                     .padding(.bottom, 12)
                 }
             }
-            .background(Color.white) // underneath video area edge
+            .background(DayflowColors.surface) // underneath video area edge
         }
         // Size modal to 90% of the presenting window if available
         .frame(

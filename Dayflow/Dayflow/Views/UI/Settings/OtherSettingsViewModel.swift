@@ -37,6 +37,12 @@ final class OtherSettingsViewModel: ObservableObject {
             UserDefaults.standard.set(seconds, forKey: "idleResetSecondsOverride")
         }
     }
+    @Published var appearance: String {
+        didSet {
+            guard appearance != oldValue else { return }
+            UserDefaults.standard.set(appearance, forKey: "dayflowAppearance")
+        }
+    }
     @Published var outputLanguageOverride: String
     @Published var isOutputLanguageOverrideSaved: Bool = true
 
@@ -53,6 +59,7 @@ final class OtherSettingsViewModel: ObservableObject {
         use24HourTime = TimeFormatPreferences.use24Hour
         let storedSeconds = UserDefaults.standard.integer(forKey: "idleResetSecondsOverride")
         idleThresholdMinutes = storedSeconds > 0 ? max(1, storedSeconds / 60) : 5
+        appearance = UserDefaults.standard.string(forKey: "dayflowAppearance") ?? "dark"
         outputLanguageOverride = LLMOutputLanguagePreferences.override
         exportStartDate = timelineDisplayDate(from: Date())
         exportEndDate = timelineDisplayDate(from: Date())

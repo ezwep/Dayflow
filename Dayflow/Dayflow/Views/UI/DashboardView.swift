@@ -6,7 +6,7 @@ struct DashboardView: View {
             // Header (matches Timeline positioning & padding is applied on parent)
             Text("Dashboard")
                 .font(.custom("InstrumentSerif-Regular", size: 42))
-                .foregroundColor(Color(hex: "1F1C17"))
+                .foregroundColor(DayflowColors.textPrimary)
                 .padding(.leading, 10) // Match Timeline header inset
 
             // Chat interface
@@ -15,7 +15,7 @@ struct DashboardView: View {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(
                             LinearGradient(
-                                colors: [Color.white, Color(hex: "FFFAF5")],
+                                colors: [DayflowColors.surface, DayflowColors.surfaceElevated],
                                 startPoint: .top,
                                 endPoint: .bottom
                             )
@@ -24,7 +24,7 @@ struct DashboardView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(Color(hex: "E9DDD0"), lineWidth: 1)
+                        .stroke(DayflowColors.border, lineWidth: 1)
                 )
                 .shadow(color: Color(hex: "D99A5A").opacity(0.14), radius: 16, x: 0, y: 8)
         }

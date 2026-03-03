@@ -1132,7 +1132,7 @@ struct CanvasTimelineDataView: View {
             HStack(spacing: 4) {
                 ForEach(0..<3, id: \.self) { _ in
                     RoundedRectangle(cornerRadius: 1.5)
-                        .fill(Color(red: 0.62, green: 0.44, blue: 0.36).opacity(0.7))
+                        .fill(DayflowColors.accent.opacity(0.7))
                         .frame(width: 12, height: 3)
                 }
             }
@@ -1217,8 +1217,8 @@ struct CanvasTimelineDataView: View {
         let baseNSColor = NSColor(hex: category.colorHex) ?? NSColor(hex: "#4F80EB") ?? .systemBlue
 
         return CanvasActivityCardStyle(
-            text: Color.black.opacity(0.9),
-            time: Color.black.opacity(0.7),
+            text: DayflowColors.textPrimary,
+            time: DayflowColors.textMuted,
             accent: Color(nsColor: baseNSColor),
             isIdle: category.isIdle
         )
@@ -1293,22 +1293,22 @@ struct CanvasActivityCard: View {
     private var backupIndicator: some View {
         Text("!")
             .font(Font.custom("Nunito", size: 9).weight(.semibold))
-            .foregroundColor(Color(red: 0.4, green: 0.4, blue: 0.4))
+            .foregroundColor(DayflowColors.textMuted)
             .frame(width: 14, height: 14)
             .background(
                 Circle()
-                    .fill(Color(red: 0.96, green: 0.94, blue: 0.91).opacity(0.9))
+                    .fill(DayflowColors.surface)
             )
             .overlay(
                 Circle()
-                    .stroke(Color(red: 0.9, green: 0.9, blue: 0.9), lineWidth: 0.75)
+                    .stroke(DayflowColors.borderSubtle, lineWidth: 0.75)
             )
             .help("This card fell back to a lower-quality Gemini model due to rate limiting, so output quality may be lower.")
     }
 
     private var selectionStroke: Color {
         if isSystemCategory {
-            return Color(red: 1, green: 0.16, blue: 0.11)
+            return DayflowColors.error
         }
         return style.accent
     }
@@ -1346,7 +1346,7 @@ struct CanvasActivityCard: View {
                             if let statusLine = statusLine {
                                 Text(statusLine)
                                     .font(Font.custom("Nunito", size: 10))
-                                    .foregroundColor(Color(red: 0.55, green: 0.45, blue: 0.4))
+                                    .foregroundColor(DayflowColors.textMuted)
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                             }
@@ -1402,7 +1402,7 @@ struct CanvasActivityCard: View {
                 RoundedRectangle(cornerRadius: 2, style: .continuous)
                     .inset(by: 0.25)
                     .stroke(
-                        isFailedCard ? Color(red: 1, green: 0.16, blue: 0.11) : Color(hex: "E8E8E8"),
+                        isFailedCard ? DayflowColors.error : DayflowColors.border,
                         style: isFailedCard ? StrokeStyle(lineWidth: 0.5, dash: [2.5, 2.5]) : StrokeStyle(lineWidth: 0.25)
                     )
             )
