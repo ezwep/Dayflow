@@ -24,6 +24,19 @@ final class OtherSettingsViewModel: ObservableObject {
             UserDefaults.standard.set(showTimelineAppIcons, forKey: "showTimelineAppIcons")
         }
     }
+    @Published var use24HourTime: Bool {
+        didSet {
+            guard use24HourTime != oldValue else { return }
+            TimeFormatPreferences.use24Hour = use24HourTime
+        }
+    }
+    @Published var idleThresholdMinutes: Int {
+        didSet {
+            guard idleThresholdMinutes != oldValue else { return }
+            let seconds = max(60, idleThresholdMinutes * 60)
+            UserDefaults.standard.set(seconds, forKey: "idleResetSecondsOverride")
+        }
+    }
     @Published var outputLanguageOverride: String
     @Published var isOutputLanguageOverrideSaved: Bool = true
 
@@ -37,6 +50,9 @@ final class OtherSettingsViewModel: ObservableObject {
         analyticsEnabled = AnalyticsService.shared.isOptedIn
         showDockIcon = UserDefaults.standard.object(forKey: "showDockIcon") as? Bool ?? true
         showTimelineAppIcons = UserDefaults.standard.object(forKey: "showTimelineAppIcons") as? Bool ?? true
+        use24HourTime = TimeFormatPreferences.use24Hour
+        let storedSeconds = UserDefaults.standard.integer(forKey: "idleResetSecondsOverride")
+        idleThresholdMinutes = storedSeconds > 0 ? max(1, storedSeconds / 60) : 5
         outputLanguageOverride = LLMOutputLanguagePreferences.override
         exportStartDate = timelineDisplayDate(from: Date())
         exportEndDate = timelineDisplayDate(from: Date())

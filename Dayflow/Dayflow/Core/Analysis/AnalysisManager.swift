@@ -327,6 +327,9 @@ final class AnalysisManager: AnalysisManaging {
         guard !isProcessing else { return }; isProcessing = true
         defer { isProcessing = false }
 
+        // 0. Retry any stuck "pending" or "processing" batches from previous runs
+        retryStuckBatches()
+
         // 1. Gather unprocessed screenshots
         let screenshots = fetchUnprocessedScreenshots()
         // 2. Build logical batches (duration based on provider config)
@@ -335,6 +338,41 @@ final class AnalysisManager: AnalysisManaging {
         let batchIDs = batches.compactMap(saveScreenshotBatch)
         // 4. Fire LLM for each batch
         for id in batchIDs { queueLLMRequest(batchId: id) }
+    }
+
+    /// Re-queues batches that got stuck in "pending" or "processing" state
+    /// (e.g. due to an app restart or crash during LLM processing).
+    /// Only retries batches created within the last 6 hours to avoid re-processing
+    /// stale batches indefinitely.
+    private func retryStuckBatches() {
+        let allBatches = store.allBatches()
+        let stuckBatches = allBatches.filter { $0.status == "pending" || $0.status == "processing" }
+
+        guard !stuckBatches.isEmpty else { return }
+
+        let sixHoursAgo = Int(Date().timeIntervalSince1970) - (6 * 60 * 60)
+        var retried = 0
+
+        for batch in stuckBatches {
+            // Skip batches older than 6 hours — mark them as failed instead
+            if batch.end < sixHoursAgo {
+                print("⏭️ [AnalysisManager] Skipping stale batch \(batch.id) (ended \(batch.end), threshold \(sixHoursAgo))")
+                store.markBatchFailed(batchId: batch.id, reason: "Batch stuck in '\(batch.status)' state for too long — auto-cleared")
+                continue
+            }
+
+            // Reset "processing" back to "pending" before re-queuing
+            if batch.status == "processing" {
+                store.updateBatchStatus(batchId: batch.id, status: "pending")
+            }
+            print("🔄 [AnalysisManager] Re-queuing batch \(batch.id) (was: \(batch.status))")
+            queueLLMRequest(batchId: batch.id)
+            retried += 1
+        }
+
+        if retried > 0 {
+            print("🔄 [AnalysisManager] Retried \(retried) stuck batch(es)")
+        }
     }
 
 

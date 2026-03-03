@@ -396,6 +396,13 @@ final class ProvidersSettingsViewModel: ObservableObject {
         let targetCanonical = canonicalProviderId(for: providerId)
         let primaryCanonical = canonicalProviderId(for: currentPrimaryProviderId)
         if targetCanonical == primaryCanonical {
+            // Allow different CLI tools within chatgpt_claude
+            // (e.g. primary=chatgpt/codex, secondary=claude, or vice versa)
+            if targetCanonical == "chatgpt_claude" {
+                let targetTool = chatTool(for: providerId)
+                let primaryTool = chatTool(for: currentPrimaryProviderId)
+                return targetTool != primaryTool
+            }
             return false
         }
 
@@ -463,6 +470,12 @@ final class ProvidersSettingsViewModel: ObservableObject {
     private func ensureBackupProviderIsValid(primaryProvider: String) {
         guard let backupProvider else { return }
         if backupProvider == primaryProvider {
+            // Allow same canonical provider (chatgpt_claude) when using different CLI tools
+            if backupProvider == "chatgpt_claude",
+               let backupTool = backupChatCLITool,
+               backupTool != preferredCLITool {
+                return // Different CLI tools, backup is valid
+            }
             persistBackupSelection(displayProviderId: nil, emitAnalytics: false)
         }
     }
@@ -519,10 +532,21 @@ final class ProvidersSettingsViewModel: ObservableObject {
         }
 
         let providerId = canonicalProviderId(for: displayProviderId)
-        guard providerId != currentProvider,
-              let provider = LLMProviderID(rawValue: providerId),
-              provider != .dayflow else {
+        let provider = LLMProviderID(rawValue: providerId)
+        guard let provider, provider != .dayflow else {
             return
+        }
+
+        // Allow same canonical provider (chatgpt_claude) when using different CLI tools
+        // e.g. primary=codex, secondary=claude
+        if providerId == currentProvider {
+            let backupTool = chatTool(for: displayProviderId)
+            let primaryTool = preferredCLITool
+            guard providerId == "chatgpt_claude",
+                  backupTool != nil,
+                  backupTool != primaryTool else {
+                return
+            }
         }
 
         let backupTool = chatTool(for: displayProviderId) ?? preferredCLITool

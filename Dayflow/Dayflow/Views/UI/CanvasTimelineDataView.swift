@@ -25,6 +25,10 @@ private struct CanvasConfig {
     static let endHour: Int = 28                   // 4 AM next day
 }
 
+private enum CardDragMode {
+    case none, moveTop, moveBottom, moveWhole
+}
+
 struct TimelineTimeLabelFramesPreferenceKey: PreferenceKey {
     static var defaultValue: [CGRect] = []
 
@@ -85,6 +89,16 @@ struct CanvasTimelineDataView: View {
     @State private var loadTask: Task<Void, Never>?
     // Staggered entrance animation state (Emil Kowalski principle: sequential reveal)
     @State private var cardEntranceProgress: [String: Bool] = [:]
+    // Manual time block creation state
+    @State private var manualBlockDragStartY: CGFloat? = nil
+    @State private var manualBlockDragCurrentY: CGFloat? = nil
+    @State private var showManualBlockPopover = false
+    @State private var manualBlockStartTime: Date = Date()
+    @State private var manualBlockEndTime: Date = Date()
+    // Card drag-to-resize/move state
+    @State private var dragCardId: String? = nil
+    @State private var dragMode: CardDragMode = .none
+    @State private var dragOffsetY: CGFloat = 0
     @EnvironmentObject private var categoryStore: CategoryStore
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var retryCoordinator: RetryCoordinator
@@ -189,6 +203,41 @@ struct CanvasTimelineDataView: View {
         .onChange(of: weeklyHoursFrame) {
             updateWeeklyHoursIntersection()
         }
+        .overlay {
+            if showManualBlockPopover {
+                ZStack {
+                    Color.black.opacity(0.1)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            showManualBlockPopover = false
+                        }
+
+                    ManualTimeBlockPopover(
+                        startTime: $manualBlockStartTime,
+                        endTime: $manualBlockEndTime,
+                        onSave: { start, end, description, category in
+                            storageManager.saveManualTimelineCard(
+                                startDate: start,
+                                endDate: end,
+                                title: description,
+                                summary: description,
+                                category: category,
+                                subcategory: ""
+                            )
+                            showManualBlockPopover = false
+                            loadActivities()
+                            refreshTrigger &+= 1
+                        },
+                        onCancel: {
+                            showManualBlockPopover = false
+                        },
+                        categories: categoryStore.categories
+                    )
+                    .transition(.scale(scale: 0.95).combined(with: .opacity))
+                }
+                .animation(.spring(response: 0.3, dampingFraction: 0.85), value: showManualBlockPopover)
+            }
+        }
     }
 
     @ViewBuilder
@@ -269,44 +318,131 @@ struct CanvasTimelineDataView: View {
             ZStack(alignment: .topLeading) {
                 Color.clear
                     .contentShape(Rectangle())
-                    .onTapGesture {
-                        clearSelection()
+                    .onTapGesture { location in
+                        if selectedCardId != nil || selectedActivity != nil {
+                            clearSelection()
+                        } else {
+                            // Tap on empty area: create a 30-min block starting at tap position
+                            let tapTime = timeFromYPosition(location.y)
+                            manualBlockStartTime = tapTime
+                            manualBlockEndTime = tapTime.addingTimeInterval(30 * 60)
+                            showManualBlockPopover = true
+                        }
                     }
+                    .gesture(
+                        DragGesture(minimumDistance: 10)
+                            .onChanged { value in
+                                if manualBlockDragStartY == nil {
+                                    manualBlockDragStartY = value.startLocation.y
+                                }
+                                manualBlockDragCurrentY = value.location.y
+                            }
+                            .onEnded { value in
+                                if let startY = manualBlockDragStartY {
+                                    let endY = value.location.y
+                                    let minY = min(startY, endY)
+                                    let maxY = max(startY, endY)
+                                    manualBlockStartTime = timeFromYPosition(minY)
+                                    manualBlockEndTime = timeFromYPosition(maxY)
+                                    // Only show popover if the drag covers at least 5 minutes
+                                    if manualBlockEndTime.timeIntervalSince(manualBlockStartTime) >= 5 * 60 {
+                                        showManualBlockPopover = true
+                                    }
+                                }
+                                manualBlockDragStartY = nil
+                                manualBlockDragCurrentY = nil
+                            }
+                    )
                     .pointingHandCursor(enabled: selectedCardId != nil || selectedActivity != nil)
+
+                // Drag preview overlay
+                if let startY = manualBlockDragStartY, let currentY = manualBlockDragCurrentY {
+                    let minY = min(startY, currentY)
+                    let maxY = max(startY, currentY)
+                    let height = maxY - minY
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color(red: 1.0, green: 0.76, blue: 0.42).opacity(0.25))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color(red: 0.98, green: 0.76, blue: 0.42), lineWidth: 1.5)
+                        )
+                        .frame(width: geo.size.width - 16, height: max(height, 4))
+                        .position(x: geo.size.width / 2, y: minY + height / 2)
+                        .allowsHitTesting(false)
+                }
                 ForEach(Array(positionedActivities.enumerated()), id: \.element.id) { index, item in
                     let isVisible = cardEntranceProgress[item.id] ?? false
-                    CanvasActivityCard(
-                        title: item.title,
-                        time: item.timeLabel,
-                        height: item.height,
-                        durationMinutes: item.durationMinutes,
-                        style: style(for: item.categoryName),
-                        isSelected: selectedCardId == item.id,
-                        isSystemCategory: item.categoryName.trimmingCharacters(in: .whitespacesAndNewlines)
-                            .caseInsensitiveCompare("System") == .orderedSame,
-                        isBackupGenerated: item.activity.isBackupGenerated == true,
-                        onTap: {
-                            if selectedCardId == item.id {
-                                clearSelection()
-                            } else {
-                                selectedCardId = item.id
-                                selectedActivity = item.activity
+                    let isDragging = dragCardId == item.id
+                    let adjustedY = isDragging ? dragAdjustedY(for: item) : item.yPosition
+                    let adjustedHeight = isDragging ? dragAdjustedHeight(for: item) : item.height
+
+                    ZStack(alignment: .top) {
+                        CanvasActivityCard(
+                            title: item.title,
+                            time: isDragging ? formatRange(start: timeFromYPosition(adjustedY), end: timeFromYPosition(adjustedY + adjustedHeight)) : item.timeLabel,
+                            height: adjustedHeight,
+                            durationMinutes: isDragging ? Double(max(1, Int((adjustedHeight / CanvasConfig.pixelsPerMinute).rounded()))) : item.durationMinutes,
+                            style: style(for: item.categoryName),
+                            isSelected: selectedCardId == item.id,
+                            isSystemCategory: item.categoryName.trimmingCharacters(in: .whitespacesAndNewlines)
+                                .caseInsensitiveCompare("System") == .orderedSame,
+                            isBackupGenerated: item.activity.isBackupGenerated == true,
+                            onTap: {
+                                if selectedCardId == item.id {
+                                    clearSelection()
+                                } else {
+                                    selectedCardId = item.id
+                                    selectedActivity = item.activity
+                                }
+                            },
+                            faviconPrimaryRaw: item.faviconPrimaryRaw,
+                            faviconSecondaryRaw: item.faviconSecondaryRaw,
+                            faviconPrimaryHost: item.faviconPrimaryHost,
+                            faviconSecondaryHost: item.faviconSecondaryHost,
+                            statusLine: retryCoordinator.statusLine(for: item.activity.batchId)
+                        )
+
+                        // Drag handles (visible when selected)
+                        if selectedCardId == item.id {
+                            // Top resize handle
+                            VStack(spacing: 0) {
+                                cardDragHandle()
+                                    .highPriorityGesture(
+                                        DragGesture(minimumDistance: 1, coordinateSpace: .local)
+                                            .onChanged { value in
+                                                if dragCardId == nil { dragCardId = item.id; dragMode = .moveTop }
+                                                dragOffsetY = value.translation.height
+                                            }
+                                            .onEnded { _ in commitCardDrag(for: item); resetDragState() }
+                                    )
+                                Spacer()
                             }
-                        },
-                        faviconPrimaryRaw: item.faviconPrimaryRaw,
-                        faviconSecondaryRaw: item.faviconSecondaryRaw,
-                        faviconPrimaryHost: item.faviconPrimaryHost,
-                        faviconSecondaryHost: item.faviconSecondaryHost,
-                        statusLine: retryCoordinator.statusLine(for: item.activity.batchId)
-                    )
-                    .frame(width: geo.size.width, height: item.height)
-                    .position(x: geo.size.width / 2, y: item.yPosition + (item.height / 2))
-                    // Staggered entrance animation (Emil Kowalski: sequential reveal creates polish)
+
+                            // Bottom resize handle
+                            VStack(spacing: 0) {
+                                Spacer()
+                                cardDragHandle()
+                                    .highPriorityGesture(
+                                        DragGesture(minimumDistance: 1, coordinateSpace: .local)
+                                            .onChanged { value in
+                                                if dragCardId == nil { dragCardId = item.id; dragMode = .moveBottom }
+                                                dragOffsetY = value.translation.height
+                                            }
+                                            .onEnded { _ in commitCardDrag(for: item); resetDragState() }
+                                    )
+                            }
+                        }
+                    }
+                    .frame(width: geo.size.width, height: adjustedHeight)
+                    .position(x: geo.size.width / 2, y: adjustedY + (adjustedHeight / 2))
+                    // Visual feedback during drag: slight shadow lift
+                    .shadow(color: isDragging ? Color.black.opacity(0.15) : Color.clear, radius: isDragging ? 8 : 0, y: isDragging ? 4 : 0)
+                    .zIndex(isDragging ? 100 : 0)
                     .opacity(isVisible ? 1 : 0)
                     .offset(x: isVisible ? 0 : 12)
                     .animation(
                         .spring(response: 0.35, dampingFraction: 0.8)
-                            .delay(Double(index) * 0.03), // 30ms stagger between cards
+                            .delay(Double(index) * 0.03),
                         value: isVisible
                     )
                 }
@@ -959,16 +1095,114 @@ struct CanvasTimelineDataView: View {
     }
 
 
-    private func formatHour(_ hour: Int) -> String {
-        let normalizedHour = hour >= 24 ? hour - 24 : hour
-        let adjustedHour = normalizedHour > 12 ? normalizedHour - 12 : (normalizedHour == 0 ? 12 : normalizedHour)
-        let period = normalizedHour >= 12 ? "PM" : "AM"
-        return "\(adjustedHour):00 \(period)"
+    /// Inverse of calculateYPosition: converts a Y pixel offset back to a Date on the selected day.
+    private func timeFromYPosition(_ y: CGFloat) -> Date {
+        let totalMinutes = max(0, y / CanvasConfig.pixelsPerMinute)
+        let hoursSince4AM = Int(totalMinutes) / 60
+        let minutes = Int(totalMinutes) % 60
+
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: selectedDate)
+        // 4 AM is the baseline
+        let baseHour = CanvasConfig.startHour + hoursSince4AM
+        let adjustedHour = baseHour >= 24 ? baseHour - 24 : baseHour
+        let dayOffset = baseHour >= 24 ? 1 : 0
+
+        var components = calendar.dateComponents([.year, .month, .day], from: startOfDay)
+        components.hour = adjustedHour
+        components.minute = minutes
+        components.second = 0
+
+        var date = calendar.date(from: components) ?? startOfDay
+        if dayOffset > 0 {
+            date = calendar.date(byAdding: .day, value: 1, to: date) ?? date
+        }
+        return date
     }
 
+    // MARK: - Card drag helpers
+
+    @ViewBuilder
+    private func cardDragHandle() -> some View {
+        ZStack {
+            Color.clear
+                .frame(height: 22)
+                .contentShape(Rectangle())
+            // Visual indicator: three small dots in a line
+            HStack(spacing: 4) {
+                ForEach(0..<3, id: \.self) { _ in
+                    RoundedRectangle(cornerRadius: 1.5)
+                        .fill(Color(red: 0.62, green: 0.44, blue: 0.36).opacity(0.7))
+                        .frame(width: 12, height: 3)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .resizeUpDownCursor()
+    }
+
+    private func dragAdjustedY(for item: CanvasPositionedActivity) -> CGFloat {
+        switch dragMode {
+        case .moveTop:
+            return item.yPosition + dragOffsetY
+        case .moveBottom, .none:
+            return item.yPosition
+        case .moveWhole:
+            return item.yPosition + dragOffsetY
+        }
+    }
+
+    private func dragAdjustedHeight(for item: CanvasPositionedActivity) -> CGFloat {
+        let minHeight: CGFloat = 5 * CanvasConfig.pixelsPerMinute // 5 min minimum
+        switch dragMode {
+        case .moveTop:
+            return max(minHeight, item.height - dragOffsetY)
+        case .moveBottom:
+            return max(minHeight, item.height + dragOffsetY)
+        case .moveWhole, .none:
+            return item.height
+        }
+    }
+
+    private func commitCardDrag(for item: CanvasPositionedActivity) {
+        guard let recordId = item.activity.recordId else { return }
+
+        let newY = dragAdjustedY(for: item)
+        let newHeight = dragAdjustedHeight(for: item)
+        let newStart = timeFromYPosition(newY)
+        let newEnd = timeFromYPosition(newY + newHeight)
+
+        guard newEnd > newStart else { return }
+
+        storageManager.updateManualTimelineCard(
+            cardId: recordId,
+            startDate: newStart,
+            endDate: newEnd,
+            title: item.activity.title,
+            summary: item.activity.summary
+        )
+        // Reload with animation — keep card selected so user can continue adjusting
+        withAnimation(.easeInOut(duration: 0.2)) {
+            loadActivities()
+        }
+        refreshTrigger &+= 1
+    }
+
+    private func resetDragState() {
+        dragCardId = nil
+        dragMode = .none
+        dragOffsetY = 0
+    }
+
+    private func formatHour(_ hour: Int) -> String {
+        TimeFormatPreferences.formatHourLabel(hour)
+    }
+
+    private let canvasDisplayTimeFormatter = DateFormatter()
     private func formatRange(start: Date, end: Date) -> String {
-        let s = cachedTimeFormatter.string(from: start)
-        let e = cachedTimeFormatter.string(from: end)
+        TimeFormatPreferences.applyDisplayFormat(to: canvasDisplayTimeFormatter)
+        let s = canvasDisplayTimeFormatter.string(from: start)
+        let e = canvasDisplayTimeFormatter.string(from: end)
         return "\(s) - \(e)"
     }
 

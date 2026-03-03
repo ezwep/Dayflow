@@ -242,8 +242,7 @@ final class LLMService: LLMServicing {
     }
 
     private func configuredBackupProvider(primaryProviderID: LLMProviderID) -> ConfiguredBackupProvider? {
-        guard let backupProvider = LLMProviderRoutingPreferences.loadBackupProvider(),
-              backupProvider != primaryProviderID else {
+        guard let backupProvider = LLMProviderRoutingPreferences.loadBackupProvider() else {
             return nil
         }
 
@@ -257,6 +256,21 @@ final class LLMService: LLMServicing {
             chatToolOverride = LLMProviderRoutingPreferences.loadBackupChatCLITool()
         } else {
             chatToolOverride = nil
+        }
+
+        // Allow same provider ID only when using different CLI tools
+        // (e.g. primary=codex, backup=claude or vice versa)
+        if backupProvider == primaryProviderID {
+            if backupProvider == .chatGPTClaude, let chatToolOverride {
+                let primaryTool = UserDefaults.standard.string(forKey: "chatCLIPreferredTool") ?? "codex"
+                let backupTool = chatToolOverride.rawValue
+                if primaryTool == backupTool {
+                    return nil // Same tool, skip
+                }
+                // Different tools (e.g. codex vs claude) — allow as backup
+            } else {
+                return nil // Same provider, not chatGPTClaude
+            }
         }
 
         return ConfiguredBackupProvider(id: backupProvider, chatToolOverride: chatToolOverride)

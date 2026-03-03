@@ -276,19 +276,18 @@ struct TimelineReviewSummaryCard: View {
 
     private var formattedLastReviewedAt: String {
         guard let last = summary.lastReviewedAt else { return "—" }
-        return Self.timeFormatter.string(from: last)
+        return Self.displayTime(from: last)
     }
 
     private var reviewCountText: String {
         cardsToReviewCount == 1 ? "1 card" : "\(cardsToReviewCount) cards"
     }
 
-    private static let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        return formatter
-    }()
+    private static let timeFormatter = DateFormatter()
+    private static func displayTime(from date: Date) -> String {
+        TimeFormatPreferences.applyDisplayFormat(to: timeFormatter)
+        return timeFormatter.string(from: date)
+    }
 }
 
 #Preview("Timeline Review Summary Card") {

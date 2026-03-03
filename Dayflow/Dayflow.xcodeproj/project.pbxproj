@@ -425,8 +425,8 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.8.3;
-				PRODUCT_BUNDLE_IDENTIFIER = teleportlabs.com.Dayflow;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = teleportlabs.com.Dayflow.dev;
+				PRODUCT_NAME = "Dayflow Dev";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -459,8 +459,8 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.8.3;
-				PRODUCT_BUNDLE_IDENTIFIER = teleportlabs.com.Dayflow;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = teleportlabs.com.Dayflow.dev;
+				PRODUCT_NAME = "Dayflow Dev";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

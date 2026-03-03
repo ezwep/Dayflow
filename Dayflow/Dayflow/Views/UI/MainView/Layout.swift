@@ -4,6 +4,14 @@ import Sentry
 
 extension MainView {
     var mainLayout: some View {
+        mainLayoutBase
+            .overlay { idlePopupOverlay }
+            .overlay { editManualBlockOverlay }
+            .overlay { categoryEditorOverlay }
+            .environmentObject(retryCoordinator)
+    }
+
+    private var mainLayoutBase: some View {
         contentStack
             .padding([.top, .trailing, .bottom], 15)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -12,18 +20,7 @@ extension MainView {
             .ignoresSafeArea()
             // Hero animation overlay for video expansion (Emil Kowalski: shared element transitions)
             .overlay { overlayContent }
-            .overlay(alignment: .bottomTrailing) {
-                if let payload = timelineFailureToastPayload {
-                    TimelineFailureToastView(
-                        message: payload.message,
-                        onOpenSettings: { handleTimelineFailureToastOpenSettings(payload) },
-                        onDismiss: { handleTimelineFailureToastDismiss(payload) }
-                    )
-                    .padding(.trailing, 24)
-                    .padding(.bottom, 24)
-                    .transition(.move(edge: .trailing).combined(with: .opacity))
-                }
-            }
+            .overlay(alignment: .bottomTrailing) { failureToastOverlay }
             .sheet(isPresented: $showDatePicker) {
                 DatePickerSheet(
                     selectedDate: Binding(
@@ -36,99 +33,15 @@ extension MainView {
                     isPresented: $showDatePicker
                 )
             }
-            .onAppear {
-                // screen viewed and initial timeline view
-                AnalyticsService.shared.screen("timeline")
-                AnalyticsService.shared.withSampling(probability: 0.01) {
-                    AnalyticsService.shared.capture("timeline_viewed", ["date_bucket": dayString(selectedDate)])
-                }
-                // Orchestrated entrance animations following Emil Kowalski principles
-                // Fast, under 300ms, natural spring motion
-
-                // Logo appears first with scale and fade
-                withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0)) {
-                    logoScale = 1.0
-                    logoOpacity = 1
-                }
-
-                // Timeline text slides in from left
-                withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0).delay(0.1)) {
-                    timelineOffset = 0
-                    timelineOpacity = 1
-                }
-
-                // Sidebar slides up
-                withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0).delay(0.15)) {
-                    sidebarOffset = 0
-                    sidebarOpacity = 1
-                }
-
-                // Main content fades in last
-                withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0).delay(0.2)) {
-                    contentOpacity = 1
-                }
-
-                // Perform initial scroll to current time on cold start
-                if !didInitialScroll {
-                    performInitialScrollIfNeeded()
-                }
-
-                // Start minute-level tick to detect timeline-day rollover (4am boundary)
-                startDayChangeTimer()
-
-                // Load weekly activity hours
-                loadWeeklyTrackedMinutes()
-                updateCardsToReviewCount()
-            }
-            // Trigger reset when idle fired and timeline is visible
+            .onAppear { handleMainLayoutAppear() }
+            // Show idle return popup when idle fired and timeline is visible
             .onChange(of: inactivity.pendingReset) { _, fired in
                 if fired, selectedIcon != .settings {
-                    performIdleResetAndScroll()
-                    InactivityMonitor.shared.markHandledIfPending()
+                    showIdlePopup = true
                 }
             }
             .onChange(of: selectedIcon) { _, newIcon in
-                // Clear journal notification badge when navigating to journal
-                if newIcon == .journal {
-                    NotificationBadgeManager.shared.clearBadge()
-                }
-
-                // tab selected + screen viewed
-                let tabName: String
-                switch newIcon {
-                case .timeline: tabName = "timeline"
-                case .daily: tabName = "daily"
-                case .dashboard: tabName = "dashboard"
-                case .journal: tabName = "journal"
-                case .bug: tabName = "bug_report"
-                case .settings: tabName = "settings"
-                }
-
-                // Add Sentry context for app state tracking
-                SentryHelper.configureScope { scope in
-                    scope.setContext(value: [
-                        "active_view": tabName,
-                        "selected_date": dayString(selectedDate),
-                        "is_recording": appState.isRecording
-                    ], key: "app_state")
-                }
-
-                // Add breadcrumb for view navigation
-                let navBreadcrumb = Breadcrumb(level: .info, category: "navigation")
-                navBreadcrumb.message = "Navigated to \(tabName)"
-                navBreadcrumb.data = ["view": tabName]
-                SentryHelper.addBreadcrumb(navBreadcrumb)
-
-                AnalyticsService.shared.capture("tab_selected", ["tab": tabName])
-                AnalyticsService.shared.screen(tabName)
-                if newIcon == .timeline {
-                    AnalyticsService.shared.withSampling(probability: 0.01) {
-                        AnalyticsService.shared.capture("timeline_viewed", ["date_bucket": dayString(selectedDate)])
-                    }
-                    updateCardsToReviewCount()
-                } else {
-                    showTimelineReview = false
-                }
+                handleSelectedIconChange(newIcon)
             }
             // Handle navigation from journal reminder notification tap
             .onReceive(NotificationCenter.default.publisher(for: .navigateToJournal)) { _ in
@@ -185,13 +98,6 @@ extension MainView {
                     "has_video": a.videoSummaryURL != nil
                 ])
             }
-            // If user returns from Settings and a reset was pending, perform it once
-            .onChange(of: selectedIcon) { _, newIcon in
-                if newIcon != .settings, inactivity.pendingReset {
-                    performIdleResetAndScroll()
-                    InactivityMonitor.shared.markHandledIfPending()
-                }
-            }
             .onDisappear {
                 // Safety: stop timer if view disappears
                 stopDayChangeTimer()
@@ -207,8 +113,199 @@ extension MainView {
                 // Refresh weekly hours in case activities were added
                 loadWeeklyTrackedMinutes()
             }
-            .overlay { categoryEditorOverlay }
-            .environmentObject(retryCoordinator)
+    }
+
+    @ViewBuilder
+    private var failureToastOverlay: some View {
+        if let payload = timelineFailureToastPayload {
+            TimelineFailureToastView(
+                message: payload.message,
+                onOpenSettings: { handleTimelineFailureToastOpenSettings(payload) },
+                onDismiss: { handleTimelineFailureToastDismiss(payload) }
+            )
+            .padding(.trailing, 24)
+            .padding(.bottom, 24)
+            .transition(.move(edge: .trailing).combined(with: .opacity))
+        }
+    }
+
+    @ViewBuilder
+    private var idlePopupOverlay: some View {
+        if showIdlePopup,
+           let idleStart = inactivity.idleStartedAt,
+           let idleEnd = inactivity.idleEndedAt {
+            ZStack {
+                Color.black.opacity(0.15)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        dismissIdlePopup()
+                    }
+
+                IdleReturnPopup(
+                    idleStartedAt: idleStart,
+                    idleEndedAt: idleEnd,
+                    onSave: { description in
+                        StorageManager.shared.saveManualTimelineCard(
+                            startDate: idleStart,
+                            endDate: idleEnd,
+                            title: description,
+                            summary: description,
+                            category: "Personal",
+                            subcategory: "Away"
+                        )
+                        dismissIdlePopup()
+                        refreshActivitiesTrigger &+= 1
+                    },
+                    onSkip: {
+                        dismissIdlePopup()
+                    }
+                )
+                .transition(.scale(scale: 0.95).combined(with: .opacity))
+            }
+            .animation(.spring(response: 0.3, dampingFraction: 0.85), value: showIdlePopup)
+        }
+    }
+
+    @ViewBuilder
+    private var editManualBlockOverlay: some View {
+        if showEditManualBlock, let activity = editingActivity {
+            ZStack {
+                Color.black.opacity(0.15)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        showEditManualBlock = false
+                        editingActivity = nil
+                    }
+
+                ManualTimeBlockPopover(
+                    startTime: $editBlockStartTime,
+                    endTime: $editBlockEndTime,
+                    onSave: { start, end, description, category in
+                        if let recordId = activity.recordId {
+                            StorageManager.shared.updateManualTimelineCard(
+                                cardId: recordId,
+                                startDate: start,
+                                endDate: end,
+                                title: description,
+                                summary: description
+                            )
+                            StorageManager.shared.updateTimelineCardCategory(
+                                cardId: recordId,
+                                category: category
+                            )
+                        }
+                        showEditManualBlock = false
+                        editingActivity = nil
+                        selectedActivity = nil
+                        refreshActivitiesTrigger &+= 1
+                    },
+                    onCancel: {
+                        showEditManualBlock = false
+                        editingActivity = nil
+                    },
+                    isEditing: true,
+                    initialDescription: activity.title,
+                    initialCategory: activity.category,
+                    categories: categoryStore.categories
+                )
+                .transition(.scale(scale: 0.95).combined(with: .opacity))
+            }
+            .animation(.spring(response: 0.3, dampingFraction: 0.85), value: showEditManualBlock)
+        }
+    }
+
+    private func handleMainLayoutAppear() {
+        // screen viewed and initial timeline view
+        AnalyticsService.shared.screen("timeline")
+        AnalyticsService.shared.withSampling(probability: 0.01) {
+            AnalyticsService.shared.capture("timeline_viewed", ["date_bucket": dayString(selectedDate)])
+        }
+        // Orchestrated entrance animations following Emil Kowalski principles
+        // Fast, under 300ms, natural spring motion
+
+        // Logo appears first with scale and fade
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0)) {
+            logoScale = 1.0
+            logoOpacity = 1
+        }
+
+        // Timeline text slides in from left
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0).delay(0.1)) {
+            timelineOffset = 0
+            timelineOpacity = 1
+        }
+
+        // Sidebar slides up
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0).delay(0.15)) {
+            sidebarOffset = 0
+            sidebarOpacity = 1
+        }
+
+        // Main content fades in last
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0).delay(0.2)) {
+            contentOpacity = 1
+        }
+
+        // Perform initial scroll to current time on cold start
+        if !didInitialScroll {
+            performInitialScrollIfNeeded()
+        }
+
+        // Start minute-level tick to detect timeline-day rollover (4am boundary)
+        startDayChangeTimer()
+
+        // Load weekly activity hours
+        loadWeeklyTrackedMinutes()
+        updateCardsToReviewCount()
+    }
+
+    private func handleSelectedIconChange(_ newIcon: SidebarIcon) {
+        // Clear journal notification badge when navigating to journal
+        if newIcon == .journal {
+            NotificationBadgeManager.shared.clearBadge()
+        }
+
+        // tab selected + screen viewed
+        let tabName: String
+        switch newIcon {
+        case .timeline: tabName = "timeline"
+        case .daily: tabName = "daily"
+        case .dashboard: tabName = "dashboard"
+        case .journal: tabName = "journal"
+        case .bug: tabName = "bug_report"
+        case .settings: tabName = "settings"
+        }
+
+        // Add Sentry context for app state tracking
+        SentryHelper.configureScope { scope in
+            scope.setContext(value: [
+                "active_view": tabName,
+                "selected_date": dayString(selectedDate),
+                "is_recording": appState.isRecording
+            ], key: "app_state")
+        }
+
+        // Add breadcrumb for view navigation
+        let navBreadcrumb = Breadcrumb(level: .info, category: "navigation")
+        navBreadcrumb.message = "Navigated to \(tabName)"
+        navBreadcrumb.data = ["view": tabName]
+        SentryHelper.addBreadcrumb(navBreadcrumb)
+
+        AnalyticsService.shared.capture("tab_selected", ["tab": tabName])
+        AnalyticsService.shared.screen(tabName)
+        if newIcon == .timeline {
+            AnalyticsService.shared.withSampling(probability: 0.01) {
+                AnalyticsService.shared.capture("timeline_viewed", ["date_bucket": dayString(selectedDate)])
+            }
+            updateCardsToReviewCount()
+        } else {
+            showTimelineReview = false
+        }
+
+        // If user returns from Settings and a reset was pending, show popup
+        if newIcon != .settings, inactivity.pendingReset {
+            showIdlePopup = true
+        }
     }
 
     private func handleTimelineFailureToastOpenSettings(_ payload: TimelineFailureToastPayload) {
@@ -407,6 +504,45 @@ extension MainView {
                         reassertOnPressEnd: true
                     )
                 }
+
+                if !timelineIsToday(selectedDate) {
+                    Button(action: {
+                        let from = selectedDate
+                        let today = timelineDisplayDate(from: Date())
+                        previousDate = selectedDate
+                        setSelectedDate(today)
+                        lastDateNavMethod = "today"
+                        AnalyticsService.shared.capture("date_navigation", [
+                            "method": "today",
+                            "from_day": dayString(from),
+                            "to_day": dayString(today)
+                        ])
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation(.easeInOut(duration: 0.35)) {
+                                scrollToNowTick &+= 1
+                            }
+                        }
+                    }) {
+                        Text("Today")
+                            .font(.custom("Nunito", size: 12).weight(.semibold))
+                            .foregroundColor(Color(red: 0.25, green: 0.17, blue: 0))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(
+                                Capsule()
+                                    .fill(Color(red: 1.0, green: 0.88, blue: 0.65).opacity(0.6))
+                            )
+                            .overlay(
+                                Capsule()
+                                    .stroke(Color(red: 0.98, green: 0.76, blue: 0.42), lineWidth: 1)
+                            )
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .hoverScaleEffect(scale: 1.04)
+                    .pointingHandCursorOnHover(reassertOnPressEnd: true)
+                    .transition(.opacity.combined(with: .scale(scale: 0.9)))
+                    .animation(.easeInOut(duration: 0.2), value: timelineIsToday(selectedDate))
+                }
             }
             .offset(x: timelineOffset)
             .opacity(timelineOpacity)
@@ -515,6 +651,12 @@ extension MainView {
                             if selectedActivity?.batchId == batchId {
                                 selectedActivity = nil
                             }
+                        },
+                        onEditManualBlock: { activity in
+                            editingActivity = activity
+                            editBlockStartTime = activity.startTime
+                            editBlockEndTime = activity.endTime
+                            showEditManualBlock = true
                         }
                     )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -63,6 +63,11 @@ struct MainView: View {
     @State var timelineTimeLabelFrames: [CGRect] = []
     @State var weeklyHoursIntersectsCard: Bool = false
     @State var timelineFailureToastPayload: TimelineFailureToastPayload?
+    @State var showIdlePopup = false
+    @State var showEditManualBlock = false
+    @State var editingActivity: TimelineActivity? = nil
+    @State var editBlockStartTime: Date = Date()
+    @State var editBlockEndTime: Date = Date()
 
     let rateSummaryFooterHeight: CGFloat = 28
     let weeklyHoursFadeDistance: CGFloat = 12

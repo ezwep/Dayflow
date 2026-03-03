@@ -53,6 +53,12 @@ extension MainView {
         }
     }
 
+    func dismissIdlePopup() {
+        showIdlePopup = false
+        InactivityMonitor.shared.markHandledIfPending()
+        performIdleResetAndScroll()
+    }
+
     func performInitialScrollIfNeeded() {
         // Check all conditions for initial scroll:
         // 1. Timeline is visible (not in settings)

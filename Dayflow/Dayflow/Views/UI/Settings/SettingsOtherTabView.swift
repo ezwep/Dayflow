@@ -65,6 +65,69 @@ struct SettingsOtherTabView: View {
                         .font(.custom("Nunito", size: 11.5))
                         .foregroundColor(.black.opacity(0.5))
 
+                    Toggle(isOn: $viewModel.use24HourTime) {
+                        Text("Use 24-hour time format")
+                            .font(.custom("Nunito", size: 13))
+                            .foregroundColor(.black.opacity(0.7))
+                    }
+                    .toggleStyle(.switch)
+                    .pointingHandCursor()
+
+                    Text("Displays times as 14:30 instead of 2:30 PM throughout the app.")
+                        .font(.custom("Nunito", size: 11.5))
+                        .foregroundColor(.black.opacity(0.5))
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Inactivity threshold")
+                            .font(.custom("Nunito", size: 13).weight(.semibold))
+                            .foregroundColor(.black.opacity(0.85))
+                        HStack(spacing: 10) {
+                            Button(action: {
+                                if viewModel.idleThresholdMinutes > 1 {
+                                    viewModel.idleThresholdMinutes -= 1
+                                }
+                            }) {
+                                Image(systemName: "minus")
+                                    .font(.system(size: 12, weight: .bold))
+                                    .foregroundColor(.black.opacity(0.7))
+                                    .frame(width: 28, height: 28)
+                                    .background(Color.white)
+                                    .cornerRadius(6)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 6)
+                                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                                    )
+                            }
+                            .buttonStyle(PlainButtonStyle())
+
+                            Text("\(viewModel.idleThresholdMinutes) minute\(viewModel.idleThresholdMinutes == 1 ? "" : "s")")
+                                .font(.custom("Nunito", size: 14).weight(.semibold))
+                                .foregroundColor(.black.opacity(0.85))
+                                .frame(minWidth: 80)
+
+                            Button(action: {
+                                if viewModel.idleThresholdMinutes < 60 {
+                                    viewModel.idleThresholdMinutes += 1
+                                }
+                            }) {
+                                Image(systemName: "plus")
+                                    .font(.system(size: 12, weight: .bold))
+                                    .foregroundColor(.black.opacity(0.7))
+                                    .frame(width: 28, height: 28)
+                                    .background(Color.white)
+                                    .cornerRadius(6)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 6)
+                                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                                    )
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                        Text("After this period of inactivity, a popup will ask what you were doing.")
+                            .font(.custom("Nunito", size: 11.5))
+                            .foregroundColor(.black.opacity(0.5))
+                    }
+
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Output language override")
                             .font(.custom("Nunito", size: 13))
@@ -125,7 +188,7 @@ struct SettingsOtherTabView: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
-                    Text("Dayflow v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")")
+                    Text("Dayflow Dev v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""))")
                         .font(.custom("Nunito", size: 12))
                         .foregroundColor(.black.opacity(0.45))
                 }

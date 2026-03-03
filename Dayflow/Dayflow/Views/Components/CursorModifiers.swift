@@ -45,6 +45,17 @@ extension View {
         return pointingHandCursor(enabled: enabled)
     }
 
+    @ViewBuilder
+    func resizeUpDownCursor() -> some View {
+        self.onHover { hovering in
+            if hovering {
+                NSCursor.resizeUpDown.push()
+            } else {
+                NSCursor.pop()
+            }
+        }
+    }
+
     func hoverScaleEffect(
         enabled: Bool = true,
         scale: CGFloat = 1.02,

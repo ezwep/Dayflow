@@ -11,6 +11,7 @@ struct ActivityCard: View {
     var onCategoryChange: ((TimelineCategory, TimelineActivity) -> Void)? = nil
     var onNavigateToCategoryEditor: (() -> Void)? = nil
     var onRetryBatchCompleted: ((Int64) -> Void)? = nil
+    var onEditManualBlock: ((TimelineActivity) -> Void)? = nil
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var categoryStore: CategoryStore
     @EnvironmentObject private var retryCoordinator: RetryCoordinator
@@ -27,11 +28,11 @@ struct ActivityCard: View {
     @State private var slideshowStartTime: Date?
     @State private var slideshowEndTime: Date?
 
-    private let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        return formatter
-    }()
+    private let timeFormatter = DateFormatter()
+    private func displayTime(from date: Date) -> String {
+        TimeFormatPreferences.applyDisplayFormat(to: timeFormatter)
+        return timeFormatter.string(from: date)
+    }
 
     var body: some View {
         if let activity = activity {
@@ -153,7 +154,7 @@ struct ActivityCard: View {
                         .foregroundColor(.black)
 
                     HStack(alignment: .center, spacing: 6) {
-                        Text("\(timeFormatter.string(from: activity.startTime)) - \(timeFormatter.string(from: activity.endTime))")
+                        Text("\(displayTime(from: activity.startTime)) - \(displayTime(from: activity.endTime))")
                             .font(
                                 Font.custom("Nunito", size: 12)
                             )
@@ -195,20 +196,37 @@ struct ActivityCard: View {
                             }
 
                             if !isFailedCard(activity) {
-                                Button(action: {
-                                    withAnimation(.spring(response: 0.25, dampingFraction: 0.85)) {
-                                        showCategoryPicker.toggle()
+                                if let onEdit = onEditManualBlock {
+                                    // Single edit button (opens full editor with category)
+                                    Button(action: {
+                                        onEdit(activity)
+                                    }) {
+                                        Image(systemName: "pencil.circle")
+                                            .font(.system(size: 16, weight: .medium))
+                                            .foregroundColor(Color(red: 0.62, green: 0.44, blue: 0.36))
+                                            .frame(width: 24, height: 24)
                                     }
-                                }) {
-                                    Image("CategorySwapButton")
-                                        .resizable()
-                                        .renderingMode(.original)
-                                        .frame(width: 24, height: 24)
+                                    .buttonStyle(PlainButtonStyle())
+                                    .hoverScaleEffect(scale: 1.02)
+                                    .pointingHandCursorOnHover(reassertOnPressEnd: true)
+                                    .accessibilityLabel(Text("Edit time block"))
+                                } else {
+                                    // Fallback: category swap button
+                                    Button(action: {
+                                        withAnimation(.spring(response: 0.25, dampingFraction: 0.85)) {
+                                            showCategoryPicker.toggle()
+                                        }
+                                    }) {
+                                        Image("CategorySwapButton")
+                                            .resizable()
+                                            .renderingMode(.original)
+                                            .frame(width: 24, height: 24)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    .hoverScaleEffect(scale: 1.02)
+                                    .pointingHandCursorOnHover(reassertOnPressEnd: true)
+                                    .accessibilityLabel(Text("Change category"))
                                 }
-                                .buttonStyle(PlainButtonStyle())
-                                .hoverScaleEffect(scale: 1.02)
-                                .pointingHandCursorOnHover(reassertOnPressEnd: true)
-                                .accessibilityLabel(Text("Change category"))
                             }
                         }
                     }
@@ -639,11 +657,11 @@ private struct ScreenshotSlideshowModal: View {
         _playbackModel = StateObject(wrappedValue: ScreenshotSlideshowPlaybackModel(screenshots: screenshots, maxRenderHeight: 720))
     }
 
-    private static let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        return formatter
-    }()
+    private static let timeFormatter = DateFormatter()
+    private static func displayTime(from date: Date) -> String {
+        TimeFormatPreferences.applyDisplayFormat(to: timeFormatter)
+        return timeFormatter.string(from: date)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -655,7 +673,7 @@ private struct ScreenshotSlideshowModal: View {
                             .fontWeight(.semibold)
                     }
                     if let startTime, let endTime {
-                        Text("\(Self.timeFormatter.string(from: startTime)) to \(Self.timeFormatter.string(from: endTime))")
+                        Text("\(Self.displayTime(from: startTime)) to \(Self.displayTime(from: endTime))")
                             .font(.caption)
                             .foregroundColor(Color(red: 0.4, green: 0.4, blue: 0.4))
                     }
@@ -797,11 +815,11 @@ private struct ScreenshotSlideshowModal: View {
     }
 }
 
-private let cachedScreenshotScrubberTimeFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "h:mm a"
-    return formatter
-}()
+private let cachedScreenshotScrubberTimeFormatter = DateFormatter()
+private func screenshotScrubberDisplayTime(from date: Date) -> String {
+    TimeFormatPreferences.applyDisplayFormat(to: cachedScreenshotScrubberTimeFormatter)
+    return cachedScreenshotScrubberTimeFormatter.string(from: date)
+}
 
 private final class ScreenshotFilmstripGenerator {
     static let shared = ScreenshotFilmstripGenerator()
@@ -1075,7 +1093,7 @@ private struct ScreenshotScrubberView: View {
             let total = absoluteEnd.timeIntervalSince(absoluteStart)
             let progress = max(0, min(1, time / duration))
             let absolute = absoluteStart.addingTimeInterval(total * progress)
-            return cachedScreenshotScrubberTimeFormatter.string(from: absolute)
+            return screenshotScrubberDisplayTime(from: absolute)
         }
 
         let mins = Int(time) / 60

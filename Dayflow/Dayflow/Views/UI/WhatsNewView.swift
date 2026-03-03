@@ -36,25 +36,21 @@ enum WhatsNewConfiguration {
     private static let seenKey = "lastSeenWhatsNewVersion"
 
     /// Override with the specific release number you want to show.
-    private static let versionOverride: String? = "1.8.0"
+    private static let versionOverride: String? = "1.9.0"
 
     /// Update this content before shipping each release. Return nil to disable the modal entirely.
     static var configuredRelease: ReleaseNote? {
         ReleaseNote(
             version: targetVersion,
-            title: "Just-in-time timelapses · Gemini back to 15-minute windows · UI polish",
+            title: "Manual time blocks · 24-hour time · Inactivity tracking · Today button",
             highlights: [
-                "Instead of generating timelapse videos continuously, Dayflow now generates them in a just-in-time fashion for better energy efficiency.",
-                "Gemini is back to 15-minute processing windows now that new mitigations are in place.",
-                "A lot of small-but-helpful UI enhancements landed across timeline, chat, settings, and navigation.",
-                "Fixed a bug where Dock icon preferences could reset after restart."
+                "Add manual time blocks by clicking or dragging on empty timeline spaces. Edit any block by clicking the pencil icon, with full category selection.",
+                "Drag the top or bottom edge of timeline cards to resize them, changing start and end times visually.",
+                "24-hour time format option in Settings > Other for users who prefer 14:30 over 2:30 PM.",
+                "A 'Today' button appears when viewing past days, letting you jump back instantly.",
+                "Inactivity popup: after a configurable idle period, a popup asks what you were doing and adds it to your timeline."
             ],
-            cta: ReleaseNoteCTA(
-                title: "Standup Pilot",
-                description: "I'm piloting a workflow to make standups and weekly 1:1 prep less painful. I'm personally onboarding the first 10 users to work out the kinks, so please book a time if you're interested!",
-                buttonTitle: "Book a Time",
-                url: "https://cal.com/jerry-liu/15min"
-            ),
+            cta: nil,
             imageName: nil
         )
     }

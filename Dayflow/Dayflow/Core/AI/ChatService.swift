@@ -15,11 +15,11 @@ private let chatServiceLongDateFormatter: DateFormatter = {
     return formatter
 }()
 
-private let chatServiceTimeFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "h:mm a"
-    return formatter
-}()
+private let chatServiceTimeFormatter = DateFormatter()
+private func chatServiceDisplayTime(from date: Date) -> String {
+    TimeFormatPreferences.applyDisplayFormat(to: chatServiceTimeFormatter)
+    return chatServiceTimeFormatter.string(from: date)
+}
 
 private let chatServiceDayFormatter: DateFormatter = {
     let formatter = DateFormatter()
@@ -432,10 +432,10 @@ final class ChatService: ObservableObject {
     private func buildSystemPrompt() -> String {
         let now = Date()
         let currentDate = chatServiceLongDateFormatter.string(from: now)
-        let currentTime = chatServiceTimeFormatter.string(from: now)
+        let currentTime = chatServiceDisplayTime(from: now)
 
         // Use full path (~ doesn't expand in sqlite3)
-        let dbPath = NSHomeDirectory() + "/Library/Application Support/Dayflow/chunks.sqlite"
+        let dbPath = NSHomeDirectory() + "/Library/Application Support/DayflowDev/chunks.sqlite"
 
         return """
         You are a friendly assistant in Dayflow, a macOS app that tracks computer activity.

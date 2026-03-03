@@ -13,7 +13,10 @@ final class KeychainManager {
     static let shared = KeychainManager()
     
     
-    private let servicePrefix = "com.teleportlabs.dayflow.apikeys"
+    private let servicePrefix: String = {
+        let bundleId = Bundle.main.bundleIdentifier ?? "com.teleportlabs.dayflow"
+        return "\(bundleId).apikeys"
+    }()
     private let queue = DispatchQueue(label: "com.teleportlabs.dayflow.keychain", qos: .userInitiated)
     
     private init() {}

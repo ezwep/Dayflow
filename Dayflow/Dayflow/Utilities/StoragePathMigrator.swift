@@ -32,7 +32,7 @@ enum StoragePathMigrator {
             return
         }
 
-        let destinationBase = newSupport.appendingPathComponent("Dayflow", isDirectory: true)
+        let destinationBase = newSupport.appendingPathComponent("DayflowDev", isDirectory: true)
 
         let normalizedLegacy = legacyBase.standardizedFileURL.path
         let normalizedDestination = destinationBase.standardizedFileURL.path

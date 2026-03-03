@@ -12,11 +12,11 @@ import AppKit
 
 // MARK: - Cached DateFormatter (creating DateFormatters is expensive due to ICU initialization)
 
-private let cachedScrubberTimeFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "h:mm a"
-    return formatter
-}()
+private let cachedScrubberTimeFormatter = DateFormatter()
+private func scrubberDisplayTime(from date: Date) -> String {
+    TimeFormatPreferences.applyDisplayFormat(to: cachedScrubberTimeFormatter)
+    return cachedScrubberTimeFormatter.string(from: date)
+}
 
 final class FilmstripGenerator {
     static let shared = FilmstripGenerator()
@@ -302,7 +302,7 @@ struct ScrubberView: View {
             let total = end.timeIntervalSince(start)
             let pct = max(0, min(1, time / duration))
             let absolute = start.addingTimeInterval(total * pct)
-            return cachedScrubberTimeFormatter.string(from: absolute)
+            return scrubberDisplayTime(from: absolute)
         } else {
             let mins = Int(time) / 60
             let secs = Int(time) % 60

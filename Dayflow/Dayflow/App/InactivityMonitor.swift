@@ -1,5 +1,6 @@
 import AppKit
 import Combine
+import CoreGraphics
 
 @MainActor
 final class InactivityMonitor: ObservableObject {
@@ -8,10 +9,15 @@ final class InactivityMonitor: ObservableObject {
     // Published so views can react when an idle reset is pending
     @Published var pendingReset: Bool = false
 
+    /// Timestamp when the user became idle (last interaction before threshold was exceeded)
+    @Published var idleStartedAt: Date?
+    /// Timestamp when the user returned from idle
+    @Published var idleEndedAt: Date?
+
     // Config
     private let secondsOverrideKey = "idleResetSecondsOverride"
     private let legacyMinutesKey = "idleResetMinutes"
-    private let defaultThresholdSeconds: TimeInterval = 15 * 60
+    private let defaultThresholdSeconds: TimeInterval = 5 * 60
 
     var thresholdSeconds: TimeInterval {
         let override = UserDefaults.standard.double(forKey: secondsOverrideKey)
@@ -26,27 +32,26 @@ final class InactivityMonitor: ObservableObject {
     }
 
     // State
-    private var lastInteractionAt: Date = Date()
+    /// Whether we've detected the user is currently idle (system-wide)
+    private var isIdle: Bool = false
+    /// When we first detected the user entered idle state
+    private var idleEnteredAt: Date?
+    /// Prevents re-triggering too quickly after a reset
     private var lastResetAt: Date? = nil
+    /// Timer that periodically checks system-wide idle time
     private var checkTimer: Timer?
-    private var eventMonitors: [Any] = []
+    /// App lifecycle observers
     private var observers: [NSObjectProtocol] = []
 
     private init() {}
 
     func start() {
-        setupEventMonitors()
         setupAppLifecycleObservers()
-
-        // Only check while active; we'll also check immediately before activation.
-        if NSApp.isActive {
-            startTimer()
-        }
+        startTimer()
     }
 
     func stop() {
         stopTimer()
-        removeEventMonitors()
         removeObservers()
     }
 
@@ -56,41 +61,32 @@ final class InactivityMonitor: ObservableObject {
         }
     }
 
-    private func setupEventMonitors() {
-        removeEventMonitors()
+    // MARK: - System-wide idle detection
 
-        let masks: [NSEvent.EventTypeMask] = [
-            .keyDown,
-            .leftMouseDown, .rightMouseDown, .otherMouseDown,
-            .scrollWheel
-        ]
+    /// Returns the system-wide idle time in seconds.
+    /// Checks multiple HID event types and returns the smallest value
+    /// (i.e. how recently the user did *anything* on the Mac).
+    private func systemIdleSeconds() -> TimeInterval {
+        let mouseMove   = CGEventSource.secondsSinceLastEventType(.hidSystemState, eventType: .mouseMoved)
+        let leftDown    = CGEventSource.secondsSinceLastEventType(.hidSystemState, eventType: .leftMouseDown)
+        let rightDown   = CGEventSource.secondsSinceLastEventType(.hidSystemState, eventType: .rightMouseDown)
+        let keyDown     = CGEventSource.secondsSinceLastEventType(.hidSystemState, eventType: .keyDown)
+        let scrollWheel = CGEventSource.secondsSinceLastEventType(.hidSystemState, eventType: .scrollWheel)
 
-        for mask in masks {
-            let token = NSEvent.addLocalMonitorForEvents(matching: mask) { [weak self] event in
-                guard let self = self else { return event }
-                self.handleInteraction()
-                return event
-            }
-            if let token = token {
-                eventMonitors.append(token)
-            }
-        }
+        return min(mouseMove, leftDown, rightDown, keyDown, scrollWheel)
     }
 
-    private func removeEventMonitors() {
-        for monitor in eventMonitors {
-            NSEvent.removeMonitor(monitor)
-        }
-        eventMonitors.removeAll()
-    }
+    // MARK: - Lifecycle
 
     private func setupAppLifecycleObservers() {
         removeObservers()
 
         let center = NotificationCenter.default
 
-        let willBecome = center.addObserver(
-            forName: NSApplication.willBecomeActiveNotification,
+        // When app becomes active, do an immediate idle check so the popup
+        // appears right when the user switches back to Dayflow.
+        let didBecome = center.addObserver(
+            forName: NSApplication.didBecomeActiveNotification,
             object: nil,
             queue: .main
         ) { [weak self] _ in
@@ -98,29 +94,7 @@ final class InactivityMonitor: ObservableObject {
                 self?.checkIdle()
             }
         }
-        observers.append(willBecome)
-
-        let didBecome = center.addObserver(
-            forName: NSApplication.didBecomeActiveNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            MainActor.assumeIsolated {
-                self?.startTimer()
-            }
-        }
         observers.append(didBecome)
-
-        let didResign = center.addObserver(
-            forName: NSApplication.didResignActiveNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            MainActor.assumeIsolated {
-                self?.stopTimer()
-            }
-        }
-        observers.append(didResign)
     }
 
     private func removeObservers() {
@@ -131,18 +105,20 @@ final class InactivityMonitor: ObservableObject {
         observers.removeAll()
     }
 
-    private func handleInteraction() {
-        lastInteractionAt = Date()
-        lastResetAt = nil
-    }
+    // MARK: - Timer
 
     private func startTimer() {
         stopTimer()
-        let interval = max(5.0, min(60.0, thresholdSeconds / 2))
-        checkTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
+        // Poll every 10 seconds. The timer runs even when the app is in the
+        // background on macOS, so we catch idle → active transitions quickly.
+        checkTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 self?.checkIdle()
             }
+        }
+        // Ensure the timer fires in common run-loop modes (e.g. during tracking)
+        if let timer = checkTimer {
+            RunLoop.main.add(timer, forMode: .common)
         }
     }
 
@@ -151,18 +127,41 @@ final class InactivityMonitor: ObservableObject {
         checkTimer = nil
     }
 
+    // MARK: - Idle check (two-phase: detect idle → detect return)
+
     private func checkIdle() {
         guard !pendingReset else { return }
 
         let threshold = thresholdSeconds
-        let now = Date()
-        guard now.timeIntervalSince(lastInteractionAt) >= threshold else { return }
+        let idleTime = systemIdleSeconds()
 
-        if let lastResetAt, now.timeIntervalSince(lastResetAt) < threshold {
-            return
+        if !isIdle {
+            // Phase 1: User was active. Check if they've been idle long enough.
+            if idleTime >= threshold {
+                isIdle = true
+                // The user became idle roughly `idleTime` seconds ago
+                idleEnteredAt = Date().addingTimeInterval(-idleTime)
+            }
+        } else {
+            // Phase 2: User was idle. Check if they've come back.
+            // "Come back" = any system input within the last 30 seconds.
+            if idleTime < 30 {
+                isIdle = false
+
+                let now = Date()
+
+                // Don't re-trigger if we already showed a popup recently
+                if let lastReset = lastResetAt, now.timeIntervalSince(lastReset) < threshold {
+                    idleEnteredAt = nil
+                    return
+                }
+
+                idleStartedAt = idleEnteredAt
+                idleEndedAt = now
+                pendingReset = true
+                lastResetAt = now
+                idleEnteredAt = nil
+            }
         }
-
-        pendingReset = true
-        lastResetAt = now
     }
 }

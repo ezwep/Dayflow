@@ -968,8 +968,8 @@ private struct TimelineReviewCard: View {
     }
 
     private var timeRangeText: String {
-        let start = Self.timeFormatter.string(from: activity.startTime)
-        let end = Self.timeFormatter.string(from: activity.endTime)
+        let start = Self.displayTime(from: activity.startTime)
+        let end = Self.displayTime(from: activity.endTime)
         return "\(start) - \(end)"
     }
 
@@ -983,7 +983,7 @@ private struct TimelineReviewCard: View {
         let total = max(0, activity.endTime.timeIntervalSince(activity.startTime))
         let progressSeconds = total * Double(playbackProgress)
         let time = activity.startTime.addingTimeInterval(progressSeconds)
-        return Self.timeFormatter.string(from: time)
+        return Self.displayTime(from: time)
     }
 
     private var speedLabel: String {
@@ -1047,11 +1047,11 @@ private struct TimelineReviewCard: View {
         .pointingHandCursor()
     }
 
-    private static let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        return formatter
-    }()
+    private static let timeFormatter = DateFormatter()
+    private static func displayTime(from date: Date) -> String {
+        TimeFormatPreferences.applyDisplayFormat(to: timeFormatter)
+        return timeFormatter.string(from: date)
+    }
 }
 
 @MainActor

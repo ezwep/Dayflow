@@ -79,6 +79,7 @@ protocol StorageManaging: Sendable {
     func fetchRecentTimelineCardsForDebug(limit: Int) -> [TimelineCardDebugEntry]
 
     func updateTimelineCardCategory(cardId: Int64, category: String)
+    func updateManualTimelineCard(cardId: Int64, startDate: Date, endDate: Date, title: String, summary: String)
 
     // Timeline review ratings (time-based)
     func fetchReviewRatingSegments(overlapping startTs: Int, endTs: Int) -> [TimelineReviewRatingSegment]
@@ -451,7 +452,7 @@ final class StorageManager: StorageManaging, @unchecked Sendable {
         StoragePathMigrator.migrateIfNeeded()
 
         let appSupport = fileMgr.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        let baseDir = appSupport.appendingPathComponent("Dayflow", isDirectory: true)
+        let baseDir = appSupport.appendingPathComponent("DayflowDev", isDirectory: true)
         let recordingsDir = baseDir.appendingPathComponent("recordings", isDirectory: true)
         let backupDir = baseDir.appendingPathComponent("backups", isDirectory: true)
 
@@ -1205,6 +1206,44 @@ final class StorageManager: StorageManaging, @unchecked Sendable {
         }
     }
 
+    /// Inserts a manually created timeline card (no batch required).
+    /// Used for idle-time entries and user-created time blocks.
+    @discardableResult
+    func saveManualTimelineCard(
+        startDate: Date,
+        endDate: Date,
+        title: String,
+        summary: String,
+        category: String,
+        subcategory: String = ""
+    ) -> Int64? {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "h:mm a"
+        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+
+        let startString = timeFormatter.string(from: startDate)
+        let endString = timeFormatter.string(from: endDate)
+        let startTs = Int(startDate.timeIntervalSince1970)
+        let endTs = Int(endDate.timeIntervalSince1970)
+        let (dayString, _, _) = startDate.getDayInfoFor4AMBoundary()
+
+        var lastId: Int64? = nil
+        try? timedWrite("saveManualTimelineCard") { db in
+            try db.execute(sql: """
+                INSERT INTO timeline_cards(
+                    batch_id, start, end, start_ts, end_ts, day, title,
+                    summary, category, subcategory, detailed_summary, metadata
+                )
+                VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)
+            """, arguments: [
+                startString, endString, startTs, endTs, dayString, title,
+                summary, category, subcategory, summary
+            ])
+            lastId = db.lastInsertedRowID
+        }
+        return lastId
+    }
+
     func updateTimelineCardCategory(cardId: Int64, category: String) {
         let trimmed = category.trimmingCharacters(in: .whitespacesAndNewlines)
         guard trimmed.isEmpty == false else { return }
@@ -1215,6 +1254,29 @@ final class StorageManager: StorageManaging, @unchecked Sendable {
                 SET category = ?
                 WHERE id = ?
             """, arguments: [trimmed, cardId])
+        }
+    }
+
+    func updateManualTimelineCard(cardId: Int64, startDate: Date, endDate: Date, title: String, summary: String) {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "h:mm a"
+        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+
+        let startString = timeFormatter.string(from: startDate)
+        let endString = timeFormatter.string(from: endDate)
+        let startTs = Int(startDate.timeIntervalSince1970)
+        let endTs = Int(endDate.timeIntervalSince1970)
+
+        try? timedWrite("updateManualTimelineCard") { db in
+            try db.execute(sql: """
+                UPDATE timeline_cards
+                SET start = ?, end = ?, start_ts = ?, end_ts = ?,
+                    title = ?, summary = ?, detailed_summary = ?
+                WHERE id = ?
+            """, arguments: [
+                startString, endString, startTs, endTs,
+                title, summary, summary, cardId
+            ])
         }
     }
 
@@ -3147,7 +3209,7 @@ private extension StorageManager {
 
         let legacyBase = fileMgr.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Containers/\(bundleID)/Data/Library/Application Support/Dayflow", isDirectory: true)
-        let newBase = appSupport.appendingPathComponent("Dayflow", isDirectory: true)
+        let newBase = appSupport.appendingPathComponent("DayflowDev", isDirectory: true)
 
         guard legacyBase.path != newBase.path else { return }
 

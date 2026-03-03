@@ -561,6 +561,7 @@ struct LLMProviderSetupView: View {
                             } else if providerType == "chatgpt_claude" {
                                 ChatCLITestView(
                                     selectedTool: setupState.preferredCLITool,
+                                    secondaryTool: setupState.secondaryCLITool,
                                     onTestComplete: { success in
                                         setupState.hasTestedConnection = true
                                         setupState.testSuccessful = success
@@ -619,6 +620,8 @@ struct LLMProviderSetupView: View {
                 onInstall: { tool in openChatCLIInstallPage(for: tool) },
                 selectedTool: setupState.preferredCLITool,
                 onSelectTool: { tool in setupState.selectPreferredCLITool(tool) },
+                secondaryTool: setupState.secondaryCLITool,
+                onSelectSecondaryTool: { tool in setupState.selectSecondaryCLITool(tool) },
                 nextButton: { nextButton }
             )
             .onAppear {
@@ -740,12 +743,17 @@ struct LLMProviderSetupView: View {
             KeychainManager.shared.store(setupState.apiKey, for: "gemini")
             GeminiModelPreference(primary: setupState.geminiModel).save()
         }
-        
+
         // Save local endpoint for local engine selection
         if activeProviderType == "ollama" {
             persistLocalSettings()
         }
-        
+
+        // Save secondary CLI tool selection for chatgpt_claude
+        if activeProviderType == "chatgpt_claude" {
+            setupState.persistSecondaryCLITool()
+        }
+
         // Mark setup as complete
         UserDefaults.standard.set(true, forKey: "\(activeProviderType)SetupComplete")
     }
@@ -833,6 +841,7 @@ class ProviderSetupState: ObservableObject {
     @Published var debugCommandOutput: String = ""
     @Published var isRunningDebugCommand: Bool = false
     @Published var preferredCLITool: CLITool? = ProviderSetupState.loadStoredPreferredCLITool()
+    @Published var secondaryCLITool: CLITool? = ProviderSetupState.loadStoredSecondaryCLITool()
 
     private var lastSavedGeminiModel: GeminiModel
     private var hasStartedCLICheck = false
@@ -1103,7 +1112,35 @@ class ProviderSetupState: ObservableObject {
         }
         UserDefaults.standard.set(tool.rawValue, forKey: Self.cliPreferenceKey)
     }
-    
+
+    func selectSecondaryCLITool(_ tool: CLITool?) {
+        if let tool, !isToolAvailable(tool) { return }
+        // Don't allow same tool as primary
+        if let tool, tool == preferredCLITool { secondaryCLITool = nil; return }
+        secondaryCLITool = tool
+        persistSecondaryCLITool()
+    }
+
+    func persistSecondaryCLITool() {
+        if let tool = secondaryCLITool {
+            LLMProviderRoutingPreferences.saveBackupChatCLITool(tool.asChatCLITool)
+            LLMProviderRoutingPreferences.saveBackupProvider(.chatGPTClaude)
+        } else {
+            LLMProviderRoutingPreferences.saveBackupChatCLITool(nil)
+            LLMProviderRoutingPreferences.saveBackupProvider(nil)
+        }
+    }
+
+    private static func loadStoredSecondaryCLITool() -> CLITool? {
+        guard let chatTool = LLMProviderRoutingPreferences.loadBackupChatCLITool() else {
+            return nil
+        }
+        switch chatTool {
+        case .codex: return .codex
+        case .claude: return .claude
+        }
+    }
+
     private func ensurePreferredCLIToolIsValid() {
         if let current = preferredCLITool, isToolAvailable(current) {
             return
@@ -1474,63 +1511,120 @@ private struct LocalLLMChatImageURL: Codable {
 
 struct ChatCLITestView: View {
     let selectedTool: CLITool?
+    let secondaryTool: CLITool?
     let onTestComplete: (Bool) -> Void
 
     private let accentColor = Color(red: 0.25, green: 0.17, blue: 0)
     private let successAccentColor = Color(red: 0.34, green: 1, blue: 0.45)
 
+    // Primary test state
     @State private var isTesting = false
     @State private var success = false
     @State private var resultMessage: String?
     @State private var debugOutput: String?
 
+    // Secondary test state
+    @State private var isTestingSecondary = false
+    @State private var secondarySuccess = false
+    @State private var secondaryResultMessage: String?
+    @State private var secondaryDebugOutput: String?
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             Text("We'll ask your CLI a simple question to verify it's working and signed in.")
                 .font(.custom("Nunito", size: 13))
                 .foregroundColor(.black.opacity(0.6))
                 .fixedSize(horizontal: false, vertical: true)
 
+            // Primary test
+            cliTestSection(
+                label: secondaryTool != nil ? "Primary — \(selectedTool?.shortName ?? "?")" : nil,
+                tool: selectedTool,
+                isTesting: isTesting,
+                testSuccess: success,
+                message: resultMessage,
+                debug: debugOutput,
+                onTest: runPrimaryTest,
+                onCopyLogs: copyPrimaryDebugLogs
+            )
+
+            // Secondary test (only shown if a secondary is selected)
+            if let secondary = secondaryTool {
+                Divider().padding(.vertical, 4)
+
+                cliTestSection(
+                    label: "Secondary — \(secondary.shortName)",
+                    tool: secondary,
+                    isTesting: isTestingSecondary,
+                    testSuccess: secondarySuccess,
+                    message: secondaryResultMessage,
+                    debug: secondaryDebugOutput,
+                    onTest: runSecondaryTest,
+                    onCopyLogs: copySecondaryDebugLogs
+                )
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func cliTestSection(
+        label: String?,
+        tool: CLITool?,
+        isTesting: Bool,
+        testSuccess: Bool,
+        message: String?,
+        debug: String?,
+        onTest: @escaping () -> Void,
+        onCopyLogs: @escaping () -> Void
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            if let label {
+                Text(label)
+                    .font(.custom("Nunito", size: 12))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.black.opacity(0.55))
+            }
+
             DayflowSurfaceButton(
-                action: runTest,
+                action: onTest,
                 content: {
                     HStack(spacing: 8) {
                         if isTesting {
                             ProgressView().scaleEffect(0.8)
                         } else {
-                            Image(systemName: success ? "checkmark.circle.fill" : "bolt.fill").font(.system(size: 14))
+                            Image(systemName: testSuccess ? "checkmark.circle.fill" : "bolt.fill").font(.system(size: 14))
                         }
-                        let idleLabel = success ? "Test Successful!" : "Test CLI"
+                        let idleLabel = testSuccess ? "Test Successful!" : "Test \(tool?.shortName ?? "CLI")"
                         Text(isTesting ? "Testing..." : idleLabel)
                             .font(.custom("Nunito", size: 14))
                             .fontWeight(.semibold)
                     }
                 },
-                background: success ? successAccentColor.opacity(0.2) : accentColor,
-                foreground: success ? .black : .white,
-                borderColor: success ? successAccentColor.opacity(0.3) : .clear,
+                background: testSuccess ? successAccentColor.opacity(0.2) : accentColor,
+                foreground: testSuccess ? .black : .white,
+                borderColor: testSuccess ? successAccentColor.opacity(0.3) : .clear,
                 cornerRadius: 8,
                 horizontalPadding: 24,
                 verticalPadding: 12,
-                showOverlayStroke: !success
+                showOverlayStroke: !testSuccess
             )
-            .disabled(isTesting || selectedTool == nil)
-            .opacity(selectedTool == nil ? 0.5 : 1.0)
+            .disabled(isTesting || tool == nil)
+            .opacity(tool == nil ? 0.5 : 1.0)
 
-            if selectedTool == nil {
+            if tool == nil {
                 Text("Select ChatGPT or Claude above before running the test.")
                     .font(.custom("Nunito", size: 12))
                     .foregroundColor(.black.opacity(0.6))
             }
 
-            if let msg = resultMessage {
+            if let msg = message {
                 HStack(alignment: .center, spacing: 8) {
                     Text(msg)
                         .font(.custom("Nunito", size: 13))
-                        .foregroundColor(success ? .black.opacity(0.7) : Color(hex: "E91515"))
+                        .foregroundColor(testSuccess ? .black.opacity(0.7) : Color(hex: "E91515"))
 
-                    if debugOutput != nil {
-                        Button(action: copyDebugLogs) {
+                    if debug != nil {
+                        Button(action: onCopyLogs) {
                             Text("Copy logs")
                                 .font(.custom("Nunito", size: 11))
                                 .foregroundColor(.black.opacity(0.4))
@@ -1540,11 +1634,10 @@ struct ChatCLITestView: View {
                         .pointingHandCursor()
                     }
                 }
-                .padding(.vertical, 6)
+                .padding(.vertical, 4)
             }
 
-            // Debug output - shows raw CLI response for troubleshooting (only on failure)
-            if let debug = debugOutput, !success {
+            if let debug, !testSuccess {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Debug output:")
                         .font(.custom("Nunito", size: 11))
@@ -1557,154 +1650,163 @@ struct ChatCLITestView: View {
                             .textSelection(.enabled)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .frame(maxHeight: 120)
+                    .frame(maxHeight: 100)
                     .padding(8)
                     .background(Color.black.opacity(0.03))
                     .cornerRadius(6)
                 }
-                .padding(.top, 4)
             }
         }
     }
 
-    private func runTest() {
+    private func runPrimaryTest() {
         guard !isTesting else { return }
         guard let tool = selectedTool else {
             resultMessage = "Pick ChatGPT or Claude first."
             return
         }
-
         isTesting = true
         success = false
         resultMessage = nil
         debugOutput = nil
 
         Task.detached {
-            let outcome: Result<CLIResult, Error> = {
-                do {
-                    return .success(try performTest(for: tool))
-                } catch {
-                    return .failure(error)
-                }
-            }()
-
+            let outcome = Self.executeTest(for: tool)
             await MainActor.run {
                 isTesting = false
-                switch outcome {
-                case .success(let cliResult):
-                    // Build debug output for troubleshooting
-                    var debugParts: [String] = []
-                    debugParts.append("Tool: \(tool.shortName)")
-                    debugParts.append("Exit code: \(cliResult.exitCode)")
-                    debugParts.append("Shell: \(LoginShellRunner.userLoginShell.path)")
-
-                    // Show all installations found (helps debug multi-install issues)
-                    let cmdName = tool == .codex ? "codex" : "claude"
-                    let whichResult = LoginShellRunner.run("which -a \(cmdName)", timeout: 5)
-                    if whichResult.exitCode == 0 {
-                        let paths = whichResult.stdout.trimmingCharacters(in: .whitespacesAndNewlines)
-                        if !paths.isEmpty {
-                            debugParts.append("Installations found:\n\(paths)")
-                        }
-                    }
-
-                    if !cliResult.stdout.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        debugParts.append("stdout:\n\(cliResult.stdout)")
-                    }
-                    if !cliResult.stderr.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        debugParts.append("stderr:\n\(cliResult.stderr)")
-                    }
-                    debugOutput = debugParts.joined(separator: "\n\n")
-
-                    // Check exit code FIRST - non-zero means failure
-                    if cliResult.exitCode != 0 {
-                        success = false
-                        if let authError = detectAuthError(cliResult, for: tool) {
-                            resultMessage = authError
-                        } else {
-                            let stderrTrimmed = cliResult.stderr.trimmingCharacters(in: .whitespacesAndNewlines)
-                            if stderrTrimmed.isEmpty {
-                                if tool == .claude {
-                                    resultMessage = "Claude CLI returned an error. You may need to sign in — run 'claude login' in Terminal."
-                                } else {
-                                    resultMessage = "Codex CLI returned an error. You may need to sign in — run 'codex auth' in Terminal."
-                                }
-                            } else {
-                                resultMessage = "CLI error: \(stderrTrimmed.prefix(150))"
-                            }
-                        }
-                        onTestComplete(false)
-                        return
-                    }
-
-                    // Exit code is 0, now check for expected response
-                    let passed = parseForSuccess(cliResult, for: tool)
-                    success = passed
-                    if passed {
-                        resultMessage = "CLI is working!"
-                    } else if cliResult.stdout.isEmpty {
-                        resultMessage = "CLI returned empty response. Make sure you're signed in."
-                    } else {
-                        let preview = cliResult.stdout.prefix(100)
-                        resultMessage = "Got: \"\(preview)\" — expected '4'"
-                    }
-                    onTestComplete(passed)
-                case .failure(let error):
-                    success = false
-                    resultMessage = error.localizedDescription
-
-                    // Build debug output even for errors
-                    var debugParts: [String] = []
-                    debugParts.append("Tool: \(tool.shortName)")
-                    debugParts.append("Error: \(error.localizedDescription)")
-                    debugParts.append("Shell: \(LoginShellRunner.userLoginShell.path)")
-
-                    let cmdName = tool == .codex ? "codex" : "claude"
-                    let whichResult = LoginShellRunner.run("which -a \(cmdName)", timeout: 5)
-                    if whichResult.exitCode == 0 {
-                        let paths = whichResult.stdout.trimmingCharacters(in: .whitespacesAndNewlines)
-                        if !paths.isEmpty {
-                            debugParts.append("Installations found:\n\(paths)")
-                        }
-                    } else {
-                        debugParts.append("Installations found: none")
-                    }
-
-                    debugOutput = debugParts.joined(separator: "\n\n")
-                    onTestComplete(false)
-                }
+                let (passed, msg, debug) = Self.processTestResult(outcome, tool: tool)
+                success = passed
+                resultMessage = msg
+                debugOutput = debug
+                // Primary must pass; secondary is optional
+                onTestComplete(passed)
             }
         }
     }
 
-    private func copyDebugLogs() {
+    private func runSecondaryTest() {
+        guard !isTestingSecondary else { return }
+        guard let tool = secondaryTool else { return }
+        isTestingSecondary = true
+        secondarySuccess = false
+        secondaryResultMessage = nil
+        secondaryDebugOutput = nil
+
+        Task.detached {
+            let outcome = Self.executeTest(for: tool)
+            await MainActor.run {
+                isTestingSecondary = false
+                let (passed, msg, debug) = Self.processTestResult(outcome, tool: tool)
+                secondarySuccess = passed
+                secondaryResultMessage = msg
+                secondaryDebugOutput = debug
+                // Don't gate overall completion on secondary test — it's optional
+            }
+        }
+    }
+
+    private func copyPrimaryDebugLogs() {
         guard let debug = debugOutput else { return }
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(debug, forType: .string)
     }
 
-    private func performTest(for tool: CLITool) throws -> CLIResult {
+    private func copySecondaryDebugLogs() {
+        guard let debug = secondaryDebugOutput else { return }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(debug, forType: .string)
+    }
+
+    // MARK: - Shared test logic
+
+    private static func executeTest(for tool: CLITool) -> Result<CLIResult, Error> {
+        do {
+            return .success(try performTest(for: tool))
+        } catch {
+            return .failure(error)
+        }
+    }
+
+    private static func processTestResult(_ outcome: Result<CLIResult, Error>, tool: CLITool) -> (passed: Bool, message: String?, debug: String?) {
+        switch outcome {
+        case .success(let cliResult):
+            var debugParts: [String] = []
+            debugParts.append("Tool: \(tool.shortName)")
+            debugParts.append("Exit code: \(cliResult.exitCode)")
+            debugParts.append("Shell: \(LoginShellRunner.userLoginShell.path)")
+
+            let cmdName = tool == .codex ? "codex" : "claude"
+            let whichResult = LoginShellRunner.run("which -a \(cmdName)", timeout: 5)
+            if whichResult.exitCode == 0 {
+                let paths = whichResult.stdout.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !paths.isEmpty {
+                    debugParts.append("Installations found:\n\(paths)")
+                }
+            }
+            if !cliResult.stdout.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                debugParts.append("stdout:\n\(cliResult.stdout)")
+            }
+            if !cliResult.stderr.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                debugParts.append("stderr:\n\(cliResult.stderr)")
+            }
+            let debug = debugParts.joined(separator: "\n\n")
+
+            if cliResult.exitCode != 0 {
+                if let authError = detectAuthError(cliResult, for: tool) {
+                    return (false, authError, debug)
+                }
+                let stderrTrimmed = cliResult.stderr.trimmingCharacters(in: .whitespacesAndNewlines)
+                if stderrTrimmed.isEmpty {
+                    let msg = tool == .claude
+                        ? "Claude CLI returned an error. You may need to sign in — run 'claude login' in Terminal."
+                        : "Codex CLI returned an error. You may need to sign in — run 'codex auth' in Terminal."
+                    return (false, msg, debug)
+                }
+                return (false, "CLI error: \(stderrTrimmed.prefix(150))", debug)
+            }
+
+            let passed = parseForSuccess(cliResult, for: tool)
+            if passed {
+                return (true, "CLI is working!", debug)
+            } else if cliResult.stdout.isEmpty {
+                return (false, "CLI returned empty response. Make sure you're signed in.", debug)
+            } else {
+                let preview = cliResult.stdout.prefix(100)
+                return (false, "Got: \"\(preview)\" — expected '4'", debug)
+            }
+
+        case .failure(let error):
+            var debugParts: [String] = []
+            debugParts.append("Tool: \(tool.shortName)")
+            debugParts.append("Error: \(error.localizedDescription)")
+            debugParts.append("Shell: \(LoginShellRunner.userLoginShell.path)")
+            let cmdName = tool == .codex ? "codex" : "claude"
+            let whichResult = LoginShellRunner.run("which -a \(cmdName)", timeout: 5)
+            if whichResult.exitCode == 0 {
+                let paths = whichResult.stdout.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !paths.isEmpty { debugParts.append("Installations found:\n\(paths)") }
+            } else {
+                debugParts.append("Installations found: none")
+            }
+            return (false, error.localizedDescription, debugParts.joined(separator: "\n\n"))
+        }
+    }
+
+    private static func performTest(for tool: CLITool) throws -> CLIResult {
         guard CLIDetector.isInstalled(tool) else {
             throw NSError(domain: "ChatCLITest", code: 1, userInfo: [NSLocalizedDescriptionKey: "\(tool.shortName) CLI not found. Install it and run '\(tool == .codex ? "codex auth" : "claude login")' in Terminal."])
         }
 
-        // Use a sandboxed directory to avoid permission prompts for Downloads/Desktop
         let safeWorkingDir = FileManager.default.temporaryDirectory
-
-        // Simple math test - deterministic and doesn't require image handling
         let prompt = "What is 2+2? Answer with just the number."
 
         switch tool {
         case .codex:
-            // --skip-git-repo-check needed because app runs from sandboxed directory
-            // Disable MCP servers dynamically to avoid connecting to user's configured servers during test
-            // -- separator ensures prompt isn't parsed as an option
             var codexArgs = [
                 "exec",
                 "--skip-git-repo-check",
                 "-c", "model_reasoning_effort=low"
             ]
-            // Dynamically disable each MCP server by name
             let mcpServers = LoginShellRunner.getCodexMCPServerNames()
             for serverName in mcpServers {
                 codexArgs.append(contentsOf: ["--config", "mcp_servers.\(serverName).enabled=false"])
@@ -1715,38 +1817,23 @@ struct ChatCLITestView: View {
                 "--",
                 prompt
             ])
-            return try runCLI(
-                "codex",
-                args: codexArgs,
-                cwd: safeWorkingDir
-            )
+            return try runCLI("codex", args: codexArgs, cwd: safeWorkingDir)
         case .claude:
-            // --strict-mcp-config disables all user MCP servers
-            // -- separator ensures prompt isn't parsed as an option
             return try runCLI(
                 "claude",
-                args: [
-                    "--print",
-                    "--output-format", "text",
-                    "--strict-mcp-config",
-                    "--",
-                    prompt
-                ],
+                args: ["--print", "--output-format", "text", "--strict-mcp-config", "--", prompt],
                 cwd: safeWorkingDir
             )
         }
     }
 
-    private func parseForSuccess(_ result: CLIResult, for tool: CLITool) -> Bool {
+    private static func parseForSuccess(_ result: CLIResult, for tool: CLITool) -> Bool {
         let combined = (result.stdout + " " + result.stderr)
-        // Simple math test - check for "4" in the response
         return combined.contains("4")
     }
 
-    private func detectAuthError(_ result: CLIResult, for tool: CLITool) -> String? {
+    private static func detectAuthError(_ result: CLIResult, for tool: CLITool) -> String? {
         let combined = (result.stdout + " " + result.stderr).lowercased()
-
-        // Check for common auth failure patterns
         let isAuthError = combined.contains("invalid api key")
             || combined.contains("please run /login")
             || combined.contains("401 unauthorized")
@@ -1755,15 +1842,10 @@ struct ChatCLITestView: View {
             || combined.contains("claude login")
             || combined.contains("authentication required")
             || combined.contains("unauthorized")
-
         guard isAuthError else { return nil }
-
-        // Return the correct message based on which tool we're actually testing
         switch tool {
-        case .claude:
-            return "Claude CLI is not signed in. Run 'claude login' in Terminal to authenticate."
-        case .codex:
-            return "Codex CLI is not signed in. Run 'codex auth' in Terminal to authenticate."
+        case .claude: return "Claude CLI is not signed in. Run 'claude login' in Terminal to authenticate."
+        case .codex: return "Codex CLI is not signed in. Run 'codex auth' in Terminal to authenticate."
         }
     }
 }
@@ -1819,6 +1901,13 @@ enum CLITool: String, CaseIterable {
         switch self {
         case .codex: return "terminal"
         case .claude: return "bolt.horizontal.circle"
+        }
+    }
+
+    var asChatCLITool: ChatCLITool {
+        switch self {
+        case .codex: return .codex
+        case .claude: return .claude
         }
     }
 }
@@ -1916,16 +2005,18 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
     let onInstall: (CLITool) -> Void
     let selectedTool: CLITool?
     let onSelectTool: (CLITool) -> Void
+    let secondaryTool: CLITool?
+    let onSelectSecondaryTool: (CLITool?) -> Void
     @ViewBuilder let nextButton: () -> NextButton
-    
+
     private let accentColor = Color(red: 0.25, green: 0.17, blue: 0)
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             Text("Dayflow can talk to ChatGPT (via the Codex CLI) or Claude Code. You only need one installed and signed in on this Mac. After installing, run `codex auth` or `claude login` in Terminal to connect it to your account.")
                 .font(.custom("Nunito", size: 14))
                 .foregroundColor(.black.opacity(0.6))
-            
+
             HStack(alignment: .top, spacing: 14) {
                 ChatCLIToolStatusRow(
                     tool: .codex,
@@ -1938,19 +2029,24 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
                     onInstall: { onInstall(.claude) }
                 )
             }
-            
-            Text("Tip: Once both are installed, you can choose which provider Dayflow uses from Settings → AI Provider.")
-                .font(.custom("Nunito", size: 12))
-                .foregroundColor(.black.opacity(0.5))
 
             VStack(alignment: .leading, spacing: 10) {
-                Text("Choose which provider Dayflow should use")
+                Text("Primary provider")
                     .font(.custom("Nunito", size: 13))
                     .fontWeight(.semibold)
                     .foregroundColor(.black.opacity(0.65))
+                Text("Dayflow sends all requests to this provider first.")
+                    .font(.custom("Nunito", size: 11.5))
+                    .foregroundColor(.black.opacity(0.45))
                 HStack(spacing: 12) {
                     ForEach(CLITool.allCases, id: \.self) { tool in
-                        selectionButton(for: tool)
+                        selectionButton(for: tool, isSelected: selectedTool == tool, action: {
+                            onSelectTool(tool)
+                            // Auto-clear secondary if it's the same tool
+                            if secondaryTool == tool {
+                                onSelectSecondaryTool(nil)
+                            }
+                        })
                     }
                 }
             }
@@ -1961,7 +2057,37 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(Color.black.opacity(0.05), lineWidth: 1)
             )
-            
+
+            // Secondary provider (optional) - only show if both tools are available
+            if bothToolsAvailable {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Secondary provider (optional)")
+                        .font(.custom("Nunito", size: 13))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.black.opacity(0.65))
+                    Text("If the primary fails, Dayflow automatically tries this one as backup.")
+                        .font(.custom("Nunito", size: 11.5))
+                        .foregroundColor(.black.opacity(0.45))
+                    HStack(spacing: 12) {
+                        // "None" option
+                        secondaryNoneButton
+                        // Show only the other tool (not primary)
+                        ForEach(CLITool.allCases.filter { $0 != selectedTool }, id: \.self) { tool in
+                            selectionButton(for: tool, isSelected: secondaryTool == tool, action: {
+                                onSelectSecondaryTool(tool)
+                            })
+                        }
+                    }
+                }
+                .padding(16)
+                .background(Color.white.opacity(0.5))
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                )
+            }
+
             HStack {
                 DayflowSurfaceButton(
                     action: {
@@ -1990,21 +2116,25 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
                     showOverlayStroke: true
                 )
                 .disabled(isChecking)
-                
+
                 Spacer()
-                
+
                 nextButton()
                     .opacity(canContinue ? 1.0 : 0.5)
                     .allowsHitTesting(canContinue)
             }
         }
     }
-    
+
     private var canContinue: Bool {
         guard let selectedTool else { return false }
         return isToolAvailable(selectedTool)
     }
-    
+
+    private var bothToolsAvailable: Bool {
+        isToolAvailable(.codex) && isToolAvailable(.claude)
+    }
+
     private func isToolAvailable(_ tool: CLITool) -> Bool {
         switch tool {
         case .codex:
@@ -2015,17 +2145,48 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
             return claudeReport?.resolvedPath != nil
         }
     }
-    
+
     @ViewBuilder
-    private func selectionButton(for tool: CLITool) -> some View {
+    private var secondaryNoneButton: some View {
+        let isSelected = secondaryTool == nil
+        Button(action: {
+            onSelectSecondaryTool(nil)
+        }) {
+            HStack(spacing: 6) {
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(accentColor)
+                Text("None")
+                    .font(.custom("Nunito", size: 13))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.black.opacity(0.85))
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(isSelected ? Color.white.opacity(0.9) : Color.white.opacity(0.5))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(isSelected ? accentColor.opacity(0.4) : Color.black.opacity(0.05), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .pointingHandCursor()
+    }
+
+    @ViewBuilder
+    private func selectionButton(for tool: CLITool, isSelected: Bool, action: @escaping () -> Void) -> some View {
         let enabled = isToolAvailable(tool)
         Button(action: {
             if enabled {
-                onSelectTool(tool)
+                action()
             }
         }) {
             HStack(spacing: 6) {
-                Image(systemName: selectedTool == tool ? "checkmark.circle.fill" : "circle")
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(enabled ? accentColor : Color.gray.opacity(0.6))
                 VStack(alignment: .leading, spacing: 2) {
@@ -2043,11 +2204,11 @@ struct ChatCLIDetectionStepView<NextButton: View>: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(selectedTool == tool ? Color.white.opacity(0.9) : Color.white.opacity(0.5))
+                    .fill(isSelected ? Color.white.opacity(0.9) : Color.white.opacity(0.5))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(selectedTool == tool ? accentColor.opacity(0.4) : Color.black.opacity(0.05), lineWidth: 1)
+                    .stroke(isSelected ? accentColor.opacity(0.4) : Color.black.opacity(0.05), lineWidth: 1)
             )
         }
         .buttonStyle(.plain)

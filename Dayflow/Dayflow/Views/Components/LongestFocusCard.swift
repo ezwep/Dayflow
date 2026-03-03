@@ -7,13 +7,25 @@
 
 import SwiftUI
 
-// MARK: - Cached DateFormatter (creating DateFormatters is expensive due to ICU initialization)
+// MARK: - Cached DateFormatters (immutable to avoid recursion via KVO during SwiftUI body evaluation)
 
-private let cachedFocusTimeFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "h:mm a"
-    return formatter
+private let focusFormatter12h: DateFormatter = {
+    let f = DateFormatter()
+    f.dateFormat = "h:mm a"
+    f.locale = Locale(identifier: "en_US_POSIX")
+    return f
 }()
+
+private let focusFormatter24h: DateFormatter = {
+    let f = DateFormatter()
+    f.dateFormat = "H:mm"
+    return f
+}()
+
+private func focusDisplayTime(from date: Date) -> String {
+    let formatter = TimeFormatPreferences.use24Hour ? focusFormatter24h : focusFormatter12h
+    return formatter.string(from: date)
+}
 
 // MARK: - Data Model
 
@@ -219,7 +231,7 @@ struct LongestFocusCard: View {
 
     private func timeLabels(for block: FocusBlock) -> some View {
         ZStack {
-            Text(cachedFocusTimeFormatter.string(from: block.startTime))
+            Text(focusDisplayTime(from: block.startTime))
                 .font(.custom("Nunito-Bold", size: 10))
                 .foregroundColor(Design.orangeSolid)
                 .position(
@@ -227,7 +239,7 @@ struct LongestFocusCard: View {
                     y: Design.labelTop + (Design.labelHeight / 2)
                 )
 
-            Text(cachedFocusTimeFormatter.string(from: block.endTime))
+            Text(focusDisplayTime(from: block.endTime))
                 .font(.custom("Nunito-Bold", size: 10))
                 .foregroundColor(Design.orangeSolid)
                 .position(

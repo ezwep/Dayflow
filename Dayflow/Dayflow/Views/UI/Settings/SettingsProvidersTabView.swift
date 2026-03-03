@@ -98,6 +98,7 @@ struct SettingsProvidersTabView: View {
                     case "chatgpt_claude":
                         ChatCLITestView(
                             selectedTool: viewModel.preferredCLITool,
+                            secondaryTool: viewModel.backupChatCLITool,
                             onTestComplete: { _ in }
                         )
                     default:

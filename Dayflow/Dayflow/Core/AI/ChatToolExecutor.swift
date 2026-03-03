@@ -14,12 +14,11 @@ private let chatToolDayFormatter: DateFormatter = {
     return formatter
 }()
 
-private let chatToolTimeFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "h:mm a"
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    return formatter
-}()
+private let chatToolTimeFormatter = DateFormatter()
+private func chatToolDisplayTime(from date: Date) -> String {
+    TimeFormatPreferences.applyDisplayFormat(to: chatToolTimeFormatter)
+    return chatToolTimeFormatter.string(from: date)
+}
 
 private let chatToolDisplayDateFormatter: DateFormatter = {
     let formatter = DateFormatter()
@@ -238,8 +237,8 @@ final class ChatToolExecutor {
         var output = "Detailed observations for \(date):\n\n"
 
         for obs in observations {
-            let startTime = chatToolTimeFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(obs.startTs)))
-            let endTime = chatToolTimeFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(obs.endTs)))
+            let startTime = chatToolDisplayTime(from: Date(timeIntervalSince1970: TimeInterval(obs.startTs)))
+            let endTime = chatToolDisplayTime(from: Date(timeIntervalSince1970: TimeInterval(obs.endTs)))
             output += "[\(startTime) - \(endTime)]\n"
             output += "\(obs.observation)\n\n"
         }
