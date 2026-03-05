@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 // MARK: - Notifications
 
@@ -53,25 +54,35 @@ struct DayflowColors {
     /// Primary accent — interactive elements, links, active states
     static var accent: Color {
         Color(nsColor: NSColor(name: nil) { appearance in
-            let isDark = appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-            return ThemeManager.shared.currentPalette.accent(isDark: isDark)
+            let isDark = Self.resolveIsDark(systemAppearance: appearance)
+            return ThemeManager.shared.cachedPalette.accent(isDark: isDark)
         })
     }
 
     /// Secondary accent — complementary highlights
     static var secondary: Color {
         Color(nsColor: NSColor(name: nil) { appearance in
-            let isDark = appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-            return ThemeManager.shared.currentPalette.secondary(isDark: isDark)
+            let isDark = Self.resolveIsDark(systemAppearance: appearance)
+            return ThemeManager.shared.cachedPalette.secondary(isDark: isDark)
         })
     }
 
     /// CTA button background
     static var cta: Color {
         Color(nsColor: NSColor(name: nil) { appearance in
-            let isDark = appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-            return ThemeManager.shared.currentPalette.cta(isDark: isDark)
+            let isDark = Self.resolveIsDark(systemAppearance: appearance)
+            return ThemeManager.shared.cachedPalette.cta(isDark: isDark)
         })
+    }
+
+    /// Resolves dark/light: in-app setting overrides the system appearance.
+    private static func resolveIsDark(systemAppearance: NSAppearance) -> Bool {
+        let stored = UserDefaults.standard.string(forKey: "dayflowAppearance") ?? "system"
+        switch DayflowAppearance(rawValue: stored) {
+        case .dark:         return true
+        case .light:        return false
+        case .system, nil:  return systemAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+        }
     }
 
     // MARK: - Text

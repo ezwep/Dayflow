@@ -182,11 +182,11 @@ struct DayflowApp: App {
                     .ignoresSafeArea()
                     .allowsHitTesting(false)
                     .accessibilityHidden(true)
+                    .id(themeManager.revision)
                 }
             }
             .frame(minWidth: 900, maxWidth: .infinity, minHeight: 600, maxHeight: .infinity)
             .preferredColorScheme(DayflowAppearance(rawValue: appearance)?.colorScheme)
-            .id(themeManager.revision)
             .onReceive(NotificationCenter.default.publisher(for: .dayflowAppearanceChanged)) { notification in
                 if let newAppearance = notification.object as? String {
                     appearance = newAppearance

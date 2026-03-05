@@ -105,6 +105,7 @@ final class ThemeManager: ObservableObject {
     @Published var currentTheme: DayflowThemeId {
         didSet {
             guard currentTheme != oldValue else { return }
+            cachedPalette = currentTheme.palette
             UserDefaults.standard.set(currentTheme.rawValue, forKey: "dayflowTheme")
             revision += 1
             NotificationCenter.default.post(name: .dayflowThemeChanged, object: currentTheme.rawValue)
@@ -115,9 +116,14 @@ final class ThemeManager: ObservableObject {
         currentTheme.palette
     }
 
+    /// Nonisolated cache so NSColor dynamic closures can read the palette without @MainActor.
+    nonisolated(unsafe) private(set) var cachedPalette: ThemePalette = DayflowThemeId.ocean.palette
+
     private init() {
         let stored = UserDefaults.standard.string(forKey: "dayflowTheme") ?? "ocean"
-        self.currentTheme = DayflowThemeId(rawValue: stored) ?? .ocean
+        let theme = DayflowThemeId(rawValue: stored) ?? .ocean
+        self.currentTheme = theme
+        self.cachedPalette = theme.palette
     }
 }
 
