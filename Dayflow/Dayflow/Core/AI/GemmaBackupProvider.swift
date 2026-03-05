@@ -1172,7 +1172,7 @@ final class GemmaBackupProvider {
     }
 
     private func loadScreenshotData(_ screenshot: Screenshot, maxDimension: CGFloat = 1280, compression: CGFloat = 0.7) -> Data? {
-        let url = URL(fileURLWithPath: screenshot.filePath)
+        let url = screenshot.fileURL
         guard let image = NSImage(contentsOf: url) else { return nil }
 
         let originalSize = image.size

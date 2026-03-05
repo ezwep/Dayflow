@@ -354,10 +354,11 @@ final class AnalysisManager: AnalysisManaging {
         var retried = 0
 
         for batch in stuckBatches {
-            // Skip batches older than 6 hours — mark them as failed instead
+            // Skip batches older than 6 hours — leave them alone so the
+            // UI RetryCoordinator can explicitly reprocess them via Retry button.
+            // Do NOT mark them as failed here; that would interfere with retry.
             if batch.end < sixHoursAgo {
-                print("⏭️ [AnalysisManager] Skipping stale batch \(batch.id) (ended \(batch.end), threshold \(sixHoursAgo))")
-                store.markBatchFailed(batchId: batch.id, reason: "Batch stuck in '\(batch.status)' state for too long — auto-cleared")
+                print("⏭️ [AnalysisManager] Skipping stale batch \(batch.id) (ended \(batch.end)) — leaving for explicit retry")
                 continue
             }
 

@@ -42,12 +42,30 @@ struct ChatView: View {
     }
 
     private var welcomePrompts: [WelcomePrompt] {
-        [
-            WelcomePrompt(icon: "doc.text", text: "Generate standup notes for yesterday"),
-            WelcomePrompt(icon: "checkmark.seal", text: "What did I get done last week?"),
-            WelcomePrompt(icon: "exclamationmark.bubble", text: "What distracted me the most this past week?"),
-            WelcomePrompt(icon: "sparkles", text: "Pull my data from the last week and tell me something interesting")
+        let lang = (LLMOutputLanguagePreferences.normalizedOverride ?? "").lowercased()
+        let texts = ChatWelcomeLocalization.prompts(for: lang)
+        return [
+            WelcomePrompt(icon: "doc.text", text: texts.0),
+            WelcomePrompt(icon: "checkmark.seal", text: texts.1),
+            WelcomePrompt(icon: "exclamationmark.bubble", text: texts.2),
+            WelcomePrompt(icon: "sparkles", text: texts.3)
         ]
+    }
+
+    private var welcomeTitle: String {
+        ChatWelcomeLocalization.title(for: (LLMOutputLanguagePreferences.normalizedOverride ?? "").lowercased())
+    }
+
+    private var welcomeSubtitle: String {
+        ChatWelcomeLocalization.subtitle(for: (LLMOutputLanguagePreferences.normalizedOverride ?? "").lowercased())
+    }
+
+    private var welcomeSectionHeader: String {
+        ChatWelcomeLocalization.sectionHeader(for: (LLMOutputLanguagePreferences.normalizedOverride ?? "").lowercased())
+    }
+
+    private var welcomePlaceholder: String {
+        ChatWelcomeLocalization.placeholder(for: (LLMOutputLanguagePreferences.normalizedOverride ?? "").lowercased())
     }
 
     private var welcomeHeroAnimation: Animation {
@@ -326,11 +344,11 @@ struct ChatView: View {
                         .frame(width: 42, height: 42)
 
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Ask about your day")
+                            Text(welcomeTitle)
                                 .font(.custom("InstrumentSerif-Regular", size: 30))
                                 .foregroundColor(DayflowColors.textPrimary)
 
-                            Text("Turn your timeline into instant answers.")
+                            Text(welcomeSubtitle)
                                 .font(.custom("Nunito", size: 13).weight(.semibold))
                                 .foregroundColor(DayflowColors.textMuted)
                         }
@@ -339,7 +357,7 @@ struct ChatView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Try one of these")
+                        Text(welcomeSectionHeader)
                             .font(.custom("Nunito", size: 12).weight(.bold))
                             .foregroundColor(DayflowColors.textMuted)
 
@@ -524,7 +542,7 @@ struct ChatView: View {
                 text: $inputText,
                 isFocused: $isInputFocused,
                 focusToken: composerFocusToken,
-                placeholder: "Ask about your day...",
+                placeholder: welcomePlaceholder,
                 onSubmit: submitCurrentInputIfAllowed
             )
             .frame(height: 50, alignment: .leading)

@@ -48,19 +48,31 @@ struct DayflowColors {
     /// Dark: #1C2333 — Light: #FFFFFF
     static let surfaceElevated = Color("DFSurfaceElevated")
 
-    // MARK: - Accent / Brand
+    // MARK: - Accent / Brand (theme-aware, resolved dynamically)
 
     /// Primary accent — interactive elements, links, active states
-    /// Dark: #00BFFF — Light: #4A6FA5
-    static let accent = Color("DFAccent")
+    static var accent: Color {
+        Color(nsColor: NSColor(name: nil) { appearance in
+            let isDark = appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            return ThemeManager.shared.currentPalette.accent(isDark: isDark)
+        })
+    }
 
     /// Secondary accent — complementary highlights
-    /// Dark: #7C3AED — Light: #2563EB
-    static let secondary = Color("DFSecondary")
+    static var secondary: Color {
+        Color(nsColor: NSColor(name: nil) { appearance in
+            let isDark = appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            return ThemeManager.shared.currentPalette.secondary(isDark: isDark)
+        })
+    }
 
     /// CTA button background
-    /// Dark: #00BFFF — Light: #2563EB
-    static let cta = Color("DFCTA")
+    static var cta: Color {
+        Color(nsColor: NSColor(name: nil) { appearance in
+            let isDark = appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            return ThemeManager.shared.currentPalette.cta(isDark: isDark)
+        })
+    }
 
     // MARK: - Text
 

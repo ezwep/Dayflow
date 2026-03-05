@@ -340,7 +340,7 @@ extension MainView {
         // Left column: Logo on top, sidebar centered
         VStack(spacing: 0) {
             // Logo area (keeps same animation)
-            LogoBadgeView(imageName: "DayflowLogoMainApp", size: 36)
+            LogoBadgeView(imageName: "DayflowLogoMainApp", size: 48)
                 .frame(height: 100)
                 .frame(maxWidth: .infinity)
                 .scaleEffect(logoScale)
@@ -351,7 +351,7 @@ extension MainView {
             // Sidebar in fixed-width gutter
             VStack {
                 Spacer()
-                SidebarView(selectedIcon: $selectedIcon)
+                SidebarView(selectedIcon: selectedIconBinding)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .offset(y: sidebarOffset)
                     .opacity(sidebarOpacity)
@@ -359,7 +359,7 @@ extension MainView {
             }
             Spacer(minLength: 0)
         }
-        .frame(width: 100)
+        .frame(width: 110)
         .fixedSize(horizontal: true, vertical: false)
         .frame(maxHeight: .infinity)
         .background(.ultraThinMaterial)
@@ -459,10 +459,11 @@ extension MainView {
                             "to_day": dayString(to)
                         ])
                     }) {
-                        Image("CalendarLeftButton")
-                            .resizable()
-                            .scaledToFit()
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(DayflowColors.textMuted)
                             .frame(width: 26, height: 26)
+                            .background(Circle().fill(DayflowColors.surface))
                     }
                     .buttonStyle(PlainButtonStyle())
                     .hoverScaleEffect(scale: 1.02)
@@ -481,10 +482,15 @@ extension MainView {
                             "to_day": dayString(tomorrow)
                         ])
                     }) {
-                        Image("CalendarRightButton")
-                            .resizable()
-                            .scaledToFit()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(
+                                canNavigateForward(from: selectedDate)
+                                ? DayflowColors.textMuted
+                                : DayflowColors.textMuted.opacity(0.4)
+                            )
                             .frame(width: 26, height: 26)
+                            .background(Circle().fill(DayflowColors.surface))
                     }
                     .buttonStyle(PlainButtonStyle())
                     .disabled(!canNavigateForward(from: selectedDate))

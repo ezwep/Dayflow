@@ -555,10 +555,18 @@ struct DaySummaryView: View {
                     isEditingFocusCategories = true
                     isEditingDistractionCategories = false
                 }) {
-                    Image("CategoryEditButton")
-                        .resizable()
-                        .scaledToFit()
+                    Image(systemName: "pencil")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor(DayflowColors.textMuted)
                         .frame(width: Design.focusEditButtonSize, height: Design.focusEditButtonSize)
+                        .background(
+                            Circle()
+                                .fill(DayflowColors.surface)
+                        )
+                        .overlay(
+                            Circle()
+                                .strokeBorder(DayflowColors.border, lineWidth: 1)
+                        )
                 }
                 .buttonStyle(.plain)
                 .hoverScaleEffect(scale: 1.02)
@@ -608,10 +616,18 @@ struct DaySummaryView: View {
                     isEditingDistractionCategories = true
                     isEditingFocusCategories = false
                 }) {
-                    Image("CategoryEditButton")
-                        .resizable()
-                        .scaledToFit()
+                    Image(systemName: "pencil")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor(DayflowColors.textMuted)
                         .frame(width: Design.focusEditButtonSize, height: Design.focusEditButtonSize)
+                        .background(
+                            Circle()
+                                .fill(DayflowColors.surface)
+                        )
+                        .overlay(
+                            Circle()
+                                .strokeBorder(DayflowColors.border, lineWidth: 1)
+                        )
                 }
                 .buttonStyle(.plain)
                 .hoverScaleEffect(scale: 1.02)

@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum SidebarIcon: CaseIterable {
+enum SidebarIcon: String, CaseIterable {
     case timeline
     case daily
     case dashboard
@@ -45,7 +45,7 @@ struct SidebarView: View {
     @ObservedObject private var badgeManager = NotificationBadgeManager.shared
 
     var body: some View {
-        VStack(alignment: .center, spacing: 5.25) {
+        VStack(alignment: .center, spacing: 6) {
             ForEach(SidebarIcon.allCases, id: \.self) { icon in
                 SidebarIconButton(
                     icon: icon,
@@ -53,7 +53,7 @@ struct SidebarView: View {
                     showBadge: icon == .journal && badgeManager.hasPendingReminder,
                     action: { selectedIcon = icon }
                 )
-                .frame(width: 56, height: 56)
+                .frame(width: 66, height: 66)
             }
         }
     }
@@ -67,12 +67,12 @@ struct SidebarIconButton: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 3) {
+            VStack(spacing: 4) {
                 ZStack {
                     if isSelected {
-                        RoundedRectangle(cornerRadius: 8)
+                        RoundedRectangle(cornerRadius: 9)
                             .fill(DayflowColors.accent.opacity(0.15))
-                            .frame(width: 30, height: 30)
+                            .frame(width: 38, height: 38)
                     }
 
                     if let asset = icon.assetName {
@@ -82,29 +82,29 @@ struct SidebarIconButton: View {
                             .renderingMode(.template)
                             .foregroundColor(isSelected ? DayflowColors.accent : DayflowColors.textMuted)
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 16, height: 16)
+                            .frame(width: 20, height: 20)
                     } else if let sys = icon.systemNameFallback {
                         Image(systemName: sys)
-                            .font(.system(size: 15))
+                            .font(.system(size: 18))
                             .foregroundColor(isSelected ? DayflowColors.accent : DayflowColors.textMuted)
                     }
 
                     if showBadge {
                         Circle()
                             .fill(DayflowColors.accent)
-                            .frame(width: 8, height: 8)
-                            .offset(x: 10, y: -10)
+                            .frame(width: 9, height: 9)
+                            .offset(x: 13, y: -13)
                     }
                 }
-                .frame(width: 34, height: 34)
+                .frame(width: 42, height: 42)
 
                 Text(icon.displayName)
-                    .font(.custom("Nunito", size: 11))
+                    .font(.custom("Nunito", size: 12))
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
                     .foregroundColor(isSelected ? DayflowColors.accent : DayflowColors.textMuted)
             }
-            .frame(width: 56, height: 56)
+            .frame(width: 66, height: 66)
             .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())

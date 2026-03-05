@@ -96,6 +96,22 @@ struct SettingsOtherTabView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 8) {
+                        Text("Color theme")
+                            .font(.custom("Nunito", size: 13).weight(.semibold))
+                            .foregroundColor(DayflowColors.textPrimary.opacity(0.85))
+
+                        HStack(spacing: 12) {
+                            ForEach(DayflowThemeId.allCases) { themeId in
+                                themeSwatchButton(themeId: themeId)
+                            }
+                        }
+
+                        Text("Changes the accent colors throughout the app.")
+                            .font(.custom("Nunito", size: 11.5))
+                            .foregroundColor(DayflowColors.textMuted)
+                    }
+
+                    VStack(alignment: .leading, spacing: 8) {
                         Text("Inactivity threshold")
                             .font(.custom("Nunito", size: 13).weight(.semibold))
                             .foregroundColor(DayflowColors.textPrimary.opacity(0.85))
@@ -421,6 +437,49 @@ struct SettingsOtherTabView: View {
                 .disabled(disabled)
         }
         .opacity(disabled ? 0.7 : 1)
+    }
+
+    private func themeSwatchButton(themeId: DayflowThemeId) -> some View {
+        let isSelected = viewModel.theme == themeId.rawValue
+        return Button {
+            viewModel.theme = themeId.rawValue
+        } label: {
+            VStack(spacing: 6) {
+                Circle()
+                    .fill(Color(nsColor: themeId.swatchColor))
+                    .frame(width: 32, height: 32)
+                    .overlay(
+                        Circle()
+                            .stroke(isSelected ? Color.white : Color.clear, lineWidth: 2)
+                    )
+                    .overlay(
+                        Circle()
+                            .stroke(
+                                isSelected
+                                    ? Color(nsColor: themeId.swatchColor).opacity(0.5)
+                                    : DayflowColors.border,
+                                lineWidth: 1
+                            )
+                            .padding(-2)
+                    )
+                    .shadow(
+                        color: isSelected
+                            ? Color(nsColor: themeId.swatchColor).opacity(0.4)
+                            : .clear,
+                        radius: 6, x: 0, y: 2
+                    )
+
+                Text(themeId.displayName)
+                    .font(.custom("Nunito", size: 11))
+                    .foregroundColor(
+                        isSelected
+                            ? DayflowColors.textPrimary
+                            : DayflowColors.textMuted
+                    )
+            }
+        }
+        .buttonStyle(.plain)
+        .pointingHandCursor()
     }
 
     private static let dateLabelFormatter: DateFormatter = {

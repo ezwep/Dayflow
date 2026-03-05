@@ -15,7 +15,14 @@ import Sentry
 struct MainView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var categoryStore: CategoryStore
-    @State var selectedIcon: SidebarIcon = .timeline
+    @AppStorage("selectedSidebarIcon") private var selectedIconRaw: String = SidebarIcon.timeline.rawValue
+    var selectedIcon: SidebarIcon {
+        get { SidebarIcon(rawValue: selectedIconRaw) ?? .timeline }
+        nonmutating set { selectedIconRaw = newValue.rawValue }
+    }
+    var selectedIconBinding: Binding<SidebarIcon> {
+        Binding(get: { selectedIcon }, set: { selectedIconRaw = $0.rawValue })
+    }
     @State var selectedDate = timelineDisplayDate(from: Date())
     @State var showDatePicker = false
     @State var selectedActivity: TimelineActivity? = nil

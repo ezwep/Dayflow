@@ -82,11 +82,13 @@ struct DayflowApp: App {
     @AppStorage("didOnboard") private var didOnboard = false
     @AppStorage("useBlankUI") private var useBlankUI = false
     @AppStorage("hasCompletedJournalOnboarding") private var hasCompletedJournalOnboarding = false
+    @AppStorage("dayflowAppearance") private var appearance: String = "dark"
     @State private var showVideoLaunch = true
     @State private var contentOpacity = 0.0
     @State private var contentScale = 0.98
     @StateObject private var categoryStore = CategoryStore()
     @StateObject private var journalCoordinator = JournalCoordinator()
+    @StateObject private var themeManager = ThemeManager.shared
 
     init() {
         // Comment out for production - only use for testing onboarding
@@ -183,6 +185,13 @@ struct DayflowApp: App {
                 }
             }
             .frame(minWidth: 900, maxWidth: .infinity, minHeight: 600, maxHeight: .infinity)
+            .preferredColorScheme(DayflowAppearance(rawValue: appearance)?.colorScheme)
+            .id(themeManager.revision)
+            .onReceive(NotificationCenter.default.publisher(for: .dayflowAppearanceChanged)) { notification in
+                if let newAppearance = notification.object as? String {
+                    appearance = newAppearance
+                }
+            }
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentMinSize)

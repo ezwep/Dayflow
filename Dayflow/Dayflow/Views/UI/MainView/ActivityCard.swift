@@ -20,7 +20,8 @@ struct ActivityCard: View {
     @State private var isPreparingSlideshow = false
     @State private var slideshowError: String?
     @State private var slideshowRequestID = 0
-    @State private var timelapsePreviewThumbnail: NSImage?
+    private enum PreviewState { case loading; case loaded(NSImage); case unavailable }
+    @State private var previewState: PreviewState = .loading
     @State private var timelapsePreviewRequestID = 0
     @State private var showSlideshowPlayer = false
     @State private var slideshowScreenshots: [Screenshot] = []
@@ -73,7 +74,7 @@ struct ActivityCard: View {
                 isPreparingSlideshow = false
                 slideshowError = nil
                 slideshowRequestID &+= 1
-                timelapsePreviewThumbnail = nil
+                previewState = .loading
                 timelapsePreviewRequestID &+= 1
                 slideshowScreenshots = []
                 slideshowTitle = nil
@@ -444,7 +445,8 @@ struct ActivityCard: View {
         VStack(alignment: .leading, spacing: 8) {
             GeometryReader { geometry in
                 ZStack {
-                    if let thumbnail = timelapsePreviewThumbnail {
+                    switch previewState {
+                    case .loaded(let thumbnail):
                         Image(nsImage: thumbnail)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
@@ -452,13 +454,29 @@ struct ActivityCard: View {
                             .frame(width: geometry.size.width, height: geometry.size.height)
                             .clipped()
                             .cornerRadius(12)
-                    } else {
+                    case .loading:
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(DayflowColors.borderSubtle)
+                            .fill(DayflowColors.surfaceElevated)
                             .overlay(
-                                Image(systemName: "photo")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .foregroundColor(Color.white.opacity(0.9))
+                                VStack(spacing: 6) {
+                                    ProgressView().scaleEffect(0.75)
+                                    Text("Laden…")
+                                        .font(.custom("Nunito", size: 11))
+                                        .foregroundColor(DayflowColors.textMuted)
+                                }
+                            )
+                    case .unavailable:
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(DayflowColors.surfaceElevated)
+                            .overlay(
+                                VStack(spacing: 6) {
+                                    Image(systemName: "photo.slash")
+                                        .font(.system(size: 18, weight: .medium))
+                                        .foregroundColor(DayflowColors.textMuted)
+                                    Text("Geen preview beschikbaar")
+                                        .font(.custom("Nunito", size: 11))
+                                        .foregroundColor(DayflowColors.textMuted)
+                                }
                             )
                     }
 
@@ -509,9 +527,14 @@ struct ActivityCard: View {
             .frame(height: 200)
 
             if let errorMessage = slideshowError {
-                Text(errorMessage)
-                    .font(Font.custom("Nunito", size: 11))
-                    .foregroundColor(DayflowColors.error)
+                HStack(spacing: 6) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(DayflowColors.warning)
+                        .font(.system(size: 12))
+                    Text(errorMessage)
+                        .font(Font.custom("Nunito", size: 12))
+                        .foregroundColor(DayflowColors.textMuted)
+                }
             }
         }
     }
@@ -562,10 +585,11 @@ struct ActivityCard: View {
 
     private func loadTimelapsePreviewThumbnail(for activity: TimelineActivity, size: CGSize) {
         guard let cardId = activity.recordId else {
-            timelapsePreviewThumbnail = nil
+            previewState = .unavailable
             return
         }
 
+        previewState = .loading
         timelapsePreviewRequestID &+= 1
         let requestID = timelapsePreviewRequestID
         let targetSize = CGSize(width: max(1, size.width), height: max(1, size.height))
@@ -575,13 +599,17 @@ struct ActivityCard: View {
             await MainActor.run {
                 guard requestID == timelapsePreviewRequestID else { return }
                 guard let screenshotURL else {
-                    timelapsePreviewThumbnail = nil
+                    previewState = .unavailable
                     return
                 }
 
                 ScreenshotThumbnailCache.shared.fetchThumbnail(fileURL: screenshotURL, targetSize: targetSize) { image in
                     guard requestID == timelapsePreviewRequestID else { return }
-                    timelapsePreviewThumbnail = image
+                    if let image {
+                        previewState = .loaded(image)
+                    } else {
+                        previewState = .unavailable
+                    }
                 }
             }
         }
@@ -629,8 +657,20 @@ private actor ActivityCardTimelapseGenerator {
         guard let screenshots = try? screenshots(forCardId: cardId), !screenshots.isEmpty else {
             return nil
         }
-        let middleIndex = screenshots.count / 2
-        return screenshots[middleIndex].fileURL
+        // Try middle first, then spread outward — find the first screenshot
+        // whose file actually exists on disk (handles missing/mismatched files).
+        let mid = screenshots.count / 2
+        let count = screenshots.count
+        for offset in 0..<count {
+            for i in (offset == 0 ? [mid] : [mid - offset, mid + offset]) {
+                guard i >= 0, i < count else { continue }
+                let url = screenshots[i].fileURL
+                if FileManager.default.fileExists(atPath: url.path) {
+                    return url
+                }
+            }
+        }
+        return nil
     }
 }
 

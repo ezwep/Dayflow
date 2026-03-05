@@ -1388,7 +1388,7 @@ extension OllamaProvider {
     }
 
     private func loadScreenshotDataForOllama(_ screenshot: Screenshot, maxHeight: Double = 720, jpegQuality: CGFloat = 0.85) -> Data? {
-        let url = URL(fileURLWithPath: screenshot.filePath)
+        let url = screenshot.fileURL
 
         guard let image = NSImage(contentsOf: url) else {
             return try? Data(contentsOf: url)

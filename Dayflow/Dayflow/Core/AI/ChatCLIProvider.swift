@@ -1184,12 +1184,13 @@ final class ChatCLIProvider {
         let durationString = formatSeconds(durationSeconds)
 
         let imagePaths: [String] = sampledScreenshots.compactMap { screenshot in
-            guard FileManager.default.fileExists(atPath: screenshot.filePath) else {
+            let resolvedURL = screenshot.fileURL
+            guard FileManager.default.fileExists(atPath: resolvedURL.path) else {
                 print("[ChatCLI] ⚠️ Screenshot file not found: \(screenshot.filePath)")
                 return nil
             }
 
-            return screenshot.filePath
+            return resolvedURL.path
         }
 
         guard !imagePaths.isEmpty else {

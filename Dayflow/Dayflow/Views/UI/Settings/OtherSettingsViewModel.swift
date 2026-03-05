@@ -44,6 +44,12 @@ final class OtherSettingsViewModel: ObservableObject {
             NotificationCenter.default.post(name: .dayflowAppearanceChanged, object: appearance)
         }
     }
+    @Published var theme: String {
+        didSet {
+            guard theme != oldValue else { return }
+            ThemeManager.shared.currentTheme = DayflowThemeId(rawValue: theme) ?? .ocean
+        }
+    }
     @Published var outputLanguageOverride: String
     @Published var isOutputLanguageOverrideSaved: Bool = true
 
@@ -61,6 +67,7 @@ final class OtherSettingsViewModel: ObservableObject {
         let storedSeconds = UserDefaults.standard.integer(forKey: "idleResetSecondsOverride")
         idleThresholdMinutes = storedSeconds > 0 ? max(1, storedSeconds / 60) : 5
         appearance = UserDefaults.standard.string(forKey: "dayflowAppearance") ?? "dark"
+        theme = UserDefaults.standard.string(forKey: "dayflowTheme") ?? "ocean"
         outputLanguageOverride = LLMOutputLanguagePreferences.override
         exportStartDate = timelineDisplayDate(from: Date())
         exportEndDate = timelineDisplayDate(from: Date())

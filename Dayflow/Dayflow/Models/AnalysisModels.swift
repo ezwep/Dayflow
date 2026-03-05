@@ -29,7 +29,15 @@ struct Screenshot: Codable, Sendable {
     let isDeleted: Bool
 
     var fileURL: URL {
-        URL(fileURLWithPath: filePath)
+        let url = URL(fileURLWithPath: filePath)
+        if FileManager.default.fileExists(atPath: url.path) {
+            return url
+        }
+        // Fallback: DayflowDev and Dayflow may capture screenshots with slightly
+        // different millisecond timestamps. When a symlink shares the recordings
+        // directory, the DB path may not match the actual file. Try to find the
+        // closest file with the same second-level prefix (yyyyMMdd_HHmmss).
+        return ScreenshotFileResolver.resolve(url) ?? url
     }
 
     var capturedDate: Date {

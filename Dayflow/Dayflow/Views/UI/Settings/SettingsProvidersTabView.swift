@@ -138,7 +138,7 @@ struct SettingsProvidersTabView: View {
     }
 
     private let routingAccentColor = DayflowColors.accent
-    private let routingButtonTextWidth: CGFloat = 120
+    private let routingButtonMinWidth: CGFloat = 150
 
     private var routingMatrix: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -258,16 +258,16 @@ struct SettingsProvidersTabView: View {
             action: action,
             content: {
                 Text(title)
-                    .font(.custom("Nunito", size: 12))
+                    .font(.custom("Nunito", size: 13))
                     .fontWeight(.semibold)
-                    .frame(width: routingButtonTextWidth, alignment: .center)
+                    .frame(minWidth: routingButtonMinWidth)
             },
             background: filled ? routingAccentColor : DayflowColors.surface,
             foreground: filled ? .white : DayflowColors.textPrimary,
             borderColor: filled ? .clear : DayflowColors.border,
-            cornerRadius: 7,
-            horizontalPadding: 10,
-            verticalPadding: 5,
+            cornerRadius: 8,
+            horizontalPadding: 16,
+            verticalPadding: 8,
             showOverlayStroke: filled
         )
         .disabled(!enabled)
@@ -556,6 +556,7 @@ struct SettingsProvidersTabView: View {
             Text(value)
                 .font(.custom("Nunito", size: 14))
                 .foregroundColor(DayflowColors.textPrimary.opacity(0.78))
+            Spacer()
             roleTag(text: roleText, type: roleType)
         }
     }

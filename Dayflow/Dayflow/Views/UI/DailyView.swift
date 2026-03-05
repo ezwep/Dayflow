@@ -35,7 +35,7 @@ private enum DailyStandupRegenerateState: Equatable {
 }
 
 struct DailyView: View {
-    @AppStorage("isDailyUnlocked") private var isUnlocked: Bool = false
+    @AppStorage("isDailyUnlocked") private var isUnlocked: Bool = true
     @Binding var selectedDate: Date
     @EnvironmentObject private var categoryStore: CategoryStore
     @Environment(\.openURL) private var openURL

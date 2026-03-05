@@ -287,6 +287,18 @@ struct TimelineReviewOverlay: View {
                                     if isActive {
                                         isPointerOverSummary = hovering
                                     }
+                                },
+                                onCategoryChange: { selectedCategory in
+                                    let normalizedCurrent = activity.category.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                                    let normalizedNew = selectedCategory.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                                    guard normalizedCurrent != normalizedNew else { return }
+                                    if let cardId = activity.recordId {
+                                        StorageManager.shared.updateTimelineCardCategory(cardId: cardId, category: selectedCategory.name)
+                                    }
+                                    let index = item.index
+                                    if index < activities.count {
+                                        activities[index] = activities[index].withCategory(selectedCategory.name)
+                                    }
                                 }
                             )
                             .frame(width: computedCardSize.width, height: computedCardSize.height)
@@ -837,10 +849,13 @@ private struct TimelineReviewCard: View {
     let isActive: Bool
     let playbackToggleToken: Int
     let onSummaryHover: (Bool) -> Void
+    var onCategoryChange: ((TimelineCategory) -> Void)? = nil
 
+    @EnvironmentObject private var categoryStore: CategoryStore
     @StateObject private var playerModel: TimelineReviewPlayerModel
     @State private var isHoveringMedia = false
     @State private var wasPlayingBeforeScrub = false
+    @State private var showCategoryPicker = false
 
     init(
         activity: TimelineActivity,
@@ -850,7 +865,8 @@ private struct TimelineReviewCard: View {
         highlightOpacity: Double,
         isActive: Bool,
         playbackToggleToken: Int,
-        onSummaryHover: @escaping (Bool) -> Void
+        onSummaryHover: @escaping (Bool) -> Void,
+        onCategoryChange: ((TimelineCategory) -> Void)? = nil
     ) {
         self.activity = activity
         self.categoryColor = categoryColor
@@ -860,6 +876,7 @@ private struct TimelineReviewCard: View {
         self.isActive = isActive
         self.playbackToggleToken = playbackToggleToken
         self.onSummaryHover = onSummaryHover
+        self.onCategoryChange = onCategoryChange
         _playerModel = StateObject(wrappedValue: TimelineReviewPlayerModel(activity: activity))
     }
 
@@ -909,7 +926,15 @@ private struct TimelineReviewCard: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     HStack(alignment: .center) {
-                        TimelineReviewCategoryPill(name: activity.category, color: categoryColor)
+                        Button {
+                            withAnimation(.spring(response: 0.25, dampingFraction: 0.85)) {
+                                showCategoryPicker.toggle()
+                            }
+                        } label: {
+                            TimelineReviewCategoryPill(name: activity.category, color: categoryColor)
+                        }
+                        .buttonStyle(.plain)
+                        .pointingHandCursor()
                         Spacer()
                         TimelineReviewTimeRangePill(timeRange: timeRangeText)
                     }
@@ -945,6 +970,26 @@ private struct TimelineReviewCard: View {
                 TimelineReviewOverlayBadge(rating: overlayRating)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .transition(.opacity)
+            }
+
+            if showCategoryPicker {
+                CategoryPickerOverlay(
+                    categories: categoryStore.categories,
+                    currentCategoryName: activity.category,
+                    onSelect: { selectedCategory in
+                        withAnimation(.spring(response: 0.25, dampingFraction: 0.85)) {
+                            showCategoryPicker = false
+                        }
+                        onCategoryChange?(selectedCategory)
+                    },
+                    onNavigateToEditor: {
+                        withAnimation(.spring(response: 0.25, dampingFraction: 0.85)) {
+                            showCategoryPicker = false
+                        }
+                    }
+                )
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .zIndex(2)
             }
         }
         .opacity(highlightOpacity)
