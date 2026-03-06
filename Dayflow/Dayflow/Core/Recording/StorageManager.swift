@@ -78,6 +78,7 @@ protocol StorageManaging: Sendable {
     func replaceTimelineCardsInRange(from: Date, to: Date, with: [TimelineCardShell], batchId: Int64) -> (insertedIds: [Int64], deletedVideoPaths: [String])
     func fetchRecentTimelineCardsForDebug(limit: Int) -> [TimelineCardDebugEntry]
 
+    func deleteTimelineCard(recordId: Int64) -> String?
     func updateTimelineCardCategory(cardId: Int64, category: String)
     func updateManualTimelineCard(cardId: Int64, startDate: Date, endDate: Date, title: String, summary: String)
 
@@ -1242,6 +1243,66 @@ final class StorageManager: StorageManaging, @unchecked Sendable {
             lastId = db.lastInsertedRowID
         }
         return lastId
+    }
+
+    func deleteTimelineCard(recordId: Int64) -> String? {
+        var videoPath: String? = nil
+
+        try? timedWrite("deleteTimelineCard(recordId:\(recordId))") { db in
+            guard let cardRow = try Row.fetchOne(
+                db,
+                sql: """
+                    SELECT video_summary_url, start_ts, end_ts, batch_id
+                    FROM timeline_cards
+                    WHERE id = ?
+                      AND is_deleted = 0
+                """,
+                arguments: [recordId]
+            ) else {
+                return
+            }
+
+            videoPath = cardRow["video_summary_url"]
+
+            let startTs: Int = cardRow["start_ts"] ?? 0
+            let endTs: Int = cardRow["end_ts"] ?? 0
+            let batchId: Int64? = cardRow["batch_id"]
+
+            try db.execute(
+                sql: """
+                    UPDATE timeline_cards
+                    SET is_deleted = 1
+                    WHERE id = ?
+                      AND is_deleted = 0
+                """,
+                arguments: [recordId]
+            )
+
+            guard endTs > startTs else { return }
+
+            if let batchId {
+                try db.execute(
+                    sql: """
+                        DELETE FROM observations
+                        WHERE batch_id = ?
+                          AND ((start_ts < ? AND end_ts > ?)
+                            OR (start_ts >= ? AND start_ts < ?))
+                    """,
+                    arguments: [batchId, endTs, startTs, startTs, endTs]
+                )
+            } else {
+                try db.execute(
+                    sql: """
+                        DELETE FROM observations
+                        WHERE (start_ts < ? AND end_ts > ?)
+                           OR (start_ts >= ? AND start_ts < ?)
+                    """,
+                    arguments: [endTs, startTs, startTs, endTs]
+                )
+            }
+        }
+
+        return videoPath
     }
 
     func updateTimelineCardCategory(cardId: Int64, category: String) {

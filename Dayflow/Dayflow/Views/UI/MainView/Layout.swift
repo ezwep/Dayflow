@@ -21,18 +21,6 @@ extension MainView {
             // Hero animation overlay for video expansion (Emil Kowalski: shared element transitions)
             .overlay { overlayContent }
             .overlay(alignment: .bottomTrailing) { failureToastOverlay }
-            .sheet(isPresented: $showDatePicker) {
-                DatePickerSheet(
-                    selectedDate: Binding(
-                        get: { selectedDate },
-                        set: {
-                            lastDateNavMethod = "picker"
-                            setSelectedDate($0)
-                        }
-                    ),
-                    isPresented: $showDatePicker
-                )
-            }
             .onAppear { handleMainLayoutAppear() }
             // Show idle return popup when idle fired and timeline is visible
             .onChange(of: inactivity.pendingReset) { _, fired in
@@ -445,6 +433,16 @@ extension MainView {
                     .font(.custom("InstrumentSerif-Regular", size: 36))
                     .foregroundColor(DayflowColors.textPrimary)
                     .frame(width: Self.maxDateTitleWidth, alignment: .leading)
+                    .contentShape(Rectangle())
+                    .onTapGesture { showDatePicker = true }
+                    .pointingHandCursor()
+                    .popover(isPresented: $showDatePicker, arrowEdge: .bottom) {
+                        DateNavInlinePicker(isPresented: $showDatePicker, initialDate: selectedDate) { newDate in
+                            lastDateNavMethod = "picker"
+                            previousDate = selectedDate
+                            setSelectedDate(newDate)
+                        }
+                    }
 
                 HStack(spacing: 3) {
                     Button(action: {
@@ -665,7 +663,8 @@ extension MainView {
                     if !feedbackModalVisible {
                         TimelineRateSummaryView(
                             activityID: activity.id,
-                            onRate: handleTimelineRating
+                            onRate: handleTimelineRating,
+                            onDelete: handleTimelineDelete
                         )
                         .frame(maxWidth: .infinity)
                         .allowsHitTesting(!feedbackModalVisible)

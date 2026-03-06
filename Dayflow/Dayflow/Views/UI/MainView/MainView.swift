@@ -60,6 +60,7 @@ struct MainView: View {
     @State var feedbackMode: TimelineFeedbackMode = .form
     @State var copyTimelineState: TimelineCopyState = .idle
     @State var copyTimelineTask: Task<Void, Never>? = nil
+    @State var deleteTimelineTask: Task<Void, Never>? = nil
     @State var weeklyTrackedMinutes: Double = 0
     @State var cardsToReviewCount: Int = 0
     @State var showTimelineReview = false

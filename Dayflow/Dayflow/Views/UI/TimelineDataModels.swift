@@ -92,46 +92,75 @@ struct TimelineActivity: Identifiable {
 struct DatePickerSheet: View {
     @Binding var selectedDate: Date
     @Binding var isPresented: Bool
-    
+
+    @State private var pickerDate: Date
+
+    init(selectedDate: Binding<Date>, isPresented: Binding<Bool>) {
+        _selectedDate = selectedDate
+        _isPresented = isPresented
+        _pickerDate = State(initialValue: selectedDate.wrappedValue)
+    }
+
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Select Date")
-                .font(.title2)
-                .fontWeight(.semibold)
-            
+        VStack(spacing: 0) {
+            // Header
+            HStack {
+                Text("Ga naar datum")
+                    .font(.custom("Nunito", size: 15).weight(.semibold))
+                    .foregroundColor(DayflowColors.textPrimary)
+                Spacer()
+                Button {
+                    isPresented = false
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 18))
+                        .foregroundColor(DayflowColors.textMuted.opacity(0.6))
+                }
+                .buttonStyle(PlainButtonStyle())
+                .pointingHandCursor()
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
+            .padding(.bottom, 12)
+
+            Divider()
+                .background(DayflowColors.textMuted.opacity(0.15))
+
+            // Kalender — sluit automatisch bij datumkeuze
             DatePicker(
                 "",
-                selection: $selectedDate,
-                in: ...Date(), // Only allow past dates and today
+                selection: $pickerDate,
+                in: ...Date(),
                 displayedComponents: .date
             )
             .datePickerStyle(.graphical)
-            .frame(width: 350)
-            
-            HStack(spacing: 12) {
-                Button("Cancel") {
-                    isPresented = false
-                }
-                .buttonStyle(.plain)
-                .pointingHandCursor()
-                .padding(.horizontal, 20)
-                .padding(.vertical, 8)
-                .background(DayflowColors.borderSubtle)
-                .cornerRadius(8)
-                
-                Button("Select") {
-                    isPresented = false
-                }
-                .buttonStyle(.plain)
-                .pointingHandCursor()
-                .padding(.horizontal, 20)
-                .padding(.vertical, 8)
-                .background(Color.accentColor)
-                .foregroundColor(.white)
-                .cornerRadius(8)
+            .environment(\.locale, Locale(identifier: "nl_NL"))
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .onChange(of: pickerDate) { _, newDate in
+                selectedDate = newDate
+                isPresented = false
             }
+
+            // Vandaag-knop
+            Button {
+                selectedDate = Date()
+                isPresented = false
+            } label: {
+                Text("Vandaag")
+                    .font(.custom("Nunito", size: 13).weight(.medium))
+                    .foregroundColor(DayflowColors.accent)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(DayflowColors.accent.opacity(0.1))
+                    .cornerRadius(8)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .pointingHandCursor()
+            .padding(.horizontal, 20)
+            .padding(.bottom, 20)
         }
-        .padding(30)
-        .frame(width: 420)
+        .frame(width: 320)
+        .background(DayflowColors.surface)
     }
 }

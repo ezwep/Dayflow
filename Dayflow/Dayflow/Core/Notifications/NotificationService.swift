@@ -47,6 +47,7 @@ final class NotificationService: NSObject, ObservableObject {
             await MainActor.run {
                 self.permissionGranted = granted
             }
+            print("[NotificationService] requestPermission granted=\(granted)")
             return granted
         } catch {
             print("[NotificationService] Permission request failed: \(error)")
@@ -113,16 +114,22 @@ final class NotificationService: NSObject, ObservableObject {
     /// Called only after successful generation + DB save.
     func scheduleDailyRecapReadyNotification(forDay day: String) {
         let trimmedDay = day.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedDay.isEmpty else { return }
+        guard !trimmedDay.isEmpty else {
+            print("[NotificationService] Skipping daily recap notification: empty day")
+            return
+        }
+        print("[NotificationService] scheduleDailyRecapReadyNotification requested day=\(trimmedDay)")
 
         Task {
             var settings = await center.notificationSettings()
             var status = settings.authorizationStatus
+            print("[NotificationService] daily recap notification settings day=\(trimmedDay) authorization_status=\(Self.authorizationStatusName(status))")
 
             if status == .notDetermined {
                 let granted = await requestPermission()
                 settings = await center.notificationSettings()
                 status = settings.authorizationStatus
+                print("[NotificationService] daily recap permission prompt result day=\(trimmedDay) granted=\(granted) final_status=\(Self.authorizationStatusName(status))")
 
                 AnalyticsService.shared.capture("daily_auto_generation_notification_permission_prompt_result", [
                     "target_day": trimmedDay,
@@ -159,7 +166,9 @@ final class NotificationService: NSObject, ObservableObject {
 
     private func enqueueDailyRecapReadyNotification(forDay day: String, settings: UNNotificationSettings) {
         let identifier = "daily.recap.\(day)"
+        print("[NotificationService] enqueue daily recap identifier=\(identifier) day=\(day) alert_setting=\(Self.notificationSettingName(settings.alertSetting)) sound_setting=\(Self.notificationSettingName(settings.soundSetting))")
         center.removePendingNotificationRequests(withIdentifiers: [identifier])
+        print("[NotificationService] removed pending notification identifier=\(identifier)")
 
         let content = UNMutableNotificationContent()
         content.title = "Your daily recap for yesterday is ready"
@@ -190,6 +199,7 @@ final class NotificationService: NSObject, ObservableObject {
                 return
             }
 
+            print("[NotificationService] Scheduled daily recap notification identifier=\(identifier) day=\(day)")
             AnalyticsService.shared.capture("daily_auto_generation_notification_scheduled", [
                 "target_day": day,
                 "authorization_status": authStatus,

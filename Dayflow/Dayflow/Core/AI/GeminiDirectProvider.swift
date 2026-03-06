@@ -253,11 +253,13 @@ final class GeminiDirectProvider {
 
         CRITICAL: This video is exactly \(durationString) long. ALL timestamps must be within 00:00 to \(durationString). No gaps.
 
+        Identifying the active app: On macOS, the app name is always shown in the top-left corner of the screen, right next to the Apple () menu. Check this FIRST to identify which app is being used. Do NOT guess — read the actual name from the menu bar. If you can't read it clearly, describe it generically (e.g., "code editor," "browser," "messaging app") rather than guessing a specific product name. Common code editors like Cursor, VS Code, Xcode, and Zed all look similar but have different names in the menu bar.
+
         For each segment, ask yourself:
         "What EXACTLY did they do? What SPECIFIC things can I see?"
 
         Capture:
-        - Exact app/site names visible
+        - Exact app/site names visible (check menu bar for app name)
         - Exact file names, URLs, page titles
         - Exact usernames, search queries, messages
         - Exact numbers, stats, prices shown
@@ -269,7 +271,7 @@ final class GeminiDirectProvider {
         Good: "Twitter/X: Scrolled feed - viewed posts by @pmarca about AI, @sama thread on GPT-5 (12 tweets)"
 
         Bad: "Working on code"
-        Good: "VS Code: Editing StorageManager.swift - fixed type error on line 47, changed String to String?"
+        Good: "Editing StorageManager.swift in [exact app name from menu bar] - fixed type error on line 47, changed String to String?"
 
         Segments:
         - 3-8 segments total
@@ -294,7 +296,7 @@ final class GeminiDirectProvider {
         var finalResponse = ""
         var finalObservations: [Observation] = []
 
-        var modelState = ModelRunState(models: Array(modelPreference.orderedModels.reversed()))
+        var modelState = ModelRunState(models: modelPreference.orderedModels)
         let callGroupId = UUID().uuidString
 
         while attempt < maxRetries {
@@ -1069,6 +1071,7 @@ private func uploadResumable(data: Data, mimeType: String) async throws -> Strin
         let generationConfig: [String: Any] = [
             "temperature": 0.3,
             "maxOutputTokens": 65536,
+            "mediaResolution": "MEDIA_RESOLUTION_HIGH",
             "responseMimeType": "application/json",
             "responseSchema": transcriptionSchema
         ]
